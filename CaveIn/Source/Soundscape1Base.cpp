@@ -18,11 +18,12 @@
 #include <X3DAudio.h>
 #include <list>
 using std::list;
-
 #include "XACore.hpp"
 using AllanMilne::Audio::XACore;
 #include "XASound.hpp"
 using AllanMilne::Audio::XASound;
+#include "X3DSound.hpp"
+using AllanMilne::Audio::X3DSound;
 
 #include "Soundscape1Base.hpp"
 
@@ -33,18 +34,13 @@ using AllanMilne::Audio::XASound;
 bool Soundscape1::SetupGame (HWND aWindow)
 {
 	
-	
 	// set up the XAudio2 engine and mastering voice; check if ok.
 	mXACore = new XACore ();
 	if (mXACore->GetEngine() == NULL || mXACore->GetMasterVoice() == NULL) {
 		return false;
 	}
-
-	DWORD channelMask;
-	XAUDIO2_DEVICE_DETAILS voiceDetails = mXACore->GetDeviceDetails();
-	channelMask = voiceDetails.OutputFormat.dwChannelMask;
-
-	X3DAudioInitialize(channelMask, X3DAUDIO_SPEED_OF_SOUND, mX3DInstance);
+	m3DSound = new X3DSound();
+	bool result = m3DSound->InitializeX3DAudio(mXACore->GetDeviceDetails());
 	return true;		// All has been setup without error.
 } // end SetupGame function.
 

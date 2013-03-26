@@ -26,12 +26,13 @@ for stereo input need matrix 4*4 first two how much of the left channel going to
 #include "IGameCore.hpp"
 using AllanMilne::IGameCore;
 #include "AudioRenderable.hpp"
-#include "IX3DAudio.hpp"
+#include "X3DSound.hpp"
 #include <list>
 using std::list;
 
 class XACore;
 class XASound;
+class X3DSound;
 
 class Soundscape1 : public IGameCore {
 public:
@@ -54,8 +55,6 @@ public:
 	Soundscape1 () 
 	: mXACore (NULL)
 	{ 
-		memset((void*)&mX3DInstance,0,sizeof(X3DAUDIO_HANDLE));
-		memset((void*)&mListener,0,sizeof(X3DAUDIO_LISTENER));
 		memset((void*)&mEmitter,0,sizeof(X3DAUDIO_EMITTER));
 		memset((void*)&mDSPSettings,0,sizeof(X3DAUDIO_DSP_SETTINGS));
 	} // end constructor.
@@ -66,10 +65,9 @@ private:
 	//--- the XAudio2 engine encapsulation.
 	XACore *mXACore;
 	XAUDIO2_FILTER_PARAMETERS mFParams;
-	X3DAUDIO_HANDLE mX3DInstance;
-	X3DAUDIO_LISTENER mListener;
-	X3DAUDIO_EMITTER mEmitter;
+	X3DSound *m3DSound;
 	X3DAUDIO_DSP_SETTINGS mDSPSettings;
+	X3DAUDIO_EMITTER mEmitter;
 }; // end Soundscape1 class.
 
 #endif
