@@ -15,101 +15,104 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\Source\AudioRenderable.hpp">
+    <ClInclude Include="Source\AudioRenderable.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\Source\Bats.hpp">
+    <ClInclude Include="Source\Bats.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\Source\GameTimer.h">
+    <ClInclude Include="Source\GameTimer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\Source\IGameCore.hpp">
+    <ClInclude Include="Source\IGameCore.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\Source\IPCMWave.hpp">
+    <ClInclude Include="Source\IPCMWave.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\Source\ISound.hpp">
+    <ClInclude Include="Source\ISound.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\Source\IXACore.hpp">
+    <ClInclude Include="Source\IX3DAudio.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\Source\PCMWave.hpp">
+    <ClInclude Include="Source\IXACore.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\Source\Rats.hpp">
+    <ClInclude Include="Source\PCMWave.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\Source\Rocks.hpp">
+    <ClInclude Include="Source\Rats.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\Source\Soundscape1Base.hpp">
+    <ClInclude Include="Source\Rocks.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\Source\WaveFileManager.hpp">
+    <ClInclude Include="Source\Soundscape1Base.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\Source\WaveFmt.hpp">
+    <ClInclude Include="Source\WaveFileManager.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\Source\WinCore.hpp">
+    <ClInclude Include="Source\WaveFmt.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\Source\XACore.hpp">
+    <ClInclude Include="Source\WinCore.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\Source\XASound.hpp">
+    <ClInclude Include="Source\XACore.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\XASound.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\Source\Bats.cpp">
+    <ClCompile Include="Source\Bats.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\Source\GameTimer.cpp">
+    <ClCompile Include="Source\GameTimer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\Source\Main_Soundscape1.cpp">
+    <ClCompile Include="Source\Main_Soundscape1.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\Source\PCMWave.cpp">
+    <ClCompile Include="Source\PCMWave.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\Source\Rats.cpp">
+    <ClCompile Include="Source\Rats.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\Source\Rocks.cpp">
+    <ClCompile Include="Source\Rocks.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\Source\Soundscape1Base.cpp">
+    <ClCompile Include="Source\Soundscape1Base.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\Source\WaveFileManager.cpp">
+    <ClCompile Include="Source\WaveFileManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\Source\WinCore.cpp">
+    <ClCompile Include="Source\WinCore.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\Source\XACore.cpp">
+    <ClCompile Include="Source\XACore.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\Source\XASound.cpp">
+    <ClCompile Include="Source\XASound.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\Sounds\car.wav">
+    <None Include="Sounds\car.wav">
       <Filter>Resource Files</Filter>
     </None>
-    <None Include="..\Sounds\frogs.wav">
+    <None Include="Sounds\frogs.wav">
       <Filter>Resource Files</Filter>
     </None>
-    <None Include="..\Sounds\rain.wav">
+    <None Include="Sounds\rain.wav">
       <Filter>Resource Files</Filter>
     </None>
-    <None Include="..\Sounds\bird.wav">
+    <None Include="Sounds\bird.wav">
       <Filter>Resource Files</Filter>
     </None>
   </ItemGroup>
