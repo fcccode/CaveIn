@@ -13,14 +13,14 @@
   <ItemGroup>
     <ClInclude Include="Source\AudioRenderable.hpp" />
     <ClInclude Include="Source\Bats.hpp" />
+    <ClInclude Include="Source\Rats.hpp" />
     <ClInclude Include="Source\GameTimer.h" />
     <ClInclude Include="Source\IGameCore.hpp" />
     <ClInclude Include="Source\IPCMWave.hpp" />
     <ClInclude Include="Source\ISound.hpp" />
-    <ClInclude Include="Source\X3DSound.hpp" />
+    <ClInclude Include="Source\Player.hpp" />
     <ClInclude Include="Source\IXACore.hpp" />
     <ClInclude Include="Source\PCMWave.hpp" />
-    <ClInclude Include="Source\Rats.hpp" />
     <ClInclude Include="Source\Rocks.hpp" />
     <ClInclude Include="Source\Soundscape1Base.hpp" />
     <ClInclude Include="Source\WaveFileManager.hpp" />
@@ -31,15 +31,15 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Bats.cpp" />
+    <ClCompile Include="Source\Rats.cpp" />
     <ClCompile Include="Source\GameTimer.cpp" />
     <ClCompile Include="Source\Main_Soundscape1.cpp" />
     <ClCompile Include="Source\PCMWave.cpp" />
-    <ClCompile Include="Source\Rats.cpp" />
     <ClCompile Include="Source\Rocks.cpp" />
     <ClCompile Include="Source\Soundscape1Base.cpp" />
     <ClCompile Include="Source\WaveFileManager.cpp" />
     <ClCompile Include="Source\WinCore.cpp" />
-    <ClCompile Include="Source\X3DSound.cpp" />
+    <ClCompile Include="Source\Player.cpp" />
     <ClCompile Include="Source\XACore.cpp" />
     <ClCompile Include="Source\XASound.cpp" />
   </ItemGroup>

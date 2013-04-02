@@ -1,22 +1,38 @@
 /********************************************************************
-	Filename:	Bats.h
+	Filename:	Bats.hpp
 	Version: 	
-	Created:	2013/03/12
+	Created:	02/04/2013
 	
 	Author:		Jake Morey
 	
 	Description:
 	
 *********************************************************************/
-#ifndef _Bats_h_
-#define _Bats_h_
+#ifndef _BAT_HPP_
+#define _BAT_HPP_
 
-class Bats
+#include <windows.h>
+#include <stdio.h>
+#include <xaudio2.h>
+#include <X3DAudio.h>
+#include "AudioRenderable.hpp"
+class XACore;
+class XASound;
+
+class Bat: virtual AudioRenderable
 {
 public:
-	Bats(void);
-	 ~Bats(void);
+	void RenderAudio(const float deltaTime);
+	bool IsOk() const;
+	void Play();
+	void UpdateEmitter(X3DAUDIO_LISTENER player);
+
+	Bat(XACore *aCore);
+	virtual ~Bat();
+private:
+	XASound *mBat;
+	float mElapsedTime;
+	float mVolumeAdjustment;
 };
 
-#endif // _Bats_h_
-
+#endif

@@ -22,8 +22,8 @@ using std::list;
 using AllanMilne::Audio::XACore;
 #include "XASound.hpp"
 using AllanMilne::Audio::XASound;
-#include "X3DSound.hpp"
-using AllanMilne::Audio::X3DSound;
+#include "Player.hpp"
+using AllanMilne::Audio::Player;
 
 #include "Soundscape1Base.hpp"
 
@@ -39,8 +39,11 @@ bool Soundscape1::SetupGame (HWND aWindow)
 	if (mXACore->GetEngine() == NULL || mXACore->GetMasterVoice() == NULL) {
 		return false;
 	}
-	m3DSound = new X3DSound();
-	bool result = m3DSound->InitializeX3DAudio(mXACore->GetDeviceDetails());
+	memset((void*)&mX3DInstance,0,sizeof(X3DAUDIO_HANDLE));
+	DWORD channelMask = mXACore->GetDeviceDetails().OutputFormat.dwChannelMask;
+	X3DAudioInitialize(channelMask,X3DAUDIO_SPEED_OF_SOUND, mX3DInstance);
+	mPlayer = new Player();
+	mPlayer->InitializeListener();
 	return true;		// All has been setup without error.
 } // end SetupGame function.
 

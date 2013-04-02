@@ -1,25 +1,38 @@
 /********************************************************************
 	Filename:	Rats.hpp
 	Version: 	
-	Created:	2013/03/12
+	Created:	02/04/2013
 	
 	Author:		Jake Morey
 	
 	Description:
 	
 *********************************************************************/
-#ifndef _Rats_h_
-#define _Rats_h_
+#ifndef _RATS_HPP_
+#define _RATS_HPP_
 
-class Rats
+#include <windows.h>
+#include <stdio.h>
+#include <xaudio2.h>
+#include <X3DAudio.h>
+#include "AudioRenderable.hpp"
+class XACore;
+
+class Rats: virtual AudioRenderable
 {
 public:
-	Rats();
-	~Rats();
+	void RenderAudio(const float deltaTime);
+	bool IsOk() const;
+	void UpdateEmitter(X3DAUDIO_LISTENER player);
+	Rats(XACore *aCore);
+	virtual ~Rats();
 
 private:
-
+	bool mOk;
+	int mPause;
+	float mElapsedTime;
+	XAUDIO2_BUFFER mRatData;
+	IXAudio2SourceVoice **mRatVoices;
 };
 
-
-#endif // _Rats_h_
+#endif
