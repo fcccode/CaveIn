@@ -25,6 +25,8 @@ using AllanMilne::Audio::XASound;
 #include "Player.hpp"
 using AllanMilne::Audio::Player;
 #include "Bats.hpp"
+#include "Rats.hpp"
+#include "Bear.hpp"
 
 #include "Soundcues.hpp"
 //=== Implementation of the IGameCore interface.
@@ -50,48 +52,15 @@ bool SoundCues::SetupGame (HWND aWindow)
 
 	mPlayer = new Player();
 	mPlayer->InitializeListener();
-	Bat *bat = new Bat(mXACore, 0);
-	bat->InitializeEmitter(mXACore);
-	if(!bat->IsOk()){
-		MessageBox(NULL,"Error loading bird.wav",TEXT("SetupGame()-FAILED"),MB_OK|MB_ICONERROR);
-		delete mRain;
-		delete bat;
+
+	if(!InitRats()){
+		return false;
+	}else if(!InitBats()){
+		return false;
+	}else if(!InitBear()){
 		return false;
 	}
-	Bat *bat1 = new Bat(mXACore, 1);
-	bat1->InitializeEmitter(mXACore);
-	if(!bat1->IsOk()){
-		MessageBox(NULL,"Error loading bird.wav",TEXT("SetupGame()-FAILED"),MB_OK|MB_ICONERROR);
-		delete mRain;
-		delete bat;
-		delete bat1;
-		return false;
-	}
-	Bat *bat2 = new Bat(mXACore, 2);
-	bat2->InitializeEmitter(mXACore);
-	if(!bat2->IsOk()){
-		MessageBox(NULL,"Error loading bird.wav",TEXT("SetupGame()-FAILED"),MB_OK|MB_ICONERROR);
-		delete mRain;
-		delete bat;
-		delete bat1;
-		delete bat2;
-		return false;
-	}
-	Bat *bat3 = new Bat(mXACore, 3);
-	bat3->InitializeEmitter(mXACore);
-	if(!bat3->IsOk()){
-		MessageBox(NULL,"Error loading bird.wav",TEXT("SetupGame()-FAILED"),MB_OK|MB_ICONERROR);
-		delete mRain;
-		delete bat;
-		delete bat1;
-		delete bat2;
-		delete bat3;
-		return false;
-	}
-	mBadSounds.push_back((AudioRenderable3D*)bat);
-	mBadSounds.push_back((AudioRenderable3D*)bat1);
-	mBadSounds.push_back((AudioRenderable3D*)bat2);
-	mBadSounds.push_back((AudioRenderable3D*)bat3);
+
 	ClearArray();
 	SetupMap();
 	mBadIter = rand()%mBadSounds.size();
@@ -101,7 +70,6 @@ bool SoundCues::SetupGame (HWND aWindow)
 	UpdateSoundTile();
 	return true;		// All has been setup without error.
 } // end SetupGame function.
-
 //--- process a single game frame.
 void SoundCues::ProcessGameFrame (const float deltaTime)
 {
@@ -388,5 +356,83 @@ bool SoundCues::CheckForwardTile(int x, int y){
 	case Bad: return false; break;
 	default: return false; break;
 	}
+}
+bool SoundCues::InitBats(){
+	Bat *bat = new Bat(mXACore, 0);
+	if(!bat->IsOk()){
+		MessageBox(NULL,"Error loading bat.wav",TEXT("SetupGame()-FAILED"),MB_OK|MB_ICONERROR);
+		delete bat;
+		return false;
+	}
+	bat->InitializeEmitter(mXACore);
+	Bat *bat1 = new Bat(mXACore, 1);
+	if(!bat1->IsOk()){
+		MessageBox(NULL,"Error loading bat1.wav",TEXT("SetupGame()-FAILED"),MB_OK|MB_ICONERROR);
+		delete bat;
+		delete bat1;
+		return false;
+	}
+	bat1->InitializeEmitter(mXACore);
+	Bat *bat2 = new Bat(mXACore, 2);
+	if(!bat2->IsOk()){
+		MessageBox(NULL,"Error loading bat2.wav",TEXT("SetupGame()-FAILED"),MB_OK|MB_ICONERROR);
+		delete bat;
+		delete bat1;
+		delete bat2;
+		return false;
+	}
+	bat2->InitializeEmitter(mXACore);
+	Bat *bat3 = new Bat(mXACore, 3);
+	if(!bat3->IsOk()){
+		MessageBox(NULL,"Error loading bat3.wav",TEXT("SetupGame()-FAILED"),MB_OK|MB_ICONERROR);
+		delete bat;
+		delete bat1;
+		delete bat2;
+		delete bat3;
+		return false;
+	}
+	bat3->InitializeEmitter(mXACore);
+	mBadSounds.push_back((AudioRenderable3D*)bat);
+	mBadSounds.push_back((AudioRenderable3D*)bat1);
+	mBadSounds.push_back((AudioRenderable3D*)bat2);
+	mBadSounds.push_back((AudioRenderable3D*)bat3);
+}
+bool SoundCues::InitRats(){
+	Rat *rat = new Rat(mXACore, 0);
+	if(!rat->IsOk()){
+		MessageBox(NULL,"Error loading rat.wav",TEXT("SetupGame()-FAILED"),MB_OK|MB_ICONERROR);
+		delete rat;
+		return false;
+	}
+	rat->InitializeEmitter(mXACore);
+	Rat *rat1 = new Rat(mXACore, 1);
+	if(!rat1->IsOk()){
+		MessageBox(NULL,"Error loading rat1.wav",TEXT("SetupGame()-FAILED"),MB_OK|MB_ICONERROR);
+		delete rat;
+		delete rat1;
+		return false;
+	}
+	rat1->InitializeEmitter(mXACore);
+	mBadSounds.push_back((AudioRenderable3D*)rat);
+	mBadSounds.push_back((AudioRenderable3D*)rat1);
+}
+bool SoundCues::InitBear(){
+	Bear *bear = new Bear(mXACore, 0);
+	if(!bear->IsOk()){
+		MessageBox(NULL,"Error loading bear.wav",TEXT("SetupGame()-FAILED"),MB_OK|MB_ICONERROR);
+		delete bear;
+		return false;
+	}
+	bear->InitializeEmitter(mXACore);
+	Bear *bear1 = new Bear(mXACore, 1);
+	if(!bear1->IsOk()){
+		MessageBox(NULL,"Error loading bear1.wav",TEXT("SetupGame()-FAILED"),MB_OK|MB_ICONERROR);
+		delete bear;
+		delete bear1;
+		return false;
+	}
+	bear1->InitializeEmitter(mXACore);
+	mBadSounds.push_back((AudioRenderable3D*)bear);
+	mBadSounds.push_back((AudioRenderable3D*)bear1);
 }
 //=== end of code.

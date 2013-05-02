@@ -14,6 +14,7 @@
     <ClInclude Include="Source\AudioRenderable.hpp" />
     <ClInclude Include="Source\AudioRenderable3D.hpp" />
     <ClInclude Include="Source\Bats.hpp" />
+    <ClInclude Include="Source\Bear.hpp" />
     <ClInclude Include="Source\Rats.hpp" />
     <ClInclude Include="Source\GameTimer.h" />
     <ClInclude Include="Source\IGameCore.hpp" />
@@ -33,6 +34,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Bats.cpp" />
+    <ClCompile Include="Source\Bear.cpp" />
     <ClCompile Include="Source\Rats.cpp" />
     <ClCompile Include="Source\GameTimer.cpp" />
     <ClCompile Include="Source\Main.cpp" />

@@ -73,12 +73,13 @@ private:
 	void UpdateSoundTile();
 	void PlaySoundTiles(int z, int x, X3DAUDIO_VECTOR pos);
 	void StopAllSounds();
+	bool InitRats();
+	bool InitBats();
+	bool InitBear();
 	//--- the XAudio2 engine encapsulation.
 	XACore *mXACore;
-	XASound *mRain;
 	XAUDIO2_FILTER_PARAMETERS mFParams;
 	Player *mPlayer;
-	Rocks *mRock;
 	X3DAUDIO_HANDLE mX3DInstance;
 	vector<AudioRenderable3D*> mGoodSounds;
 	vector<AudioRenderable3D*> mBadSounds;

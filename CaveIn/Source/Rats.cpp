@@ -8,130 +8,81 @@
 	Description:
 	
 *********************************************************************/
-#include <time.h>
-
-#define XAUDIO2_HELPER_FUNCTIONS
 #include <windows.h>
 #include <stdio.h>
 #include <xaudio2.h>
 #include <X3DAudio.h>
-
 #include "XACore.hpp"
-#include "WaveFileManager.hpp"
-#include "PCMWave.hpp"
-#include "WaveFmt.hpp"
+#include "XASound.hpp"
 using AllanMilne::Audio::XACore;
-using AllanMilne::Audio::WaveFileManager;
-using AllanMilne::Audio::PCMWave;
-using AllanMilne::Audio::WaveFmt;
+using AllanMilne::Audio::XASound;
 #include "Rats.hpp"
 
-bool LoadFrogsFile(XAUDIO2_BUFFER *aBuffer, WAVEFORMATEX *aFormat);
-int GetRandomPause();
-
-Rats::Rats(XACore *aCore, int sound)
-	:mOk(false), mPause(0), mElapsedTime(0.0f), mRatVoices(NULL)
-{/*
+Rat::Rat(XACore *aCore, int sound)
+	:mRat(NULL), mElapsedTime(0.0f), mVolumeAdjustment(1.1f)
+{
 	switch(sound){
-	case 0: mRat = aCore->CreateSound("Sounds/Warnings/Rats/Rats.wav"); break;
-	case 1: mRat = aCore->CreateSound("Sounds/Warnings/Rats/Rats1.wav"); break;
-	}*/
-	WAVEFORMATEX wFmt;
-	if(!LoadFrogsFile(&mRatData,&wFmt)){
-		return;
+	case 0: mRat = aCore->CreateSound("Sounds/Warning/Rats/Rats.wav"); break;
+	case 1: mRat = aCore->CreateSound("Sounds/Warning/Rats/Rats1.wav"); break;
 	}
-
-	mRatVoices = new IXAudio2SourceVoice*[3];
-	IXAudio2 *engine = aCore->GetEngine();
-	if(engine == NULL){
-		return;
-	}
-	HRESULT hr = 0;
-	for(int i = 0; i < 3; i++){
-		hr = hr & engine->CreateSourceVoice(&(mRatVoices[i]), &wFmt);
-	}
-	if(FAILED(hr)){
-		delete[] mRatVoices;
-		return;
-	}
-
-	float frequencyRatio;
-	mRatVoices[0]->GetFrequencyRatio(&frequencyRatio);
-	float semitones = XAudio2FrequencyRatioToSemitones(frequencyRatio);
-	mRatVoices[1]->SetFrequencyRatio(XAudio2SemitonesToFrequencyRatio(semitones+4));
-	mRatVoices[2]->SetFrequencyRatio(XAudio2SemitonesToFrequencyRatio(semitones+7));
-	for(int i = 0; i<3; ++i){
-		mRatVoices[i]->Start();
-	}
-
-	srand(time(NULL));
-	mPause = GetRandomPause();
-
-	mOk = true;
 }
-Rats::~Rats()
-{
-	if(mRatVoices!=NULL){
-		for(int i = 0; i< 3; ++i){
-			if(mRatVoices[i]!=NULL){
-				mRatVoices[i]->Stop();
-				mRatVoices[i]->FlushSourceBuffers();
-				mRatVoices[i]->DestroyVoice();
-			}
+Rat::~Rat(){
+	if(mRat!=NULL){
+		delete mRat;
+		mRat = NULL;
+	}
+}
+void Rat::Play(){
+	mRat->SetLooped(true);
+	mRat->Play(0);
+}
+void Rat::Pause(){
+	mRat->Pause();
+}
+void Rat::RenderAudio(const float deltaTime){
+	static const float minVolume	= 0.1f;
+	static const float maxVolume	= 1.0f;
+	static const float volumeUp		= 1.25f;
+	static const float volumeDown	= 0.8f;
+	static const float pauseTime	= 1.0f;
+
+	if(!IsOk()){
+		return;
+	}
+	mElapsedTime+=deltaTime;
+	if(mElapsedTime>pauseTime){
+		mElapsedTime = 0.0f;
+		float volume = mRat->GetVolume();
+		if(volume<minVolume){
+			mVolumeAdjustment = volumeUp;
+		}else if(volume > maxVolume){
+			mVolumeAdjustment = volumeDown;
 		}
-		delete [] mRatVoices;
+		mRat->AdjustVolume(mVolumeAdjustment);
 	}
+	
 }
+void Rat::InitializeEmitter(XACore *xacore){
+	XAUDIO2_VOICE_DETAILS details;
+	mRat->GetSourceVoice()->GetVoiceDetails(&details);
+	mEmitter.ChannelCount = details.InputChannels;
+	mEmitter.CurveDistanceScaler = 1.0f;
+	X3DAUDIO_VECTOR tempVector = { 0.0f, 0.0f, 1.0f};
+	mEmitter.Position = tempVector;
+	mEmitter.Velocity = tempVector;
 
-
-//--- called every game frame to check if random time has passed and frogs should play.
-//--- Parameter is time in seconds since last call.
-void Rats::RenderAudio (const float deltaTime)
-{
-	// Guard against invalid sound elements.
-	if (!IsOk()) return;
-	mElapsedTime += deltaTime;
-	// do nothing if random pause time has not passed.
-	if (mElapsedTime < mPause) return;
-	// play the harmonised frog sounds.
-	for (int i=0; i<3; ++i) {
-		mRatVoices[i]->SubmitSourceBuffer(&mRatData);
-	}
-	// Restart timing for the next play.
-	mPause = GetRandomPause();
-	mElapsedTime = 0.0f;
-} // end Renderaudio function.
-
-//--- Indicate if object has been created correctly.
-inline bool Rats::IsOk() const { return mOk; }
-
-
-//=== private helper functions.
-
-//--- Load wave file and assign XAudio2 buffer and wave format struct to reference parameters.
-//--- returns false if any error in loading .wav file.
-bool LoadFrogsFile (XAUDIO2_BUFFER *aBuffer, WAVEFORMATEX *aFormat)
-{
-	PCMWave *wave = WaveFileManager::GetInstance().LoadWave ("Sounds/frogs.wav");
-	// If the file was not loaded correctly then can go no further.
-	if (wave->GetStatus() != PCMWave::OK) { return false; }
-	// Initialise the XAudio2 buffer struct from the PCMWave object.
-	memset ((void*)aBuffer, 0, sizeof (XAUDIO2_BUFFER));
-	aBuffer->AudioBytes = wave->GetDataSize ();
-	aBuffer->pAudioData = (BYTE*)(wave->GetWaveData ());
-	// copy windows wave format struct from the PCMWave struct field.
-	memset ((void*)aFormat, 0, sizeof (WAVEFORMATEX));
-	memcpy_s ((void*)aFormat, sizeof (WaveFmt), (void*)&(wave->GetWaveFormat()), sizeof (WaveFmt));
-	return true;
-} // end LoadFrogsFile function.
-
-//--- Get a random pause time between frogs playing; units are seconds.
-int GetRandomPause ()
-{
-	// Time range to use.
-	static const int minPause = 7;
-	static const int range = 10;
-
-	return rand() % range + minPause;
-} // end GetRandomPause function.
-//=== end of code.
+	mDSPSettings.SrcChannelCount = mEmitter.ChannelCount;
+	mDSPSettings.DstChannelCount = xacore->GetChannelCount();
+	mDSPSettings.pMatrixCoefficients = new FLOAT32[mDSPSettings.SrcChannelCount * mDSPSettings.DstChannelCount];
+}
+void Rat::UpdateEmitter(X3DAUDIO_VECTOR pos, X3DAUDIO_VECTOR velo){
+	mEmitter.Position.x += pos.x;
+	mEmitter.Position.y += pos.y;
+	mEmitter.Position.z += pos.z;
+	mEmitter.Velocity.x += velo.x;
+	mEmitter.Velocity.y += velo.y;
+	mEmitter.Velocity.z += velo.z;
+}
+IXAudio2SourceVoice* Rat::getSourceVoice(){
+	return mRat->GetSourceVoice();
+}

@@ -8,30 +8,39 @@
 	Description:
 	
 *********************************************************************/
-#ifndef _RATS_HPP_
-#define _RATS_HPP_
+#ifndef _RAT_HPP_
+#define _RAT_HPP_
 
 #include <windows.h>
 #include <stdio.h>
 #include <xaudio2.h>
 #include <X3DAudio.h>
-#include "AudioRenderable.hpp"
-class XACore;
+#include "AudioRenderable3D.hpp"
 
-class Rats: virtual AudioRenderable
+class XACore;
+class XASound;
+
+class Rat: public AudioRenderable3D
 {
 public:
-	Rats(XACore *aCore, int sound);
-	~Rats();
-	
+	Rat(XACore *aCore, int sound);
+	~Rat();
 	void RenderAudio(const float deltaTime);
-	bool IsOk() const;
+	void Play();
+	void Pause();
+	XASound* getXASound() {return mRat;}
+	void InitializeEmitter(XACore *xacore);
+
+	inline X3DAUDIO_EMITTER getEmitter(){ return mEmitter;}
+	inline X3DAUDIO_DSP_SETTINGS* getDSPSettings(){return &mDSPSettings;}
+	inline bool IsOk() const {return (mRat!=NULL);}
+
+	IXAudio2SourceVoice* getSourceVoice();
+	void UpdateEmitter(X3DAUDIO_VECTOR pos, X3DAUDIO_VECTOR velo);
 private:
-	bool mOk;
-	int mPause;
+	XASound *mRat;
 	float mElapsedTime;
-	XAUDIO2_BUFFER mRatData;
-	IXAudio2SourceVoice **mRatVoices;
+	float mVolumeAdjustment;
 };
 
-#endif
+#endif 

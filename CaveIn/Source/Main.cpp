@@ -24,7 +24,7 @@
 */
 
 #include <windows.h>
-
+#include <ctime>
 #include "WinCore.hpp"
 #include "IGameCore.hpp"
 using AllanMilne::WinCore;
@@ -41,7 +41,7 @@ int WINAPI WinMain (HINSTANCE hinstance,
 {
 	WinCore *windowApp;
 	IGameCore *game;
-
+	srand(time(NULL));
 	//xxx following line should be uncommented and XXX replaced with your game processing class (that implements IGameCore).
 	//game = new Soundscape();
 	game = new SoundCues();
