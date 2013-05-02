@@ -149,7 +149,7 @@ void SoundCues::ProcessGameFrame (const float deltaTime)
 	}
 	if(positionChanged){
 		//mGoodSounds.at(mGoodIter)->Play();
-		mBadSounds.at(mBadIter)->Play();
+		
 		UpdateSoundTile();
 	}
 } // end ProcessGameFrame function.
@@ -193,6 +193,7 @@ void SoundCues::PlaySoundTiles(int z, int x, X3DAUDIO_VECTOR pos){
 	case Bad:
 		mBadSounds.at(mBadIter)->UpdateEmitter(pos,velo);
 		UpdateSettings(mBadSounds.at(mBadIter));
+		mBadSounds.at(mBadIter)->Play();
 		break;
 	}
 }
