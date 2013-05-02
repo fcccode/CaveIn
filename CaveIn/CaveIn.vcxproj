@@ -15,6 +15,8 @@
     <ClInclude Include="Source\AudioRenderable3D.hpp" />
     <ClInclude Include="Source\Bats.hpp" />
     <ClInclude Include="Source\Bear.hpp" />
+    <ClInclude Include="Source\Directions.hpp" />
+    <ClInclude Include="Source\Path.hpp" />
     <ClInclude Include="Source\Rats.hpp" />
     <ClInclude Include="Source\GameTimer.h" />
     <ClInclude Include="Source\IGameCore.hpp" />
@@ -26,6 +28,7 @@
     <ClInclude Include="Source\Rocks.hpp" />
     <ClInclude Include="Source\SoundCues.hpp" />
     <ClInclude Include="Source\Soundscape.hpp" />
+    <ClInclude Include="Source\Wall.hpp" />
     <ClInclude Include="Source\Water.hpp" />
     <ClInclude Include="Source\WaveFileManager.hpp" />
     <ClInclude Include="Source\WaveFmt.hpp" />
@@ -36,6 +39,8 @@
   <ItemGroup>
     <ClCompile Include="Source\Bats.cpp" />
     <ClCompile Include="Source\Bear.cpp" />
+    <ClCompile Include="Source\Directions.cpp" />
+    <ClCompile Include="Source\Path.cpp" />
     <ClCompile Include="Source\Rats.cpp" />
     <ClCompile Include="Source\GameTimer.cpp" />
     <ClCompile Include="Source\Main.cpp" />
@@ -43,6 +48,7 @@
     <ClCompile Include="Source\Rocks.cpp" />
     <ClCompile Include="Source\SoundCues.cpp" />
     <ClCompile Include="Source\Soundscape.cpp" />
+    <ClCompile Include="Source\Wall.cpp" />
     <ClCompile Include="Source\Water.cpp" />
     <ClCompile Include="Source\WaveFileManager.cpp" />
     <ClCompile Include="Source\WinCore.cpp" />

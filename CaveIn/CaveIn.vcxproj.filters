@@ -102,6 +102,15 @@
     <ClInclude Include="Source\Water.hpp">
       <Filter>Header Files\Sound Cues\Warnings</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Directions.hpp">
+      <Filter>Header Files\Sound Cues\Praise</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Path.hpp">
+      <Filter>Header Files\Sound Cues</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Wall.hpp">
+      <Filter>Header Files\Sound Cues</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\GameTimer.cpp">
@@ -148,6 +157,15 @@
     </ClCompile>
     <ClCompile Include="Source\Water.cpp">
       <Filter>Source Files\Sound Cues\Warnings</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Directions.cpp">
+      <Filter>Source Files\Sound Cues\Praise</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Path.cpp">
+      <Filter>Source Files\Sound Cues</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Wall.cpp">
+      <Filter>Source Files\Sound Cues</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

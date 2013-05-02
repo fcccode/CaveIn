@@ -27,6 +27,8 @@ for stereo input need matrix 4*4 first two how much of the left channel going to
 using AllanMilne::IGameCore;
 #include "AudioRenderable3D.hpp"
 #include "Player.hpp"
+#include "Path.hpp"
+#include "Wall.hpp"
 #include <vector>
 using std::vector;
 
@@ -36,7 +38,7 @@ class Player;
 
 class SoundCues : public IGameCore {
 public:
-	enum mTileTypes {Wall, Start, Finish, Good, Bad, Path};
+	enum mTileTypes {tWall, tStart, tFinish, tGood, tBad, tPath};
 	struct Tiles{
 		mTileTypes tile;
 		bool played;
@@ -76,6 +78,8 @@ private:
 	bool InitBats();
 	bool InitBear();
 	bool InitOtherWarnings();
+	bool InitGood();
+	bool InitOther();
 	//--- the XAudio2 engine encapsulation.
 	XACore *mXACore;
 	XAUDIO2_FILTER_PARAMETERS mFParams;
@@ -87,6 +91,8 @@ private:
 	int locationX, locationZ, mapSize;
 	bool movementEnabled;
 	Tiles mMap[11][11]; 
+	Path *mPath;
+	Wall *mWall; 
 }; // end Soundscape1 class.
 
 #endif
