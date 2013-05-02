@@ -29,9 +29,13 @@ using AllanMilne::Audio::WaveFmt;
 bool LoadFrogsFile(XAUDIO2_BUFFER *aBuffer, WAVEFORMATEX *aFormat);
 int GetRandomPause();
 
-Rats::Rats(XACore *aCore)
+Rats::Rats(XACore *aCore, int sound)
 	:mOk(false), mPause(0), mElapsedTime(0.0f), mRatVoices(NULL)
-{
+{/*
+	switch(sound){
+	case 0: mRat = aCore->CreateSound("Sounds/Warnings/Rats/Rats.wav"); break;
+	case 1: mRat = aCore->CreateSound("Sounds/Warnings/Rats/Rats1.wav"); break;
+	}*/
 	WAVEFORMATEX wFmt;
 	if(!LoadFrogsFile(&mRatData,&wFmt)){
 		return;
@@ -130,8 +134,4 @@ int GetRandomPause ()
 
 	return rand() % range + minPause;
 } // end GetRandomPause function.
-
-void Rats::UpdateEmitter(X3DAUDIO_LISTENER player){
-
-}
 //=== end of code.

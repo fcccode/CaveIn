@@ -22,13 +22,22 @@ namespace Audio {
 class Player{
 public:
 	bool InitializeListener();
-
+	bool MoveForward();
+	bool ShuffleLeft();
+	bool ShuffleRight();
+	bool ShuffleBack();
+	void Move();
+	inline bool getFinishedMoving() {return moving;}
 	inline X3DAUDIO_LISTENER getListener() {return mListener;}
-
+	bool UpdateSettings(X3DAUDIO_HANDLE instance, X3DAUDIO_EMITTER& emitter, X3DAUDIO_DSP_SETTINGS& settings);
 	Player();
 	~Player();
+	void RotateRound();
 private:
 	X3DAUDIO_LISTENER mListener;
+	bool transition;
+	bool moving;
+	float scale;
 };
 
 }

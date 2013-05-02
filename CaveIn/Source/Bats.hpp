@@ -16,6 +16,7 @@
 #include <xaudio2.h>
 #include <X3DAudio.h>
 #include "AudioRenderable.hpp"
+
 class XACore;
 class XASound;
 
@@ -25,10 +26,8 @@ public:
 	void RenderAudio(const float deltaTime);
 	bool IsOk() const;
 	void Play();
-	void UpdateEmitter(X3DAUDIO_LISTENER player);
-
-	Bat(XACore *aCore);
-	virtual ~Bat();
+	Bat(XACore *aCore, int sound);
+	~Bat();
 private:
 	XASound *mBat;
 	float mElapsedTime;

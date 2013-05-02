@@ -24,14 +24,15 @@ using AllanMilne::Audio::XACore;
 using AllanMilne::Audio::XASound;
 #include "Player.hpp"
 using AllanMilne::Audio::Player;
+#include "Bats.hpp"
 
-#include "Soundscape1Base.hpp"
+#include "Soundscape.hpp"
 
 //=== Implementation of the IGameCore interface.
 
 //--- create and initialize XACore.
 //--- Since this game has no graphics the HWND argument is not used.
-bool Soundscape1::SetupGame (HWND aWindow)
+bool Soundscape::SetupGame (HWND aWindow)
 {
 	
 	// set up the XAudio2 engine and mastering voice; check if ok.
@@ -39,23 +40,29 @@ bool Soundscape1::SetupGame (HWND aWindow)
 	if (mXACore->GetEngine() == NULL || mXACore->GetMasterVoice() == NULL) {
 		return false;
 	}
-	memset((void*)&mX3DInstance,0,sizeof(X3DAUDIO_HANDLE));
-	DWORD channelMask = mXACore->GetDeviceDetails().OutputFormat.dwChannelMask;
-	X3DAudioInitialize(channelMask,X3DAUDIO_SPEED_OF_SOUND, mX3DInstance);
-	mPlayer = new Player();
-	mPlayer->InitializeListener();
+	/*
+	mBat = new Bat(mXACore);
+	mBat->InitializeEmitter(mXACore);
+	mRenderedSounds.push_back((AudioRenderable*)mBat);
+	*/
 	return true;		// All has been setup without error.
 } // end SetupGame function.
 
 //--- process a single game frame.
-void Soundscape1::ProcessGameFrame (const float deltaTime)
+void Soundscape::ProcessGameFrame (const float deltaTime)
 {
 	static bool keyPress = false;
+	/*
+	list<AudioRenderable*>::const_iterator iter;
+	for(iter=mRenderedSounds.begin(); iter!=mRenderedSounds.end(); ++iter){
+		(*iter)->RenderAudio(deltaTime);
+	}
+	*/
 } // end ProcessGameFrame function.
 
 //--- Release all XACore resources.
 //--- Note the order of destruction is important; XAudio2 destroys voices when the engine is destroyed, any calls to the voices AFTER this is an error, so any voice->DestroyVoice() should always be called before the engine is destroyed.
-void Soundscape1::CleanupGame ()
+void Soundscape::CleanupGame ()
 {
 	if (mXACore != NULL) {
 		delete mXACore;

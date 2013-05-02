@@ -18,24 +18,30 @@ for stereo input need matrix 4*4 first two how much of the left channel going to
 	this version is the base definition of the class with no sound elements.
 */
 
-#ifndef __SOUNDSCAPE1_HPP_0__
-#define __SOUNDSCAPE1_HPP_0__
+#ifndef _SOUNDS_CUES_HPP_
+#define _SOUNDS_CUES_HPP_
 
 #include <xaudio2.h>
 #include <X3DAudio.h>
 #include "IGameCore.hpp"
 using AllanMilne::IGameCore;
-#include "AudioRenderable.hpp"
+#include "AudioRenderable3D.hpp"
 #include "Player.hpp"
-#include <list>
-using std::list;
+#include "Rocks.hpp"
+#include <vector>
+using std::vector;
 
 class XACore;
 class XASound;
 class Player;
 
-class Soundscape1 : public IGameCore {
+class SoundCues : public IGameCore {
 public:
+	enum mTileTypes {Wall, Start, Finish, Good, Bad, Path};
+	struct Tiles{
+		mTileTypes tile;
+		bool played;
+	};
 
 	//=== Implementation of the IGameCore interface.
 
@@ -48,27 +54,37 @@ public:
 
 	//--- Release all XACore, XASound and other audio resources.
 	void CleanupGame ();
-
 	//=== Game specific behaviour.
-
 	//--- Default constructor.
-	Soundscape1 () 
-	: mXACore (NULL)
-	{ 
-		memset((void*)&mEmitter,0,sizeof(X3DAUDIO_EMITTER));
-		memset((void*)&mDSPSettings,0,sizeof(X3DAUDIO_DSP_SETTINGS));
-	} // end constructor.
-
+	SoundCues () 
+	: mXACore (NULL), locationX(0), locationZ(0), mapSize(11), movementEnabled(true)
+	{} // end constructor.
 
 private:
-	
+
+	void UpdateSettings(AudioRenderable3D* audio);
+	void Apply3D();
+	void ClearArray();
+	void SetupMap();
+	inline mTileTypes CheckMap(int x, int y) {return mMap[x][y].tile;}
+	bool CheckForwardTile(int x, int y);
+	bool CheckMoveForward();
+	void ChangeOrientation(int dir);
+	void UpdateSoundTile();
+	void PlaySoundTiles(int z, int x, X3DAUDIO_VECTOR pos);
 	//--- the XAudio2 engine encapsulation.
 	XACore *mXACore;
+	XASound *mRain;
 	XAUDIO2_FILTER_PARAMETERS mFParams;
 	Player *mPlayer;
-	X3DAUDIO_DSP_SETTINGS mDSPSettings;
-	X3DAUDIO_EMITTER mEmitter;
+	Rocks *mRock;
 	X3DAUDIO_HANDLE mX3DInstance;
+	vector<AudioRenderable3D*> mGoodSounds;
+	vector<AudioRenderable3D*> mBadSounds;
+	int mGoodIter, mBadIter;
+	int locationX, locationZ, mapSize;
+	bool movementEnabled;
+	Tiles mMap[11][11]; 
 }; // end Soundscape1 class.
 
 #endif

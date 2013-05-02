@@ -21,12 +21,11 @@ class XACore;
 class Rats: virtual AudioRenderable
 {
 public:
+	Rats(XACore *aCore, int sound);
+	~Rats();
+	
 	void RenderAudio(const float deltaTime);
 	bool IsOk() const;
-	void UpdateEmitter(X3DAUDIO_LISTENER player);
-	Rats(XACore *aCore);
-	virtual ~Rats();
-
 private:
 	bool mOk;
 	int mPause;

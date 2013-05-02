@@ -12,6 +12,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\AudioRenderable.hpp" />
+    <ClInclude Include="Source\AudioRenderable3D.hpp" />
     <ClInclude Include="Source\Bats.hpp" />
     <ClInclude Include="Source\Rats.hpp" />
     <ClInclude Include="Source\GameTimer.h" />
@@ -22,7 +23,8 @@
     <ClInclude Include="Source\IXACore.hpp" />
     <ClInclude Include="Source\PCMWave.hpp" />
     <ClInclude Include="Source\Rocks.hpp" />
-    <ClInclude Include="Source\Soundscape1Base.hpp" />
+    <ClInclude Include="Source\SoundCues.hpp" />
+    <ClInclude Include="Source\Soundscape.hpp" />
     <ClInclude Include="Source\WaveFileManager.hpp" />
     <ClInclude Include="Source\WaveFmt.hpp" />
     <ClInclude Include="Source\WinCore.hpp" />
@@ -33,10 +35,11 @@
     <ClCompile Include="Source\Bats.cpp" />
     <ClCompile Include="Source\Rats.cpp" />
     <ClCompile Include="Source\GameTimer.cpp" />
-    <ClCompile Include="Source\Main_Soundscape1.cpp" />
+    <ClCompile Include="Source\Main.cpp" />
     <ClCompile Include="Source\PCMWave.cpp" />
     <ClCompile Include="Source\Rocks.cpp" />
-    <ClCompile Include="Source\Soundscape1Base.cpp" />
+    <ClCompile Include="Source\SoundCues.cpp" />
+    <ClCompile Include="Source\Soundscape.cpp" />
     <ClCompile Include="Source\WaveFileManager.cpp" />
     <ClCompile Include="Source\WinCore.cpp" />
     <ClCompile Include="Source\Player.cpp" />

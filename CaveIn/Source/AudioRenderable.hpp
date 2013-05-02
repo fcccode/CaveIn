@@ -15,20 +15,13 @@
 #include <stdio.h>
 #include <xaudio2.h>
 #include <X3DAudio.h>
+class XACore;
 
 class AudioRenderable
 {
 public:
 	virtual void RenderAudio(const float deltaTime) = 0;
 	virtual bool IsOk() const = 0;
-	virtual void UpdateEmitter(X3DAUDIO_LISTENER player)=0;
 	virtual ~AudioRenderable(){}
-	AudioRenderable(){
-		memset((void*)&mDSPSettings,0,sizeof(X3DAUDIO_DSP_SETTINGS));
-		memset((void*)&mEmitter,0,sizeof(X3DAUDIO_EMITTER));
-	}
-protected:
-	X3DAUDIO_EMITTER mEmitter;
-	X3DAUDIO_DSP_SETTINGS mDSPSettings;
 };
 #endif

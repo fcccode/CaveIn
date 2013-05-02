@@ -13,17 +13,32 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Header Files\Sounds">
+    <Filter Include="Source Files\Soundscape">
+      <UniqueIdentifier>{0904c95f-2c5b-44d7-b772-2d434a6d6491}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Soundscape">
       <UniqueIdentifier>{28039702-d58d-4cd8-a662-c9e532f66a5c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Sounds">
+    <Filter Include="Header Files\Sound Cues">
+      <UniqueIdentifier>{347e0866-27b7-4c6a-968f-a580201f0c38}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Sound Cues">
+      <UniqueIdentifier>{779343c7-abcb-4320-87e4-f45058c7cc7c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Sound Cues\Praise">
+      <UniqueIdentifier>{d889145c-0005-490b-b19f-9340c4c4ab32}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Sound Cues\Warnings">
       <UniqueIdentifier>{bbd6ca7a-8d9e-4ae9-83ca-5ee01289aa95}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Sound Cues\Praise">
+      <UniqueIdentifier>{400b9ee0-291c-4b2d-ab9d-c05821672072}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Sound Cues\Warnings">
+      <UniqueIdentifier>{75a18eec-e6a0-4259-a7d5-d54bef6b61b6}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Source\AudioRenderable.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Source\GameTimer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -42,9 +57,6 @@
     <ClInclude Include="Source\PCMWave.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Soundscape1Base.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Source\WaveFileManager.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -60,30 +72,36 @@
     <ClInclude Include="Source\XASound.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Rocks.hpp">
-      <Filter>Header Files\Sounds</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Player.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Rats.hpp">
-      <Filter>Header Files\Sounds</Filter>
+      <Filter>Header Files\Soundscape</Filter>
     </ClInclude>
     <ClInclude Include="Source\Bats.hpp">
-      <Filter>Header Files\Sounds</Filter>
+      <Filter>Header Files\Soundscape</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Rocks.hpp">
+      <Filter>Header Files\Sound Cues\Warnings</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Soundscape.hpp">
+      <Filter>Header Files\Soundscape</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\AudioRenderable.hpp">
+      <Filter>Header Files\Soundscape</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\AudioRenderable3D.hpp">
+      <Filter>Header Files\Sound Cues</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\SoundCues.hpp">
+      <Filter>Header Files\Sound Cues</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Player.hpp">
+      <Filter>Header Files\Sound Cues</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\GameTimer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Main_Soundscape1.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Source\PCMWave.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Soundscape1Base.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Source\WaveFileManager.cpp">
@@ -99,16 +117,25 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Source\Rocks.cpp">
-      <Filter>Source Files\Sounds</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Player.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Sound Cues\Warnings</Filter>
     </ClCompile>
     <ClCompile Include="Source\Rats.cpp">
-      <Filter>Source Files\Sounds</Filter>
+      <Filter>Source Files\Soundscape</Filter>
     </ClCompile>
     <ClCompile Include="Source\Bats.cpp">
-      <Filter>Source Files\Sounds</Filter>
+      <Filter>Source Files\Soundscape</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Soundscape.cpp">
+      <Filter>Source Files\Soundscape</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Player.cpp">
+      <Filter>Source Files\Sound Cues</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\SoundCues.cpp">
+      <Filter>Source Files\Sound Cues</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

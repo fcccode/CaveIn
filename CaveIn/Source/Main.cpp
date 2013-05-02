@@ -29,7 +29,8 @@
 #include "IGameCore.hpp"
 using AllanMilne::WinCore;
 using AllanMilne::IGameCore;
-#include "Soundscape1Base.hpp"
+#include "Soundscape.hpp"
+#include "SoundCues.hpp"
 //xxx Add #include for your class header file.
 
 //=== Application entry point.
@@ -42,14 +43,14 @@ int WINAPI WinMain (HINSTANCE hinstance,
 	IGameCore *game;
 
 	//xxx following line should be uncommented and XXX replaced with your game processing class (that implements IGameCore).
-	game = new Soundscape1();
-
+	//game = new Soundscape();
+	game = new SoundCues();
 	windowApp = new WinCore (game);
 
 	//--- Create the application window and application-wide resources.
 	//xxx amend parameters to reflect your application.
 	bool ok = windowApp->Initialize (
-				"Soundscape",		//xxx Windows title bar text.
+				"Cave In",		//xxx Windows title bar text.
 				800, 600,			//xxx width x height
 				false,				//xxx use full screen; change to true if windowed is required.
 				hinstance );
