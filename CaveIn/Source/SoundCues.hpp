@@ -72,6 +72,7 @@ private:
 	void ChangeOrientation(int dir);
 	void UpdateSoundTile();
 	void PlaySoundTiles(int z, int x, X3DAUDIO_VECTOR pos);
+	void StopAllSounds();
 	//--- the XAudio2 engine encapsulation.
 	XACore *mXACore;
 	XASound *mRain;

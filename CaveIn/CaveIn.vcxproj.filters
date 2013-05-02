@@ -75,9 +75,6 @@
     <ClInclude Include="Source\Rats.hpp">
       <Filter>Header Files\Soundscape</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Bats.hpp">
-      <Filter>Header Files\Soundscape</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Rocks.hpp">
       <Filter>Header Files\Sound Cues\Warnings</Filter>
     </ClInclude>
@@ -95,6 +92,9 @@
     </ClInclude>
     <ClInclude Include="Source\Player.hpp">
       <Filter>Header Files\Sound Cues</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Bats.hpp">
+      <Filter>Header Files\Sound Cues\Warnings</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -122,9 +122,6 @@
     <ClCompile Include="Source\Rats.cpp">
       <Filter>Source Files\Soundscape</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Bats.cpp">
-      <Filter>Source Files\Soundscape</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Soundscape.cpp">
       <Filter>Source Files\Soundscape</Filter>
     </ClCompile>
@@ -136,6 +133,9 @@
     </ClCompile>
     <ClCompile Include="Source\SoundCues.cpp">
       <Filter>Source Files\Sound Cues</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Bats.cpp">
+      <Filter>Source Files\Sound Cues\Warnings</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

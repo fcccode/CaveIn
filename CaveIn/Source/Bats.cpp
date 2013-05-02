@@ -22,11 +22,10 @@ Bat::Bat(XACore *aCore, int sound)
 	:mBat(NULL), mElapsedTime(0.0f), mVolumeAdjustment(1.1f)
 {
 	switch(sound){
-	case 0: mBat = aCore->CreateSound("Sounds/Warnings/Bats/Bats.wav"); break;
-	case 1: mBat = aCore->CreateSound("Sounds/Warnings/Bats/Bats1.wav"); break;
-	case 2: mBat = aCore->CreateSound("Sounds/Warnings/Bats/Bats2.wav"); break;
-	case 3: mBat = aCore->CreateSound("Sounds/Warnings/Bats/Bats3.wav"); break;
-	case 4: mBat = aCore->CreateSound("Sounds/Warnings/Bats/Bats4.wav"); break;
+	case 0: mBat = aCore->CreateSound("Sounds/Warning/Bats/Bats.wav"); break;
+	case 1: mBat = aCore->CreateSound("Sounds/Warning/Bats/Bats1.wav"); break;
+	case 2: mBat = aCore->CreateSound("Sounds/Warning/Bats/Bats2.wav"); break;
+	case 3: mBat = aCore->CreateSound("Sounds/Warning/Bats/Bats3.wav"); break;
 	}
 }
 Bat::~Bat()
@@ -40,6 +39,9 @@ void Bat::Play()
 {
 	mBat->SetLooped(true);
 	mBat->Play(0);
+}
+void Bat::Pause(){
+	mBat->Pause();
 }
 inline bool Bat::IsOk() const {return (mBat!=NULL);}
 
@@ -67,4 +69,28 @@ void Bat::RenderAudio(const float deltaTime)
 	}
 
 	
+}
+void Bat::InitializeEmitter(XACore *xacore){
+	XAUDIO2_VOICE_DETAILS details;
+	mBat->GetSourceVoice()->GetVoiceDetails(&details);
+	mEmitter.ChannelCount = details.InputChannels;
+	mEmitter.CurveDistanceScaler = 1.0f;
+	X3DAUDIO_VECTOR tempVector = { 0.0f, 0.0f, 1.0f};
+	mEmitter.Position = tempVector;
+	mEmitter.Velocity = tempVector;
+
+	mDSPSettings.SrcChannelCount = mEmitter.ChannelCount;
+	mDSPSettings.DstChannelCount = xacore->GetChannelCount();
+	mDSPSettings.pMatrixCoefficients = new FLOAT32[mDSPSettings.SrcChannelCount * mDSPSettings.DstChannelCount];
+}
+void Bat::UpdateEmitter(X3DAUDIO_VECTOR pos, X3DAUDIO_VECTOR velo){
+	mEmitter.Position.x += pos.x;
+	mEmitter.Position.y += pos.y;
+	mEmitter.Position.z += pos.z;
+	mEmitter.Velocity.x += velo.x;
+	mEmitter.Velocity.y += velo.y;
+	mEmitter.Velocity.z += velo.z;
+}
+IXAudio2SourceVoice* Bat::getSourceVoice(){
+	return mBat->GetSourceVoice();
 }

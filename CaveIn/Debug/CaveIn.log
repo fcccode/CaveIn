@@ -1,4 +1,4 @@
-﻿Build started 5/2/2013 11:25:22 AM.
+﻿Build started 5/2/2013 2:08:08 PM.
      1>Project "C:\Users\Jake\Documents\Visual Studio 2010\Projects\CaveIn\CaveIn\CaveIn.vcxproj" on node 2 (build target(s)).
      1>InitializeBuildStatus:
          Creating "Debug\CaveIn.unsuccessfulbuild" because "AlwaysCreate" was specified.
@@ -35,4 +35,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:03.13
+Time Elapsed 00:00:03.30

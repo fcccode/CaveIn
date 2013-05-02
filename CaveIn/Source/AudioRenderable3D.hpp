@@ -15,7 +15,9 @@
 #include <stdio.h>
 #include <xaudio2.h>
 #include <X3DAudio.h>
+#include "XASound.hpp"
 class XACore;
+class XASound;
 
 class AudioRenderable3D
 {
@@ -23,6 +25,9 @@ public:
 	virtual void RenderAudio(const float deltaTime) = 0;
 	virtual bool IsOk() const = 0;
 	virtual void InitializeEmitter(XACore *xacore)=0;
+	virtual XASound* getXASound() = 0;
+	virtual void Play() = 0;
+	virtual void Pause() = 0;
 	virtual ~AudioRenderable3D(){}
 	virtual X3DAUDIO_EMITTER getEmitter()=0;
 	virtual X3DAUDIO_DSP_SETTINGS* getDSPSettings()=0;
