@@ -1,15 +1,15 @@
 /********************************************************************
-	Filename:	Rocks.h
+	Filename:	Bats.hpp
 	Version: 	
-	Created:	2013/03/12
+	Created:	02/04/2013
 	
 	Author:		Jake Morey
 	
 	Description:
 	
 *********************************************************************/
-#ifndef _Rocks_h_
-#define _Rocks_h_
+#ifndef _ROCKS_HPP_
+#define _ROCKS_HPP_
 
 #include <windows.h>
 #include <stdio.h>
@@ -23,22 +23,22 @@ class XASound;
 class Rocks: public AudioRenderable3D
 {
 public:
-	Rocks(void);
-	~Rocks(void);
+	Rocks(XACore *aCore);
+	~Rocks();
 	void RenderAudio(const float deltaTime);
 	bool IsOk() const;
 	void Play();
-	Rocks(XACore *aCore, int sound);
+	void Pause();
+	XASound* getXASound() {return mRocks;}
 	void InitializeEmitter(XACore *xacore);
 	inline X3DAUDIO_EMITTER getEmitter(){ return mEmitter;}
 	inline X3DAUDIO_DSP_SETTINGS* getDSPSettings(){return &mDSPSettings;}
 	IXAudio2SourceVoice* getSourceVoice();
 	void UpdateEmitter(X3DAUDIO_VECTOR pos, X3DAUDIO_VECTOR velo);
 private:
-	XASound *mRock;
+	XASound *mRocks;
 	float mElapsedTime;
 	float mVolumeAdjustment;
 };
 
-#endif // _Rocks_h_
-
+#endif 

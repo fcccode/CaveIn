@@ -27,7 +27,6 @@ for stereo input need matrix 4*4 first two how much of the left channel going to
 using AllanMilne::IGameCore;
 #include "AudioRenderable3D.hpp"
 #include "Player.hpp"
-#include "Rocks.hpp"
 #include <vector>
 using std::vector;
 
@@ -76,6 +75,7 @@ private:
 	bool InitRats();
 	bool InitBats();
 	bool InitBear();
+	bool InitOtherWarnings();
 	//--- the XAudio2 engine encapsulation.
 	XACore *mXACore;
 	XAUDIO2_FILTER_PARAMETERS mFParams;

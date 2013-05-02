@@ -99,6 +99,9 @@
     <ClInclude Include="Source\Bear.hpp">
       <Filter>Header Files\Sound Cues\Warnings</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Water.hpp">
+      <Filter>Header Files\Sound Cues\Warnings</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\GameTimer.cpp">
@@ -141,6 +144,9 @@
       <Filter>Source Files\Sound Cues\Warnings</Filter>
     </ClCompile>
     <ClCompile Include="Source\Bear.cpp">
+      <Filter>Source Files\Sound Cues\Warnings</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Water.cpp">
       <Filter>Source Files\Sound Cues\Warnings</Filter>
     </ClCompile>
   </ItemGroup>

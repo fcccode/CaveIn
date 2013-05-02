@@ -27,7 +27,8 @@ using AllanMilne::Audio::Player;
 #include "Bats.hpp"
 #include "Rats.hpp"
 #include "Bear.hpp"
-
+#include "Water.hpp"
+#include "Rocks.hpp"
 #include "Soundcues.hpp"
 //=== Implementation of the IGameCore interface.
 namespace{
@@ -58,6 +59,8 @@ bool SoundCues::SetupGame (HWND aWindow)
 	}else if(!InitBats()){
 		return false;
 	}else if(!InitBear()){
+		return false;
+	}else if(!InitOtherWarnings()){
 		return false;
 	}
 
@@ -396,6 +399,7 @@ bool SoundCues::InitBats(){
 	mBadSounds.push_back((AudioRenderable3D*)bat1);
 	mBadSounds.push_back((AudioRenderable3D*)bat2);
 	mBadSounds.push_back((AudioRenderable3D*)bat3);
+	return true;
 }
 bool SoundCues::InitRats(){
 	Rat *rat = new Rat(mXACore, 0);
@@ -415,6 +419,7 @@ bool SoundCues::InitRats(){
 	rat1->InitializeEmitter(mXACore);
 	mBadSounds.push_back((AudioRenderable3D*)rat);
 	mBadSounds.push_back((AudioRenderable3D*)rat1);
+	return true;
 }
 bool SoundCues::InitBear(){
 	Bear *bear = new Bear(mXACore, 0);
@@ -434,5 +439,36 @@ bool SoundCues::InitBear(){
 	bear1->InitializeEmitter(mXACore);
 	mBadSounds.push_back((AudioRenderable3D*)bear);
 	mBadSounds.push_back((AudioRenderable3D*)bear1);
+	return true;
+}
+bool SoundCues::InitOtherWarnings(){
+	Rocks *rocks = new Rocks(mXACore);
+	if(!rocks->IsOk()){
+		MessageBox(NULL,"Error loading rocks.wav",TEXT("SetupGame()-FAILED"),MB_OK|MB_ICONERROR);
+		delete rocks;
+		return false;
+	}
+	rocks->InitializeEmitter(mXACore);
+	Water *water = new Water(mXACore,0);
+	if(!water->IsOk()){
+		MessageBox(NULL,"Error loading water.wav",TEXT("SetupGame()-FAILED"),MB_OK|MB_ICONERROR);
+		delete rocks;		
+		delete water;
+		return false;
+	}
+	water->InitializeEmitter(mXACore);
+	Water *water1 = new Water(mXACore,0);
+	if(!water1->IsOk()){
+		MessageBox(NULL,"Error loading water.wav",TEXT("SetupGame()-FAILED"),MB_OK|MB_ICONERROR);
+		delete rocks;		
+		delete water;
+		delete water1;
+		return false;
+	}
+	water1->InitializeEmitter(mXACore);
+	mBadSounds.push_back((AudioRenderable3D*)water);
+	mBadSounds.push_back((AudioRenderable3D*)water1);
+	mBadSounds.push_back((AudioRenderable3D*)rocks);
+	return true;
 }
 //=== end of code.

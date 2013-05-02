@@ -1,10 +1,10 @@
-﻿Build started 5/2/2013 3:57:26 PM.
+﻿Build started 5/2/2013 4:40:07 PM.
      1>Project "C:\Users\Jake\Documents\Visual Studio 2010\Projects\CaveIn\CaveIn\CaveIn.vcxproj" on node 2 (build target(s)).
      1>InitializeBuildStatus:
          Creating "Debug\CaveIn.unsuccessfulbuild" because "AlwaysCreate" was specified.
        ClCompile:
-         c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _WINDOWS /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt Source\Bear.cpp
-         Bear.cpp
+         c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _WINDOWS /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt Source\SoundCues.cpp
+         SoundCues.cpp
        ManifestResourceCompile:
          All outputs are up-to-date.
        Link:
@@ -18,6 +18,7 @@
          Debug\Rocks.obj
          Debug\SoundCues.obj
          Debug\Soundscape.obj
+         Debug\Water.obj
          Debug\WaveFileManager.obj
          Debug\WinCore.obj
          Debug\Player.obj
@@ -36,4 +37,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:02.37
+Time Elapsed 00:00:03.05

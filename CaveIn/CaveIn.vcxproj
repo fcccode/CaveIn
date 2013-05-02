@@ -26,6 +26,7 @@
     <ClInclude Include="Source\Rocks.hpp" />
     <ClInclude Include="Source\SoundCues.hpp" />
     <ClInclude Include="Source\Soundscape.hpp" />
+    <ClInclude Include="Source\Water.hpp" />
     <ClInclude Include="Source\WaveFileManager.hpp" />
     <ClInclude Include="Source\WaveFmt.hpp" />
     <ClInclude Include="Source\WinCore.hpp" />
@@ -42,6 +43,7 @@
     <ClCompile Include="Source\Rocks.cpp" />
     <ClCompile Include="Source\SoundCues.cpp" />
     <ClCompile Include="Source\Soundscape.cpp" />
+    <ClCompile Include="Source\Water.cpp" />
     <ClCompile Include="Source\WaveFileManager.cpp" />
     <ClCompile Include="Source\WinCore.cpp" />
     <ClCompile Include="Source\Player.cpp" />
