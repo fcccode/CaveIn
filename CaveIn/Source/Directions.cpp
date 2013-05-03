@@ -35,7 +35,6 @@ Directions::~Directions(){
 	}
 }
 void Directions::Play(){
-	mGood->SetLooped(true);
 	mGood->Play(0);
 }
 void Directions::Pause(){
@@ -51,18 +50,13 @@ void Directions::RenderAudio(const float deltaTime){
 	if(!IsOk()){
 		return;
 	}
-	mElapsedTime+=deltaTime;
-	if(mElapsedTime>pauseTime){
-		mElapsedTime = 0.0f;
-		float volume = mGood->GetVolume();
-		if(volume<minVolume){
-			mVolumeAdjustment = volumeUp;
-		}else if(volume > maxVolume){
-			mVolumeAdjustment = volumeDown;
+	if(mGood->IsPlaying() == false){
+		mElapsedTime+=deltaTime;
+		if(mElapsedTime>pauseTime){
+			mElapsedTime = 0.0f;
+			mGood->Play(0);
 		}
-		mGood->AdjustVolume(mVolumeAdjustment);
 	}
-	
 }
 void Directions::InitializeEmitter(XACore *xacore){
 	XAUDIO2_VOICE_DETAILS details;

@@ -32,7 +32,6 @@ Path::~Path()
 }
 void Path::Play()
 {
-	mPath->SetLooped(true);
 	mPath->Play(0);
 }
 void Path::Pause(){
@@ -42,28 +41,17 @@ inline bool Path::IsOk() const {return (mPath!=NULL);}
 
 void Path::RenderAudio(const float deltaTime)
 {
-	static const float minVolume	= 0.1f;
-	static const float maxVolume	= 1.0f;
-	static const float volumeUp		= 1.25f;
-	static const float volumeDown	= 0.8f;
 	static const float pauseTime	= 1.0f;
-
 	if(!IsOk()){
 		return;
 	}
-	mElapsedTime+=deltaTime;
-	if(mElapsedTime>pauseTime){
-		mElapsedTime = 0.0f;
-		float volume = mPath->GetVolume();
-		if(volume<minVolume){
-			mVolumeAdjustment = volumeUp;
-		}else if(volume > maxVolume){
-			mVolumeAdjustment = volumeDown;
+	if(mPath->IsPlaying() == false){
+		mElapsedTime+=deltaTime;
+		if(mElapsedTime>pauseTime){
+			mElapsedTime = 0.0f;
+			mPath->Play(0);
 		}
-		mPath->AdjustVolume(mVolumeAdjustment);
 	}
-
-	
 }
 void Path::InitializeEmitter(XACore *xacore){
 	XAUDIO2_VOICE_DETAILS details;

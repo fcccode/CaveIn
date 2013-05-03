@@ -42,7 +42,7 @@ namespace{
 //--- Since this game has no graphics the HWND argument is not used.
 bool SoundCues::SetupGame (HWND aWindow)
 {
-	
+	mPlayPath = false;
 	// set up the XAudio2 engine and mastering voice; check if ok.
 	mXACore = new XACore ();
 	if (mXACore->GetEngine() == NULL || mXACore->GetMasterVoice() == NULL) {
@@ -126,8 +126,20 @@ void SoundCues::ProcessGameFrame (const float deltaTime)
 	if(positionChanged){
 		UpdateSoundTile();
 	}
+	if(mPlayPath){
+		mPath->RenderAudio(deltaTime);
+	}
+	if(mPlayGood){
+		mGoodSounds.at(mGoodIter)->RenderAudio(deltaTime);
+	}
+	if(mPlayBad){
+		mBadSounds.at(mBadIter)->RenderAudio(deltaTime);
+	}
 } // end ProcessGameFrame function.
 void SoundCues::UpdateSoundTile(){
+	mPlayPath = false;
+	mPlayGood = false;
+	mPlayBad = false;
 	X3DAUDIO_VECTOR pos = mPlayer->getListener().Position;
 	if(mMap[locationZ-1][locationX].played == false){
 		pos.z-=1;
@@ -157,20 +169,25 @@ void SoundCues::PlaySoundTiles(int z, int x, X3DAUDIO_VECTOR pos){
 		mGoodSounds.at(mGoodIter)->UpdateEmitter(pos,velo);
 		UpdateSettings(mGoodSounds.at(mGoodIter));
 		mGoodSounds.at(mGoodIter)->Play();
+		mPlayGood = true;
 		break;
 	case tFinish:
 		mGoodSounds.at(mGoodIter)->UpdateEmitter(pos,velo);
 		UpdateSettings(mGoodSounds.at(mGoodIter));
 		mGoodSounds.at(mGoodIter)->Play();
+		mPlayGood = true;
 		break;
 	case tPath:
+		mPath->UpdateEmitter(pos,velo);
+		UpdateSettings(mPath);
 		mPath->Play();
-		//path sounds
+		mPlayPath = true;
 		break;
 	case tBad:
 		mBadSounds.at(mBadIter)->UpdateEmitter(pos,velo);
 		UpdateSettings(mBadSounds.at(mBadIter));
 		mBadSounds.at(mBadIter)->Play();
+		mPlayBad = true;
 		break;
 	}
 }
@@ -209,9 +226,9 @@ bool SoundCues::CheckMoveForward(){
 				return true;
 			}
 		}else if((locationZ-1)==0){
-			pos.z = locationZ-1;
+			pos.z = float(locationZ-1);
 			mWall->UpdateEmitter(pos,velo);
-			UpdateSettings(mWall);
+			UpdateSettings((AudioRenderable3D*)mWall);
 			mWall->Play();
 		}
 		break;
@@ -222,9 +239,9 @@ bool SoundCues::CheckMoveForward(){
 				return true;
 			}
 		}else if((locationX+1)==mapSize){
-			pos.x = locationX+1;
+			pos.x = float(locationX+1);
 			mWall->UpdateEmitter(pos,velo);
-			UpdateSettings(mWall);
+			UpdateSettings((AudioRenderable3D*)mWall);
 			mWall->Play();
 		}
 		break;
@@ -235,9 +252,9 @@ bool SoundCues::CheckMoveForward(){
 				return true;
 			}
 		}else if((locationZ+1)==mapSize){
-			pos.z = locationZ+1;
+			pos.z = float(locationZ+1);
 			mWall->UpdateEmitter(pos,velo);
-			UpdateSettings(mWall);
+			UpdateSettings((AudioRenderable3D*)mWall);
 			mWall->Play();
 		}
 		break;
@@ -248,9 +265,9 @@ bool SoundCues::CheckMoveForward(){
 				return true;
 			}
 		}else if((locationX-1)==0){
-			pos.x = locationX-1;
+			pos.x = float(locationX-1);
 			mWall->UpdateEmitter(pos,velo);
-			UpdateSettings(mWall);
+			UpdateSettings((AudioRenderable3D*)mWall);
 			mWall->Play();
 		}
 		break;
@@ -383,7 +400,7 @@ bool SoundCues::CheckForwardTile(int x, int y){
 	case tGood: return true; break;
 	case tWall: 
 		mWall->UpdateEmitter(pos,velo);
-		UpdateSettings(mWall);
+		UpdateSettings((AudioRenderable3D*)mWall);
 		mWall->Play();
 	case tBad: return false; break;
 	default: return false; break;

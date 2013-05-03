@@ -93,6 +93,9 @@ private:
 	Tiles mMap[11][11]; 
 	Path *mPath;
 	Wall *mWall; 
+	bool mPlayPath;
+	bool mPlayGood;
+	bool mPlayBad;
 }; // end Soundscape1 class.
 
 #endif
