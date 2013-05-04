@@ -68,7 +68,7 @@ private:
 	void ClearArray();
 	void SetupMap();
 	inline mTileTypes CheckMap(int x, int y) {return mMap[x][y].tile;}
-	bool CheckForwardTile(int x, int y);
+	bool CheckForwardTile(int x, int y, X3DAUDIO_VECTOR pos);
 	bool CheckMoveForward();
 	void ChangeOrientation(int dir);
 	void UpdateSoundTile();

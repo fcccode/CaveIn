@@ -38,7 +38,7 @@ namespace {
 
 
 Player::Player(){
-	scale = 1.0f;
+	scale = 3.0f;
 	memset((void*)&mListener,0,sizeof(X3DAUDIO_LISTENER));
 }
 bool Player::InitializeListener(){
@@ -72,6 +72,7 @@ void Player::RotateRound(){
 		}else if(endPoint>currentPoint){
 			currentDir = Orientation(currentPoint+1);
 		}
+		mListener.OrientFront = compassVectors[int(currentDir)];
 	}
 }
 bool Player::MoveForward(){
@@ -154,6 +155,21 @@ bool Player::ShuffleBack(){
 	default: return false;
 	}
 }
-
+X3DAUDIO_VECTOR Player::getPlayerNorth(){
+	X3DAUDIO_VECTOR pos = {mListener.Position.x,mListener.Position.y,mListener.Position.z+scale};
+	return pos;
+}
+X3DAUDIO_VECTOR Player::getPlayerEast(){
+	X3DAUDIO_VECTOR pos = {mListener.Position.x+scale,mListener.Position.y,mListener.Position.z};
+	return pos;
+}
+X3DAUDIO_VECTOR Player::getPlayerSouth(){
+	X3DAUDIO_VECTOR pos = {mListener.Position.x,mListener.Position.y,mListener.Position.z-scale};
+	return pos;
+}
+X3DAUDIO_VECTOR Player::getPlayerWest(){
+	X3DAUDIO_VECTOR pos = {mListener.Position.x-scale,mListener.Position.y,mListener.Position.z};
+	return pos;
+}
 }
 }

@@ -27,12 +27,17 @@ public:
 	bool ShuffleRight();
 	bool ShuffleBack();
 	void Move();
-	inline bool getFinishedMoving() {return moving;}
+	inline bool getMoving() {return moving;}
+	inline bool getTransition() {return transition;}
 	inline X3DAUDIO_LISTENER getListener() {return mListener;}
 	bool UpdateSettings(X3DAUDIO_HANDLE instance, X3DAUDIO_EMITTER& emitter, X3DAUDIO_DSP_SETTINGS& settings);
 	Player();
 	~Player();
 	void RotateRound();
+	X3DAUDIO_VECTOR getPlayerNorth();
+	X3DAUDIO_VECTOR getPlayerEast();
+	X3DAUDIO_VECTOR getPlayerSouth();
+	X3DAUDIO_VECTOR getPlayerWest();
 private:
 	X3DAUDIO_LISTENER mListener;
 	bool transition;

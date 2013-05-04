@@ -72,12 +72,8 @@ void Directions::InitializeEmitter(XACore *xacore){
 	mDSPSettings.pMatrixCoefficients = new FLOAT32[mDSPSettings.SrcChannelCount * mDSPSettings.DstChannelCount];
 }
 void Directions::UpdateEmitter(X3DAUDIO_VECTOR pos, X3DAUDIO_VECTOR velo){
-	mEmitter.Position.x += pos.x;
-	mEmitter.Position.y += pos.y;
-	mEmitter.Position.z += pos.z;
-	mEmitter.Velocity.x += velo.x;
-	mEmitter.Velocity.y += velo.y;
-	mEmitter.Velocity.z += velo.z;
+	mEmitter.Position = pos;
+	mEmitter.Velocity = velo;
 }
 IXAudio2SourceVoice* Directions::getSourceVoice(){
 	return mGood->GetSourceVoice();
