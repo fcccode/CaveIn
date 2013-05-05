@@ -59,7 +59,7 @@ private:
 	HWND mHwnd;			// Handle to current window.
 	GameTimer *mTimer;		// Pointer to a timing class for use in calculating delta times between frames.
 	IGameCore *mGame;		// pointer to game processing object.
-
+	
 }; // end WinCore class.
 
 } // end AllanMilne namespace.

@@ -57,13 +57,15 @@ bool SoundCues::SetupGame (HWND aWindow){
 
 	mPlayer = new Player();
 	mPlayer->InitializeListener();
-	
+	mAmbient = new Soundscape();
+	InitSounds();
 	SetupMap();
 	return true;		// All has been setup without error.
 } // end SetupGame function.
 //--- process a single game frame.
 void SoundCues::ProcessGameFrame (const float deltaTime){
 	if(CheckStart() == false && CheckFinish() == false){
+		mAmbient->ProcessGameFrame(deltaTime);
 		mPlayer->Move(deltaTime);
 		if(mPlayer->getTransition()){
 			Apply3D();
@@ -120,6 +122,7 @@ bool SoundCues::CheckStart(){
 			mBadIter = rand()%mBadSounds.size();
 			mGoodIter = rand()%mGoodSounds.size();
 			UpdateSoundTile();
+			mAmbient->SetupGame(mXACore);
 		}
 		mStart->Play();
 		return true;
@@ -128,14 +131,17 @@ bool SoundCues::CheckStart(){
 }
 bool SoundCues::CheckFinish(){
 	if(mMap[locationZ][locationX].tile == tFinish){
-		mFinish->Play();
 		if(mFinish->getFinished()){
 			mFinished = true;
 		}
+		mFinish->Play();
 	}
 	return mFinished;
 }
 void SoundCues::UpdateSoundTile(){
+	mPlayPath = false;
+	mPlayGood = false;
+	mPlayBad = false;
 	if(mMap[locationZ-1][locationX].played == false){
 		PlaySoundTiles(locationZ-1,locationX,mPlayer->getPlayerNorth());
 	}
@@ -281,9 +287,6 @@ int SoundCues::CheckIter(int check, int size){
 	return iter;
 }
 void SoundCues::StopAllSounds(){
-	mPlayPath = false;
-	mPlayGood = false;
-	mPlayBad = false;
 	vector<AudioRenderable3D*>::const_iterator iter;
 	mWall->Pause();
 	mPath->Pause();
@@ -635,6 +638,7 @@ bool SoundCues::InitGood(){
 //--- Release all XACore resources.
 //--- Note the order of destruction is important; XAudio2 destroys voices when the engine is destroyed, any calls to the voices AFTER this is an error, so any voice->DestroyVoice() should always be called before the engine is destroyed.
 void SoundCues::CleanupGame (){
+	mAmbient->CleanupGame();
 	vector<AudioRenderable3D*>::const_iterator iter;
 	for(iter = mGoodSounds.begin(); iter!=mGoodSounds.end(); ++iter){
 		delete *iter;

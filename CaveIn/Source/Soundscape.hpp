@@ -50,7 +50,7 @@ public:
 	//--- create and initialize XACore and the sounds to be played.
 	//--- since this game has no graphics the argument is not used.
 	//--- this will create all the sound elements.
-	bool SetupGame (HWND aWindow, XACore *aCore);
+	bool SetupGame (XACore *aCore);
 
 	//--- process a single game frame.
 	//--- this will call the relevant AudioRender() functions.
