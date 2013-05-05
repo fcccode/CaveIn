@@ -28,10 +28,12 @@ public:
 	void RenderAudio(const float deltaTime);
 	void Play();
 	void Pause();
+	void Reset();
 	XASound* getXASound() {return mShuffle;}
 	IXAudio2SourceVoice* getSourceVoice();
 	bool getFinished();
 	inline bool IsOk() const {return (mShuffle!=NULL);}
+	inline bool getStarted(){return mStarted;}
 private:
 	XASound *mShuffle;
 	float mElapsedTime;

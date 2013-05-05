@@ -24,6 +24,7 @@ Rat::Rat(XACore *aCore, int sound)
 	switch(sound){
 	case 0: mRat = aCore->CreateSound("Sounds/Warning/Rats/Rats.wav"); break;
 	case 1: mRat = aCore->CreateSound("Sounds/Warning/Rats/Rats1.wav"); break;
+	case 2: mRat = aCore->CreateSound("Sounds/Warning/Rats/Rats2.wav"); break;
 	}
 }
 Rat::~Rat(){

@@ -123,13 +123,10 @@
     <ClInclude Include="Source\Path.hpp">
       <Filter>Header Files\Sound Cues\Other Tiles</Filter>
     </ClInclude>
-    <ClInclude Include="Source\AmbientRat.hpp">
-      <Filter>Header Files\Soundscape</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\AmbientBats.hpp">
-      <Filter>Header Files\Soundscape</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Horror.hpp">
+      <Filter>Header Files\Soundscape</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Drip.hpp">
       <Filter>Header Files\Soundscape</Filter>
     </ClInclude>
   </ItemGroup>
@@ -197,17 +194,14 @@
     <ClCompile Include="Source\Start.cpp">
       <Filter>Source Files\Sound Cues\Other Tiles</Filter>
     </ClCompile>
-    <ClCompile Include="Source\AmbientRat.cpp">
-      <Filter>Source Files\Soundscape</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\AmbientBats.cpp">
-      <Filter>Source Files\Soundscape</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Horror.cpp">
       <Filter>Source Files\Soundscape</Filter>
     </ClCompile>
     <ClCompile Include="Source\Wall.cpp">
       <Filter>Source Files\Sound Cues\Warnings</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Drip.cpp">
+      <Filter>Source Files\Soundscape</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

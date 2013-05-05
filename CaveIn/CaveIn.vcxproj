@@ -15,10 +15,9 @@
     <ClInclude Include="Source\AudioRenderable3D.hpp" />
     <ClInclude Include="Source\Bats.hpp" />
     <ClInclude Include="Source\Bear.hpp" />
-    <ClInclude Include="Source\AmbientRat.hpp" />
     <ClInclude Include="Source\Directions.hpp" />
     <ClInclude Include="Source\Finish.hpp" />
-    <ClInclude Include="Source\AmbientBats.hpp" />
+    <ClInclude Include="Source\Drip.hpp" />
     <ClInclude Include="Source\Horror.hpp" />
     <ClInclude Include="Source\Path.hpp" />
     <ClInclude Include="Source\Rats.hpp" />
@@ -46,10 +45,9 @@
   <ItemGroup>
     <ClCompile Include="Source\Bats.cpp" />
     <ClCompile Include="Source\Bear.cpp" />
-    <ClCompile Include="Source\AmbientRat.cpp" />
     <ClCompile Include="Source\Directions.cpp" />
     <ClCompile Include="Source\Finish.cpp" />
-    <ClCompile Include="Source\AmbientBats.cpp" />
+    <ClCompile Include="Source\Drip.cpp" />
     <ClCompile Include="Source\Horror.cpp" />
     <ClCompile Include="Source\Path.cpp" />
     <ClCompile Include="Source\Rats.cpp" />

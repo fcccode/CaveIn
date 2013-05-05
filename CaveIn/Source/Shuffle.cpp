@@ -30,10 +30,9 @@ Shuffle::~Shuffle(){
 	}
 }
 void Shuffle::Play(){
-	if(mShuffle->IsPlaying() == false && mStarted == false){
-		mShuffle->Play(0);
-		mStarted = true;
-	}
+	mShuffle->Play(0);
+	mShuffle->SetLooped(true);
+	mStarted = true;
 }
 bool Shuffle::getFinished(){
 	if(mShuffle->IsPlaying()==false && mStarted == true){
@@ -43,6 +42,11 @@ bool Shuffle::getFinished(){
 }
 void Shuffle::Pause(){
 	mShuffle->Pause();
+}
+void Shuffle::Reset(){
+	mStarted = false;
+	mFinished = false;
+	mShuffle->Stop();
 }
 void Shuffle::RenderAudio(const float deltaTime){
 	if(!IsOk()){

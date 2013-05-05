@@ -35,6 +35,8 @@ using AllanMilne::Audio::Player;
 #include "Soundcues.hpp"
 #include "Finish.hpp"
 #include "Start.hpp"
+#include "Walking.hpp"
+#include "Shuffle.hpp"
 //=== Implementation of the IGameCore interface.
 namespace{
 	enum Orientation{North, East, South, West};
@@ -69,12 +71,24 @@ void SoundCues::ProcessGameFrame (const float deltaTime){
 		mPlayer->Move(deltaTime);
 		if(mPlayer->getTransition()){
 			Apply3D();
+		}else if(mShuffle->getStarted() == true){
+			mShuffle->Reset();
 		}
 		if(mPlayer->getMoving() == false){
-			movementEnabled = true;
-		}
-		if(movementEnabled){
-			Move();
+			if(mWalking->getStarted()== false && mShuffle->getStarted() == false){
+				Move();
+			}else if(mWalking->getStarted() == true && mWalking->getFinished() == true){
+				mMap[locationZ][locationX].played = true;
+				mBadIter=CheckIter(mBadIter, mBadSounds.size());
+				mGoodIter=CheckIter(mGoodIter, mGoodSounds.size());
+				StopAllSounds();
+				UpdateSoundTile();
+				mWalking->Reset();
+				Move();
+			}else if(mShuffle->getStarted() == true && mShuffle->getFinished()==true){
+				mShuffle->Reset();
+				Move();
+			}
 		}
 		if(mPlayPath){
 			mPath->RenderAudio(deltaTime);
@@ -91,28 +105,23 @@ void SoundCues::Move(){
 	if( (GetAsyncKeyState(VK_UP) & 0x0001) || (GetAsyncKeyState('W') & 0x0001) ){
 		if(CheckMoveForward()){
 			mPlayer->MoveForward();
-			movementEnabled = false;
-			mMap[locationZ][locationX].played = true;
-			mBadIter=CheckIter(mBadIter, mBadSounds.size());
-			mGoodIter=CheckIter(mGoodIter, mGoodSounds.size());
-			StopAllSounds();
-			UpdateSoundTile();
+			mWalking->Play();
 		}
 	}else if( (GetAsyncKeyState(VK_LEFT) & 0x0001) || (GetAsyncKeyState('A') & 0x0001) ){
 		ChangeOrientation(1);
 		mPlayer->ShuffleLeft();
 		Apply3D();
-		movementEnabled = false;
+		mShuffle->Play();
 	}else if((GetAsyncKeyState(VK_RIGHT) & 0x0001) || (GetAsyncKeyState('D') & 0x0001) ){
 		ChangeOrientation(-1);
 		mPlayer->ShuffleRight();
 		Apply3D();
-		movementEnabled = false;
+		mShuffle->Play();
 	}else if((GetAsyncKeyState(VK_DOWN) & 0x0001) || (GetAsyncKeyState('S') & 0x0001) ){
 		ChangeOrientation(2);
 		mPlayer->ShuffleBack();
 		Apply3D();
-		movementEnabled = false;
+		mShuffle->Play();
 	}
 }
 bool SoundCues::CheckStart(){
@@ -445,6 +454,8 @@ bool SoundCues::InitSounds(){
 		return false;
 	}else if(!InitOther()){
 		return false;
+	}else if(!InitWalk()){
+		return false;
 	}
 	return true;
 }
@@ -483,10 +494,22 @@ bool SoundCues::InitBats(){
 		return false;
 	}
 	bat3->InitializeEmitter(mXACore);
+	Bat *bat4 = new Bat(mXACore, 4);
+	if(!bat4->IsOk()){
+		MessageBox(NULL,"Error loading bat4.wav",TEXT("SetupGame()-FAILED"),MB_OK|MB_ICONERROR);
+		delete bat;
+		delete bat1;
+		delete bat2;
+		delete bat3;
+		delete bat4;
+		return false;
+	}
+	bat4->InitializeEmitter(mXACore);
 	mBadSounds.push_back((AudioRenderable3D*)bat);
 	mBadSounds.push_back((AudioRenderable3D*)bat1);
 	mBadSounds.push_back((AudioRenderable3D*)bat2);
 	mBadSounds.push_back((AudioRenderable3D*)bat3);
+	mBadSounds.push_back((AudioRenderable3D*)bat4);
 	return true;
 }
 bool SoundCues::InitRats(){
@@ -502,6 +525,15 @@ bool SoundCues::InitRats(){
 		MessageBox(NULL,"Error loading rat1.wav",TEXT("SetupGame()-FAILED"),MB_OK|MB_ICONERROR);
 		delete rat;
 		delete rat1;
+		return false;
+	}
+	rat1->InitializeEmitter(mXACore);
+	Rat *rat2 = new Rat(mXACore, 2);
+	if(!rat2->IsOk()){
+		MessageBox(NULL,"Error loading rat1.wav",TEXT("SetupGame()-FAILED"),MB_OK|MB_ICONERROR);
+		delete rat;
+		delete rat1;
+		delete rat2;
 		return false;
 	}
 	rat1->InitializeEmitter(mXACore);
@@ -635,10 +667,25 @@ bool SoundCues::InitGood(){
 	mGoodSounds.push_back((AudioRenderable3D*)good3);
 	return true;
 }
+bool SoundCues::InitWalk(){
+	mWalking = new Walking(mXACore);
+	if(!mWalking->IsOk()){
+		MessageBox(NULL,"Error loading bat.wav",TEXT("SetupGame()-FAILED"),MB_OK|MB_ICONERROR);
+		delete mWalking;
+		return false;
+	}
+	mShuffle = new Shuffle(mXACore);
+	if(!mShuffle->IsOk()){
+		MessageBox(NULL,"Error loading bat1.wav",TEXT("SetupGame()-FAILED"),MB_OK|MB_ICONERROR);
+		delete mWalking;
+		delete mShuffle;
+		return false;
+	}
+	return true;
+}
 //--- Release all XACore resources.
 //--- Note the order of destruction is important; XAudio2 destroys voices when the engine is destroyed, any calls to the voices AFTER this is an error, so any voice->DestroyVoice() should always be called before the engine is destroyed.
 void SoundCues::CleanupGame (){
-	mAmbient->CleanupGame();
 	vector<AudioRenderable3D*>::const_iterator iter;
 	for(iter = mGoodSounds.begin(); iter!=mGoodSounds.end(); ++iter){
 		delete *iter;
@@ -652,6 +699,7 @@ void SoundCues::CleanupGame (){
 	delete mPath;
 	delete mWall;
 	delete mStart;
+	mAmbient->CleanupGame();
 	if (mXACore != NULL) {
 		delete mXACore;
 		mXACore = NULL;

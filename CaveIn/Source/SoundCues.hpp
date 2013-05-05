@@ -33,6 +33,8 @@ using AllanMilne::IGameCore;
 #include "Start.hpp"
 #include <vector>
 #include "Soundscape.hpp"
+#include "Walking.hpp"
+#include "Shuffle.hpp"
 using std::vector;
 
 class XACore;
@@ -62,7 +64,7 @@ public:
 	bool FinishedGame();
 	//--- Default constructor.
 	SoundCues () 
-	: mXACore (NULL), locationX(0), locationZ(0), mapSize(17), movementEnabled(true), mFinished(false), mAmbient(NULL)
+	: mXACore (NULL), locationX(0), locationZ(0), mapSize(17), mFinished(false), mAmbient(NULL)
 	{} // end constructor.
 
 	inline XACore * getXACore(){return mXACore;}
@@ -96,6 +98,7 @@ private:
 	bool InitOtherWarnings();
 	bool InitGood();
 	bool InitOther();
+	bool InitWalk();
 
 	//--- the XAudio2 engine encapsulation.
 	XACore *mXACore;
@@ -106,12 +109,13 @@ private:
 	vector<AudioRenderable3D*> mBadSounds;
 	int mGoodIter, mBadIter;
 	int locationX, locationZ, mapSize;
-	bool movementEnabled;
 	Tiles mMap[17][17]; 
 	Path *mPath;
 	Wall *mWall; 
 	Finish *mFinish; 
 	Start *mStart;
+	Walking *mWalking;
+	Shuffle *mShuffle; 
 	bool mPlayPath;
 	bool mPlayGood;
 	bool mPlayBad;

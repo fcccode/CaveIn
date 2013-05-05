@@ -36,26 +36,14 @@ using AllanMilne::Audio::XASound;
 //--- Parameter is time in seconds since last call.
 void Horror::RenderAudio (const float deltaTime)
 {
-	// constants used to define animation of the bird movement.
-	static const float minVolume = 0.1f;		// level at which to bounce volume adjustment up again.
-	static const float maxVolume = 1.0f;		// level at which to bounce volume down again.
-	static const float volumeUp = 1.25f;		// multiplier for increasing volume = 5/4.
-	static const float volumeDown = 0.8f;		// multiplier for decreasing volume = 4/5.
-	static const float pauseTime = 1.0f;		// change volume every 1 second.
-
 	// guard against invalid object - do nothing if invalid.
 	if (!IsOk()) return;
 
 	mElapsedTime += deltaTime;
-	if (mElapsedTime > pauseTime)
-	{
+	if(mElapsedTime > mPauseTime){
+		mPauseTime = float(rand()%100)/10;
 		mElapsedTime = 0.0f;
-		float volume = mHorror->GetVolume();
-		if (volume < minVolume) 
-			mVolumeAdjustment = volumeUp;		// bounce and move bird towards listener.
-		else if (volume >maxVolume) 
-			mVolumeAdjustment = volumeDown;		// bounce and move bird away from listener.
-		mHorror->AdjustVolume(mVolumeAdjustment);
+		mHorror->Play(0);
 	}
 } // end RenderAudio function.
 
@@ -64,7 +52,7 @@ inline bool Horror::IsOk () const { return (mHorror != NULL); }
 
 	//--- constructor will setup the bird sound object.
 Horror::Horror (XACore *aCore)
-	: mHorror (NULL), mElapsedTime (0.0f), mVolumeAdjustment (1.1f)
+	: mHorror (NULL), mElapsedTime (0.0f), mVolumeAdjustment (1.1f), mPauseTime(1.0f)
 {
 	mHorror = aCore->CreateSound("Sounds/Atmosphere/Horror.wav");
 } // end constructor function.
@@ -79,9 +67,7 @@ Horror::~Horror()
 } // end destructor function.
 
 //--- Starts the bird sound, does not initiate any movement.
-void Horror::Play ()
-{
-	mHorror->SetLooped(true);
+void Horror::Play (){
 	mHorror->Play(0);
 } // end Play method.
 

@@ -21,7 +21,7 @@ using AllanMilne::Audio::XASound;
 Walking::Walking(XACore *aCore)
 	:mWalking(NULL), mFinished(false), mStarted(false)
 {
-	mWalking = aCore->CreateSound("Sounds/Walking.wav");
+	mWalking = aCore->CreateSound("Sounds/Footsteps.wav");
 }
 Walking::~Walking(){
 	if(mWalking!=NULL){
@@ -48,6 +48,10 @@ void Walking::RenderAudio(const float deltaTime){
 	if(!IsOk()){
 		return;
 	}
+}
+void Walking::Reset(){
+	mStarted = false;
+	mFinished = false;
 }
 IXAudio2SourceVoice* Walking::getSourceVoice(){
 	return mWalking->GetSourceVoice();

@@ -1,0 +1,62 @@
+﻿Build started 5/5/2013 9:01:16 PM.
+     1>Project "C:\Users\Jake\Documents\Visual Studio 2010\Projects\CaveIn\CaveIn\CaveIn.vcxproj" on node 2 (build target(s)).
+     1>PrepareForBuild:
+         Creating directory "C:\Users\Jake\Documents\Visual Studio 2010\Projects\CaveIn\Release\".
+       InitializeBuildStatus:
+         Creating "Release\CaveIn.unsuccessfulbuild" because "AlwaysCreate" was specified.
+       ClCompile:
+         c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /Zi /nologo /W3 /WX- /O2 /Oi /Oy- /GL /D WIN32 /D NDEBUG /D _WINDOWS /D _UNICODE /D UNICODE /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Release\\" /Fd"Release\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt Source\Bats.cpp Source\Bear.cpp Source\Directions.cpp Source\Finish.cpp Source\Drip.cpp Source\Horror.cpp Source\Path.cpp Source\Rats.cpp Source\GameTimer.cpp Source\Main.cpp Source\PCMWave.cpp Source\Rocks.cpp Source\Shuffle.cpp Source\SoundCues.cpp Source\Soundscape.cpp Source\Start.cpp Source\Walking.cpp Source\Wall.cpp Source\Water.cpp Source\WaveFileManager.cpp Source\WinCore.cpp Source\Player.cpp Source\XACore.cpp Source\XASound.cpp
+         Bats.cpp
+     1>Source\Bats.cpp(13): fatal error C1083: Cannot open include file: 'xaudio2.h': No such file or directory
+         Bear.cpp
+     1>Source\Bear.cpp(13): fatal error C1083: Cannot open include file: 'xaudio2.h': No such file or directory
+         Directions.cpp
+     1>Source\Directions.cpp(13): fatal error C1083: Cannot open include file: 'xaudio2.h': No such file or directory
+         Finish.cpp
+     1>Source\Finish.cpp(13): fatal error C1083: Cannot open include file: 'xaudio2.h': No such file or directory
+         Drip.cpp
+     1>Source\Drip.cpp(25): fatal error C1083: Cannot open include file: 'XAudio2.h': No such file or directory
+         Horror.cpp
+     1>c:\users\jake\documents\visual studio 2010\projects\cavein\cavein\source\XACore.hpp(28): fatal error C1083: Cannot open include file: 'XAudio2.h': No such file or directory
+         Path.cpp
+     1>Source\Path.cpp(13): fatal error C1083: Cannot open include file: 'xaudio2.h': No such file or directory
+         Rats.cpp
+     1>Source\Rats.cpp(13): fatal error C1083: Cannot open include file: 'xaudio2.h': No such file or directory
+         GameTimer.cpp
+         Main.cpp
+     1>c:\users\jake\documents\visual studio 2010\projects\cavein\cavein\source\Soundscape.hpp(34): fatal error C1083: Cannot open include file: 'xaudio2.h': No such file or directory
+         PCMWave.cpp
+         Rocks.cpp
+     1>Source\Rocks.cpp(13): fatal error C1083: Cannot open include file: 'xaudio2.h': No such file or directory
+         Shuffle.cpp
+     1>Source\Shuffle.cpp(13): fatal error C1083: Cannot open include file: 'xaudio2.h': No such file or directory
+         SoundCues.cpp
+     1>Source\SoundCues.cpp(17): fatal error C1083: Cannot open include file: 'xaudio2.h': No such file or directory
+         Soundscape.cpp
+     1>Source\Soundscape.cpp(18): fatal error C1083: Cannot open include file: 'xaudio2.h': No such file or directory
+         Start.cpp
+     1>Source\Start.cpp(13): fatal error C1083: Cannot open include file: 'xaudio2.h': No such file or directory
+         Walking.cpp
+     1>Source\Walking.cpp(13): fatal error C1083: Cannot open include file: 'xaudio2.h': No such file or directory
+         Wall.cpp
+     1>Source\Wall.cpp(13): fatal error C1083: Cannot open include file: 'xaudio2.h': No such file or directory
+         Water.cpp
+     1>Source\Water.cpp(13): fatal error C1083: Cannot open include file: 'xaudio2.h': No such file or directory
+         WaveFileManager.cpp
+         Compiling...
+         WinCore.cpp
+     1>Source\WinCore.cpp(91): error C2440: '=' : cannot convert from 'LPCSTR' to 'LPCWSTR'
+                 Types pointed to are unrelated; conversion requires reinterpret_cast, C-style cast or function-style cast
+     1>Source\WinCore.cpp(100): error C2664: 'CreateWindowExW' : cannot convert parameter 2 from 'LPCSTR' to 'LPCWSTR'
+                 Types pointed to are unrelated; conversion requires reinterpret_cast, C-style cast or function-style cast
+         Player.cpp
+     1>Source\Player.cpp(13): fatal error C1083: Cannot open include file: 'xaudio2.h': No such file or directory
+         XACore.cpp
+     1>Source\XACore.cpp(24): fatal error C1083: Cannot open include file: 'XAudio2.h': No such file or directory
+         XASound.cpp
+     1>Source\XASound.cpp(25): fatal error C1083: Cannot open include file: 'XAudio2.h': No such file or directory
+     1>Done Building Project "C:\Users\Jake\Documents\Visual Studio 2010\Projects\CaveIn\CaveIn\CaveIn.vcxproj" (build target(s)) -- FAILED.
+
+Build FAILED.
+
+Time Elapsed 00:00:10.93

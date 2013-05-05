@@ -38,8 +38,9 @@ namespace {
 
 
 Player::Player(){
-	scale = 10.0f;
+	scale = 5.0f;
 	mElapsedTime = 0.0f;
+	moving = false;
 	transition = false;
 	memset((void*)&mListener,0,sizeof(X3DAUDIO_LISTENER));
 }
@@ -54,8 +55,6 @@ bool Player::InitializeListener(){
 void Player::Move(const float deltaTime){
 	if(transition == true){
 		RotateRound(deltaTime);
-	}else if(nextDir == currentDir){
-		moving = false;
 	}
 }
 void Player::RotateRound(const float deltaTime){
@@ -64,6 +63,7 @@ void Player::RotateRound(const float deltaTime){
 	mElapsedTime+=deltaTime;
 	if(nextDir == currentDir){
 		transition = false;
+		moving = false;
 	}else if(mElapsedTime>pauseTime){
 		mElapsedTime = 0.0f;
 		int endPoint = int(nextDir);

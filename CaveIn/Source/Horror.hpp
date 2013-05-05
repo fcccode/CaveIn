@@ -46,7 +46,7 @@ private:
 	XASound *mHorror;					// the bird sound.
 	float mElapsedTime;				// time since last bird movement applied.
 	float mVolumeAdjustment;		// amount of volume to apply for one movement, is changed to indicate "bouncing" of the sound away/towards the listener.
-	
+	float mPauseTime;
 };	// end Bird class.
 
 #endif

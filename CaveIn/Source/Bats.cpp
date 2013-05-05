@@ -26,6 +26,7 @@ Bat::Bat(XACore *aCore, int sound)
 	case 1: mBat = aCore->CreateSound("Sounds/Warning/Bats/Bats1.wav"); break;
 	case 2: mBat = aCore->CreateSound("Sounds/Warning/Bats/Bats2.wav"); break;
 	case 3: mBat = aCore->CreateSound("Sounds/Warning/Bats/Bats3.wav"); break;
+	case 4: mBat = aCore->CreateSound("Sounds/Warning/Bats/Bats4.wav"); break;
 	}
 }
 Bat::~Bat(){

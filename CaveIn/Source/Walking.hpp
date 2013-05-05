@@ -28,8 +28,10 @@ public:
 	void RenderAudio(const float deltaTime);
 	void Play();
 	void Pause();
+	void Reset();
 	bool getFinished();
 	IXAudio2SourceVoice* getSourceVoice();
+	inline bool getStarted(){return mStarted;}
 	inline XASound* getXASound() {return mWalking;}
 	inline bool IsOk() const {return (mWalking!=NULL);}
 private:

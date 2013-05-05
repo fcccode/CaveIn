@@ -25,8 +25,7 @@ using AllanMilne::Audio::XACore;
 using AllanMilne::Audio::XASound;
 
 #include "Soundscape.hpp"
-#include "AmbientBats.hpp"
-#include "AmbientRat.hpp"
+#include "Drip.hpp"
 #include "Horror.hpp"
 
 //=== Implementation of the IGameCore interface.
@@ -44,19 +43,11 @@ bool Soundscape::SetupGame (XACore *aCore){
 	mWind->SetLooped(true);
 
 	// Create the renderable objects and add to the renderable component list.
-	AmbientBats *bats = new AmbientBats(aCore);
+	Drip *bats = new Drip(aCore);
 	if (!bats->IsOk()){
 		MessageBox (NULL, "Error loading bird.wav", TEXT ("SetupGame() - FAILED"), MB_OK | MB_ICONERROR );
 		delete mWind;
 		delete bats;
-		return false;
-	}
-	AmbientRat *rats= new AmbientRat(aCore);
-	if (!rats->IsOk()){
-		MessageBox (NULL, "Error loading frogs.wav", TEXT ("SetupGame() - FAILED"), MB_OK | MB_ICONERROR );
-		delete mWind;
-		delete bats;
-		delete rats;
 		return false;
 	}
 	Horror *horror= new Horror(aCore);
@@ -64,17 +55,14 @@ bool Soundscape::SetupGame (XACore *aCore){
 		MessageBox (NULL, "Error loading frogs.wav", TEXT ("SetupGame() - FAILED"), MB_OK | MB_ICONERROR );
 		delete mWind;
 		delete bats;
-		delete rats;
 		delete horror;
 		return false;
 	}
 	mRenderedSounds.push_back((AudioRenderable*)bats);
-	mRenderedSounds.push_back((AudioRenderable*)rats);
 	mRenderedSounds.push_back((AudioRenderable*)horror);
 	
 	// Play the rain and bird sounds; frogs will be played through the game loop.
 	mWind->Play(0);
-	rats->Play();
 	horror->Play();
 	return true;		// All has been setup without error.
 } // end SetupGame function.
