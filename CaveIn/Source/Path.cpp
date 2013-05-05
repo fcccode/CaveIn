@@ -19,28 +19,24 @@ using AllanMilne::Audio::XASound;
 #include "Path.hpp"
 
 Path::Path(XACore *aCore)
-	:mPath(NULL), mElapsedTime(0.0f), mVolumeAdjustment(1.1f)
+	:mPath(NULL), mElapsedTime(0.0f)
 {
 	mPath = aCore->CreateSound("Sounds/Hey.wav");
 }
-Path::~Path()
-{
+Path::~Path(){
 	if(mPath!=NULL){
 		delete mPath;
 		mPath = NULL;
 	}
 }
-void Path::Play()
-{
+void Path::Play(){
 	mPath->Play(0);
 }
 void Path::Pause(){
 	mPath->Pause();
 }
-inline bool Path::IsOk() const {return (mPath!=NULL);}
 
-void Path::RenderAudio(const float deltaTime)
-{
+void Path::RenderAudio(const float deltaTime){
 	static const float pauseTime	= 1.0f;
 	if(!IsOk()){
 		return;

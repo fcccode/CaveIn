@@ -19,54 +19,31 @@ using AllanMilne::Audio::XASound;
 #include "Bear.hpp"
 
 Bear::Bear(XACore *aCore, int sound)
-	:mBear(NULL), mElapsedTime(0.0f), mVolumeAdjustment(1.1f)
+	:mBear(NULL)
 {
 	switch(sound){
 	case 0: mBear = aCore->CreateSound("Sounds/Warning/Bear/BearRoar.wav"); break;
 	case 1: mBear = aCore->CreateSound("Sounds/Warning/Bear/BearRoar1.wav"); break;
 	}
 }
-Bear::~Bear()
-{
+Bear::~Bear(){
 	if(mBear!=NULL){
 		delete mBear;
 		mBear = NULL;
 	}
 }
-void Bear::Play()
-{
+void Bear::Play(){
 	mBear->SetLooped(true);
 	mBear->Play(0);
 }
 void Bear::Pause(){
 	mBear->Pause();
 }
-inline bool Bear::IsOk() const {return (mBear!=NULL);}
 
-void Bear::RenderAudio(const float deltaTime)
-{
-	static const float minVolume	= 0.1f;
-	static const float maxVolume	= 1.0f;
-	static const float volumeUp		= 1.25f;
-	static const float volumeDown	= 0.8f;
-	static const float pauseTime	= 1.0f;
-
+void Bear::RenderAudio(const float deltaTime){
 	if(!IsOk()){
 		return;
 	}
-	mElapsedTime+=deltaTime;
-	if(mElapsedTime>pauseTime){
-		mElapsedTime = 0.0f;
-		float volume = mBear->GetVolume();
-		if(volume<minVolume){
-			mVolumeAdjustment = volumeUp;
-		}else if(volume > maxVolume){
-			mVolumeAdjustment = volumeDown;
-		}
-		mBear->AdjustVolume(mVolumeAdjustment);
-	}
-
-	
 }
 void Bear::InitializeEmitter(XACore *xacore){
 	XAUDIO2_VOICE_DETAILS details;

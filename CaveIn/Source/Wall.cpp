@@ -19,38 +19,26 @@ using AllanMilne::Audio::XASound;
 #include "Wall.hpp"
 
 Wall::Wall(XACore *aCore)
-	:mWall(NULL), mElapsedTime(0.0f), mVolumeAdjustment(1.1f)
+	:mWall(NULL)
 {
 	mWall = aCore->CreateSound("Sounds/Hurt.wav");
 }
-Wall::~Wall()
-{
+Wall::~Wall(){
 	if(mWall!=NULL){
 		delete mWall;
 		mWall = NULL;
 	}
 }
-void Wall::Play()
-{
+void Wall::Play(){
 	mWall->Play(0);
 }
 void Wall::Pause(){
 	mWall->Pause();
 }
-inline bool Wall::IsOk() const {return (mWall!=NULL);}
-
-void Wall::RenderAudio(const float deltaTime)
-{
-	static const float minVolume	= 0.1f;
-	static const float maxVolume	= 1.0f;
-	static const float volumeUp		= 1.25f;
-	static const float volumeDown	= 0.8f;
-	static const float pauseTime	= 1.0f;
-
+void Wall::RenderAudio(const float deltaTime){
 	if(!IsOk()){
 		return;
 	}
-	
 }
 void Wall::InitializeEmitter(XACore *xacore){
 	XAUDIO2_VOICE_DETAILS details;

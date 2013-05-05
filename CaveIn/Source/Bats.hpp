@@ -26,19 +26,17 @@ public:
 	Bat(XACore *aCore, int sound);
 	~Bat();
 	void RenderAudio(const float deltaTime);
-	bool IsOk() const;
 	void Play();
 	void Pause();
 	XASound* getXASound() {return mBat;}
 	void InitializeEmitter(XACore *xacore);
 	inline X3DAUDIO_EMITTER getEmitter(){ return mEmitter;}
 	inline X3DAUDIO_DSP_SETTINGS* getDSPSettings(){return &mDSPSettings;}
+	inline bool IsOk() const {return (mBat!=NULL);}
 	IXAudio2SourceVoice* getSourceVoice();
 	void UpdateEmitter(X3DAUDIO_VECTOR pos, X3DAUDIO_VECTOR velo);
 private:
 	XASound *mBat;
-	float mElapsedTime;
-	float mVolumeAdjustment;
 };
 
 #endif 

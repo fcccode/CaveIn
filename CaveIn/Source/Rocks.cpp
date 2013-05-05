@@ -19,51 +19,28 @@ using AllanMilne::Audio::XASound;
 #include "Rocks.hpp"
 
 Rocks::Rocks(XACore *aCore)
-	:mRocks(NULL), mElapsedTime(0.0f), mVolumeAdjustment(1.1f)
+	:mRocks(NULL)
 {
 	mRocks = aCore->CreateSound("Sounds/Warning/Rocks.wav");
 }
-Rocks::~Rocks()
-{
+Rocks::~Rocks(){
 	if(mRocks!=NULL){
 		delete mRocks;
 		mRocks = NULL;
 	}
 }
-void Rocks::Play()
-{
+void Rocks::Play(){
 	mRocks->SetLooped(true);
 	mRocks->Play(0);
 }
 void Rocks::Pause(){
 	mRocks->Pause();
 }
-inline bool Rocks::IsOk() const {return (mRocks!=NULL);}
 
-void Rocks::RenderAudio(const float deltaTime)
-{
-	static const float minVolume	= 0.1f;
-	static const float maxVolume	= 1.0f;
-	static const float volumeUp		= 1.25f;
-	static const float volumeDown	= 0.8f;
-	static const float pauseTime	= 1.0f;
-
+void Rocks::RenderAudio(const float deltaTime){
 	if(!IsOk()){
 		return;
 	}
-	mElapsedTime+=deltaTime;
-	if(mElapsedTime>pauseTime){
-		mElapsedTime = 0.0f;
-		float volume = mRocks->GetVolume();
-		if(volume<minVolume){
-			mVolumeAdjustment = volumeUp;
-		}else if(volume > maxVolume){
-			mVolumeAdjustment = volumeDown;
-		}
-		mRocks->AdjustVolume(mVolumeAdjustment);
-	}
-
-	
 }
 void Rocks::InitializeEmitter(XACore *xacore){
 	XAUDIO2_VOICE_DETAILS details;

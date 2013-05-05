@@ -26,17 +26,15 @@ public:
 	Finish(XACore *aCore);
 	~Finish();
 	void RenderAudio(const float deltaTime);
-	bool IsOk() const;
 	void Play();
 	void Pause();
-	XASound* getXASound() {return mFinish;}
 	void InitializeEmitter(XACore *xacore);
+	inline XASound* getXASound() {return mFinish;}
+	inline bool IsOk() const {return (mFinish!=NULL);}
 	bool getFinished();
 	IXAudio2SourceVoice* getSourceVoice();
 private:
 	XASound *mFinish;
-	float mElapsedTime;
-	float mVolumeAdjustment;
 	bool mFinished;
 	bool mStarted;
 };

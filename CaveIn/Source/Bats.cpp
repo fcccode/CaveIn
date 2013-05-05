@@ -19,7 +19,7 @@ using AllanMilne::Audio::XASound;
 #include "Bats.hpp"
 
 Bat::Bat(XACore *aCore, int sound)
-	:mBat(NULL), mElapsedTime(0.0f), mVolumeAdjustment(1.1f)
+	:mBat(NULL)
 {
 	switch(sound){
 	case 0: mBat = aCore->CreateSound("Sounds/Warning/Bats/Bats.wav"); break;
@@ -28,47 +28,24 @@ Bat::Bat(XACore *aCore, int sound)
 	case 3: mBat = aCore->CreateSound("Sounds/Warning/Bats/Bats3.wav"); break;
 	}
 }
-Bat::~Bat()
-{
+Bat::~Bat(){
 	if(mBat!=NULL){
 		delete mBat;
 		mBat = NULL;
 	}
 }
-void Bat::Play()
-{
+void Bat::Play(){
 	mBat->SetLooped(true);
 	mBat->Play(0);
 }
 void Bat::Pause(){
 	mBat->Pause();
 }
-inline bool Bat::IsOk() const {return (mBat!=NULL);}
 
-void Bat::RenderAudio(const float deltaTime)
-{
-	static const float minVolume	= 0.1f;
-	static const float maxVolume	= 1.0f;
-	static const float volumeUp		= 1.25f;
-	static const float volumeDown	= 0.8f;
-	static const float pauseTime	= 1.0f;
-
+void Bat::RenderAudio(const float deltaTime){
 	if(!IsOk()){
 		return;
 	}
-	mElapsedTime+=deltaTime;
-	if(mElapsedTime>pauseTime){
-		mElapsedTime = 0.0f;
-		float volume = mBat->GetVolume();
-		if(volume<minVolume){
-			mVolumeAdjustment = volumeUp;
-		}else if(volume > maxVolume){
-			mVolumeAdjustment = volumeDown;
-		}
-		mBat->AdjustVolume(mVolumeAdjustment);
-	}
-
-	
 }
 void Bat::InitializeEmitter(XACore *xacore){
 	XAUDIO2_VOICE_DETAILS details;

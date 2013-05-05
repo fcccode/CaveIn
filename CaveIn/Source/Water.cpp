@@ -19,54 +19,30 @@ using AllanMilne::Audio::XASound;
 #include "Water.hpp"
 
 Water::Water(XACore *aCore, int sound)
-	:mWater(NULL), mElapsedTime(0.0f), mVolumeAdjustment(1.1f)
+	:mWater(NULL)
 {
 	switch(sound){
 	case 0: mWater = aCore->CreateSound("Sounds/Warning/Water/Water.wav");
 	case 1: mWater = aCore->CreateSound("Sounds/Warning/Water/Water1.wav");
 	}
 }
-Water::~Water()
-{
+Water::~Water(){
 	if(mWater!=NULL){
 		delete mWater;
 		mWater = NULL;
 	}
 }
-void Water::Play()
-{
+void Water::Play(){
 	mWater->SetLooped(true);
 	mWater->Play(0);
 }
 void Water::Pause(){
 	mWater->Pause();
 }
-inline bool Water::IsOk() const {return (mWater!=NULL);}
-
-void Water::RenderAudio(const float deltaTime)
-{
-	static const float minVolume	= 0.1f;
-	static const float maxVolume	= 1.0f;
-	static const float volumeUp		= 1.25f;
-	static const float volumeDown	= 0.8f;
-	static const float pauseTime	= 1.0f;
-
+void Water::RenderAudio(const float deltaTime){
 	if(!IsOk()){
 		return;
 	}
-	mElapsedTime+=deltaTime;
-	if(mElapsedTime>pauseTime){
-		mElapsedTime = 0.0f;
-		float volume = mWater->GetVolume();
-		if(volume<minVolume){
-			mVolumeAdjustment = volumeUp;
-		}else if(volume > maxVolume){
-			mVolumeAdjustment = volumeDown;
-		}
-		mWater->AdjustVolume(mVolumeAdjustment);
-	}
-
-	
 }
 void Water::InitializeEmitter(XACore *xacore){
 	XAUDIO2_VOICE_DETAILS details;

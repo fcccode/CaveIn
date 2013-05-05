@@ -19,7 +19,7 @@ using AllanMilne::Audio::XASound;
 #include "Rats.hpp"
 
 Rat::Rat(XACore *aCore, int sound)
-	:mRat(NULL), mElapsedTime(0.0f), mVolumeAdjustment(1.1f)
+	:mRat(NULL)
 {
 	switch(sound){
 	case 0: mRat = aCore->CreateSound("Sounds/Warning/Rats/Rats.wav"); break;
@@ -40,27 +40,9 @@ void Rat::Pause(){
 	mRat->Pause();
 }
 void Rat::RenderAudio(const float deltaTime){
-	static const float minVolume	= 0.1f;
-	static const float maxVolume	= 1.0f;
-	static const float volumeUp		= 1.25f;
-	static const float volumeDown	= 0.8f;
-	static const float pauseTime	= 1.0f;
-
 	if(!IsOk()){
 		return;
 	}
-	mElapsedTime+=deltaTime;
-	if(mElapsedTime>pauseTime){
-		mElapsedTime = 0.0f;
-		float volume = mRat->GetVolume();
-		if(volume<minVolume){
-			mVolumeAdjustment = volumeUp;
-		}else if(volume > maxVolume){
-			mVolumeAdjustment = volumeDown;
-		}
-		mRat->AdjustVolume(mVolumeAdjustment);
-	}
-	
 }
 void Rat::InitializeEmitter(XACore *xacore){
 	XAUDIO2_VOICE_DETAILS details;

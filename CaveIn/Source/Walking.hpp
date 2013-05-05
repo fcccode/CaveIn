@@ -26,15 +26,16 @@ public:
 	Walking(XACore *aCore);
 	~Walking();
 	void RenderAudio(const float deltaTime);
-	bool IsOk() const;
 	void Play();
 	void Pause();
-	XASound* getXASound() {return mFinish;}
+	bool getFinished();
 	IXAudio2SourceVoice* getSourceVoice();
+	inline XASound* getXASound() {return mWalking;}
+	inline bool IsOk() const {return (mWalking!=NULL);}
 private:
-	XASound *mFinish;
-	float mElapsedTime;
-	float mVolumeAdjustment;
+	XASound *mWalking;
+	bool mFinished;
+	bool mStarted;
 };
 
 #endif 

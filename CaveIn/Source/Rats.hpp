@@ -39,8 +39,6 @@ public:
 	void UpdateEmitter(X3DAUDIO_VECTOR pos, X3DAUDIO_VECTOR velo);
 private:
 	XASound *mRat;
-	float mElapsedTime;
-	float mVolumeAdjustment;
 };
 
 #endif 

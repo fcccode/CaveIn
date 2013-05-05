@@ -58,36 +58,44 @@ public:
 	//--- Release all XACore, XASound and other audio resources.
 	void CleanupGame ();
 	//=== Game specific behaviour.
+	bool FinishedGame();
 	//--- Default constructor.
 	SoundCues () 
 	: mXACore (NULL), locationX(0), locationZ(0), mapSize(17), movementEnabled(true)
 	{} // end constructor.
 
 private:
+	inline mTileTypes CheckMap(int x, int y) {return mMap[x][y].tile;}
 
 	void UpdateSettings(AudioRenderable3D* audio);
 	void Apply3D();
-	void ClearArray();
-	void SetupMap();
-	inline mTileTypes CheckMap(int x, int y) {return mMap[x][y].tile;}
 	bool CheckForwardTile(int x, int y, X3DAUDIO_VECTOR pos);
 	bool CheckMoveForward();
 	void ChangeOrientation(int dir);
 	void UpdateSoundTile();
 	void PlaySoundTiles(int z, int x, X3DAUDIO_VECTOR pos);
 	void StopAllSounds();
+	void Move();
+	int CheckIter(int iter, int check);
+	bool CheckStart();
+	bool CheckFinish();
+	
+	void SetupMap();
+	void ClearArray();
+	void SetUpGoodTiles();
+	void SetUpBadTiles();
+	void SetUpPathTiles();
+	void SetUpOtherTiles();
+
+	bool InitSounds();
 	bool InitRats();
 	bool InitBats();
 	bool InitBear();
 	bool InitOtherWarnings();
 	bool InitGood();
 	bool InitOther();
-	void Move();
-	int CheckIter(int iter, int check);
-	bool CheckStart();
 	//--- the XAudio2 engine encapsulation.
 	XACore *mXACore;
-	XAUDIO2_FILTER_PARAMETERS mFParams;
 	Player *mPlayer;
 	X3DAUDIO_HANDLE mX3DInstance;
 	vector<AudioRenderable3D*> mGoodSounds;
@@ -103,7 +111,7 @@ private:
 	bool mPlayPath;
 	bool mPlayGood;
 	bool mPlayBad;
-
+	bool mFinished; 
 }; // end Soundscape1 class.
 
 #endif

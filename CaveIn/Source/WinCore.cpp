@@ -35,10 +35,8 @@ namespace AllanMilne {
 
 //=== Windows message processing.
 //=== Escape key terminates application.
-LRESULT CALLBACK WndProc (HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
-{
-	switch( msg )
-	{
+LRESULT CALLBACK WndProc (HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam){
+	switch( msg ){
 	case WM_DESTROY:
 		PostQuitMessage(0);
 		break;
@@ -52,8 +50,7 @@ LRESULT CALLBACK WndProc (HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 } // end WndProc function.
 
 //=== Constructor to set up strategy pattern.
-WinCore::WinCore (IGameCore *aGame)
-{
+WinCore::WinCore (IGameCore *aGame){
 	mGame = aGame;
 	mHwnd = NULL;
 	mTimer = new GameTimer ();
@@ -63,9 +60,8 @@ WinCore::WinCore (IGameCore *aGame)
 //=== Notes:
 //=== 1. we do not call mGame->CleanupGame() since this is called in the Start() method.
 //=== 2. We do not delete the mGame field since this object was not responsible for creating it - it was passed to it in the constructor.
-WinCore::~WinCore ()
-{
-	if (mTimer != NULL) {
+WinCore::~WinCore (){
+	if (mTimer != NULL){
 		delete mTimer;
 		mTimer = NULL;
 	}
@@ -73,7 +69,7 @@ WinCore::~WinCore ()
 
 //=== Create the application window; returns false if any errors detected.
 //=== Calls the SetupGame() function via the strategy pattern; and resets the timer.
-	bool WinCore::Initialize (
+bool WinCore::Initialize (
 		const string &aTitle,		// Text to display in title bar.
 		int aWidth,					// width of back-buffer window.
 		int aHeight,				// height of back-buffer window.
@@ -93,8 +89,7 @@ WinCore::~WinCore ()
 	wc.hbrBackground = (HBRUSH)GetStockObject(WHITE_BRUSH);
 	wc.lpszMenuName  = 0;
 	wc.lpszClassName = (LPCSTR)title;
-	if (!RegisterClass(&wc) ) 
-	{
+	if (!RegisterClass(&wc) ) {
 		MessageBox (NULL, TEXT ("Error registering application class with Windows in WinCore."), TEXT ("RegisterClass() - FAILED"), MB_OK | MB_ICONERROR );
 		return false;
 	}
@@ -103,8 +98,7 @@ WinCore::~WinCore ()
 		WS_EX_TOPMOST,
 		0, 0, aWidth, aHeight,
 		0 /*parent hwnd*/, 0 /* menu */, anHInstance, 0 /*extra*/); 
-	if( !hwnd )
-	{
+	if( !hwnd ){
 		MessageBox(NULL, TEXT ("Error creating window in WinCore."), TEXT ("CreateWindow() - FAILED"), MB_OK | MB_ICONERROR );
 		return false;
 	}
@@ -127,24 +121,23 @@ WinCore::~WinCore ()
 //===  Encapsulates calling of the windows message processing function.
 //=== Calls the game object ProcessGameFrame() function every time around the messsage loop.
 //=== The game object Cleanup() function is called when the message loop is terminated.
-void WinCore::Start ()
-{
+void WinCore::Start (){
 	MSG msg;
 	ZeroMemory(&msg, sizeof(MSG));
 	//--- The Windows message processing loop.
-	while (msg.message != WM_QUIT)
-	{
-		if (PeekMessage (&msg, 0, 0, 0, PM_REMOVE))
-		{
+	while (msg.message != WM_QUIT){
+		if (PeekMessage (&msg, 0, 0, 0, PM_REMOVE)){
 			TranslateMessage(&msg);
 			DispatchMessage(&msg);
-		}
-		else
-		{
+		}else{
 			// get elapsed time for the current call.
 			mTimer->Tick ();
 			//--- call the game frame processing function. ---
 			mGame->ProcessGameFrame (mTimer->GetDeltaTime());
+			if(mGame->FinishedGame()==true){
+				MessageBox (NULL, TEXT ("Congratulations you've completed the game"), TEXT ("Game Over"), MB_OK | MB_ICONERROR );
+				DestroyWindow(mHwnd);
+			}
 		}
 	} // end while loop.
 	//--- clean up game-wide resources we have allocated.

@@ -26,15 +26,18 @@ public:
 	Shuffle(XACore *aCore);
 	~Shuffle();
 	void RenderAudio(const float deltaTime);
-	bool IsOk() const;
 	void Play();
 	void Pause();
 	XASound* getXASound() {return mShuffle;}
 	IXAudio2SourceVoice* getSourceVoice();
+	bool getFinished();
+	inline bool IsOk() const {return (mShuffle!=NULL);}
 private:
 	XASound *mShuffle;
 	float mElapsedTime;
 	float mVolumeAdjustment;
+	bool mFinished;
+	bool mStarted;
 };
 
 #endif 

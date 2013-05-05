@@ -19,49 +19,35 @@ using AllanMilne::Audio::XASound;
 #include "Shuffle.hpp"
 
 Shuffle::Shuffle(XACore *aCore)
-	:mShuffle(NULL), mElapsedTime(0.0f), mVolumeAdjustment(1.1f)
+	:mShuffle(NULL), mFinished(false), mStarted(false)
 {
 	mShuffle = aCore->CreateSound("Sounds/Shuffle.wav");
 }
-Shuffle::~Shuffle()
-{
+Shuffle::~Shuffle(){
 	if(mShuffle!=NULL){
 		delete mShuffle;
 		mShuffle = NULL;
 	}
 }
-void Shuffle::Play()
-{
-	mShuffle->Play(0);
+void Shuffle::Play(){
+	if(mShuffle->IsPlaying() == false && mStarted == false){
+		mShuffle->Play(0);
+		mStarted = true;
+	}
+}
+bool Shuffle::getFinished(){
+	if(mShuffle->IsPlaying()==false && mStarted == true){
+		mFinished = true;
+	}
+	return mFinished;
 }
 void Shuffle::Pause(){
 	mShuffle->Pause();
 }
-inline bool Shuffle::IsOk() const {return (mShuffle!=NULL);}
-void Shuffle::RenderAudio(const float deltaTime)
-{
-	static const float minVolume	= 0.1f;
-	static const float maxVolume	= 1.0f;
-	static const float volumeUp		= 1.25f;
-	static const float volumeDown	= 0.8f;
-	static const float pauseTime	= 1.0f;
-
+void Shuffle::RenderAudio(const float deltaTime){
 	if(!IsOk()){
 		return;
 	}
-	mElapsedTime+=deltaTime;
-	if(mElapsedTime>pauseTime){
-		mElapsedTime = 0.0f;
-		float volume = mShuffle->GetVolume();
-		if(volume<minVolume){
-			mVolumeAdjustment = volumeUp;
-		}else if(volume > maxVolume){
-			mVolumeAdjustment = volumeDown;
-		}
-		mShuffle->AdjustVolume(mVolumeAdjustment);
-	}
-
-	
 }
 IXAudio2SourceVoice* Shuffle::getSourceVoice(){
 	return mShuffle->GetSourceVoice();

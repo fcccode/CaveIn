@@ -42,8 +42,7 @@ namespace{
 }
 //--- create and initialize XACore.
 //--- Since this game has no graphics the HWND argument is not used.
-bool SoundCues::SetupGame (HWND aWindow)
-{
+bool SoundCues::SetupGame (HWND aWindow){
 	mPlayPath = false;
 	// set up the XAudio2 engine and mastering voice; check if ok.
 	mXACore = new XACore ();
@@ -58,48 +57,13 @@ bool SoundCues::SetupGame (HWND aWindow)
 
 	mPlayer = new Player();
 	mPlayer->InitializeListener();
-
-	if(!InitRats()){
-		return false;
-	}else if(!InitBats()){
-		return false;
-	}else if(!InitBear()){
-		return false;
-	}else if(!InitOtherWarnings()){
-		return false;
-	}else if(!InitGood()){
-		return false;
-	}else if(!InitOther()){
-		return false;
-	}
-
-	ClearArray();
+	
 	SetupMap();
 	return true;		// All has been setup without error.
 } // end SetupGame function.
-bool SoundCues::CheckStart(){
-	if(mMap[locationZ][locationX].tile == tStart && mMap[locationZ][locationX].played == false){
-		if(mStart->getFinished()){
-			mMap[locationZ][locationX].played = true;
-			mBadIter = rand()%mBadSounds.size();
-			mGoodIter = rand()%mGoodSounds.size();
-			UpdateSoundTile();
-		}
-		mStart->Play();
-		return true;
-	}
-	return false;
-}
 //--- process a single game frame.
-void SoundCues::ProcessGameFrame (const float deltaTime)
-{
-	if(CheckStart() == false){
-		if(mMap[locationZ][locationX].tile == tFinish){
-			mFinish->Play();
-			if(mFinish->getFinished()){
-
-			}
-		}
+void SoundCues::ProcessGameFrame (const float deltaTime){
+	if(CheckStart() == false && CheckFinish() == false){
 		mPlayer->Move(deltaTime);
 		if(mPlayer->getTransition()){
 			Apply3D();
@@ -149,21 +113,29 @@ void SoundCues::Move(){
 		movementEnabled = false;
 	}
 }
-int SoundCues::CheckIter(int check, int size){
-	int iter = rand()%size;
-	if(iter == check){
-		if(iter+1 < size){
-			iter++;
-		}else{
-			iter--;
+bool SoundCues::CheckStart(){
+	if(mMap[locationZ][locationX].tile == tStart && mMap[locationZ][locationX].played == false){
+		if(mStart->getFinished()){
+			mMap[locationZ][locationX].played = true;
+			mBadIter = rand()%mBadSounds.size();
+			mGoodIter = rand()%mGoodSounds.size();
+			UpdateSoundTile();
+		}
+		mStart->Play();
+		return true;
+	}
+	return false;
+}
+bool SoundCues::CheckFinish(){
+	if(mMap[locationZ][locationX].tile == tFinish){
+		mFinish->Play();
+		if(mFinish->getFinished()){
+			mFinished = true;
 		}
 	}
-	return iter;
+	return mFinished;
 }
 void SoundCues::UpdateSoundTile(){
-	mPlayPath = false;
-	mPlayGood = false;
-	mPlayBad = false;
 	if(mMap[locationZ-1][locationX].played == false){
 		PlaySoundTiles(locationZ-1,locationX,mPlayer->getPlayerNorth());
 	}
@@ -180,13 +152,8 @@ void SoundCues::UpdateSoundTile(){
 void SoundCues::PlaySoundTiles(int z, int x, X3DAUDIO_VECTOR pos){
 	X3DAUDIO_VECTOR velo = {0.0f,0.0f,0.0f};
 	switch (CheckMap(z,x)){
-	case tGood:
-		mGoodSounds.at(mGoodIter)->UpdateEmitter(pos,velo);
-		UpdateSettings(mGoodSounds.at(mGoodIter));
-		mGoodSounds.at(mGoodIter)->Play();
-		mPlayGood = true;
-		break;
 	case tFinish:
+	case tGood:
 		mGoodSounds.at(mGoodIter)->UpdateEmitter(pos,velo);
 		UpdateSettings(mGoodSounds.at(mGoodIter));
 		mGoodSounds.at(mGoodIter)->Play();
@@ -208,30 +175,6 @@ void SoundCues::PlaySoundTiles(int z, int x, X3DAUDIO_VECTOR pos){
 		mWall->UpdateEmitter(pos,velo);
 		UpdateSettings(mWall);
 		break;
-	}
-}
-void SoundCues::ChangeOrientation(int dir){
-	if(dir == 1){
-		switch(PlayerOrientation){
-		case North: PlayerOrientation = West; break;
-		case East: PlayerOrientation = North; break;
-		case South: PlayerOrientation = East; break;
-		case West: PlayerOrientation = South; break;
-		}
-	}else if(dir == -1){
-		switch(PlayerOrientation){
-		case North: PlayerOrientation = East; break;
-		case East: PlayerOrientation = South; break;
-		case South: PlayerOrientation = West; break;
-		case West: PlayerOrientation = North; break;
-		}
-	}else if(dir == 2){
-		switch(PlayerOrientation){
-		case North: PlayerOrientation = South; break;
-		case East: PlayerOrientation = West; break;
-		case South: PlayerOrientation = North; break;
-		case West: PlayerOrientation = East; break;
-		}
 	}
 }
 bool SoundCues::CheckMoveForward(){
@@ -272,47 +215,50 @@ bool SoundCues::CheckMoveForward(){
 	}
 	return false;
 }
-//--- Release all XACore resources.
-//--- Note the order of destruction is important; XAudio2 destroys voices when the engine is destroyed, any calls to the voices AFTER this is an error, so any voice->DestroyVoice() should always be called before the engine is destroyed.
-void SoundCues::CleanupGame ()
-{
-	vector<AudioRenderable3D*>::const_iterator iter;
-	for(iter = mGoodSounds.begin(); iter!=mGoodSounds.end(); ++iter){
-		delete *iter;
+void SoundCues::ChangeOrientation(int dir){
+	if(dir == 1){
+		switch(PlayerOrientation){
+		case North: PlayerOrientation = West; break;
+		case East: PlayerOrientation = North; break;
+		case South: PlayerOrientation = East; break;
+		case West: PlayerOrientation = South; break;
+		}
+	}else if(dir == -1){
+		switch(PlayerOrientation){
+		case North: PlayerOrientation = East; break;
+		case East: PlayerOrientation = South; break;
+		case South: PlayerOrientation = West; break;
+		case West: PlayerOrientation = North; break;
+		}
+	}else if(dir == 2){
+		switch(PlayerOrientation){
+		case North: PlayerOrientation = South; break;
+		case East: PlayerOrientation = West; break;
+		case South: PlayerOrientation = North; break;
+		case West: PlayerOrientation = East; break;
+		}
 	}
-	mGoodSounds.clear();
-	for(iter = mBadSounds.begin(); iter!=mBadSounds.end(); ++iter){
-		delete *iter;
+}
+bool SoundCues::CheckForwardTile(int x, int y, X3DAUDIO_VECTOR pos){
+	X3DAUDIO_VECTOR velo = {0.0f,0.0f,0.0f};
+	switch(CheckMap(x,y)){
+	case tPath:
+	case tFinish:
+	case tStart:
+	case tGood: return true; break;
+	case tWall: 
+		mWall->UpdateEmitter(pos,velo);
+		UpdateSettings(mWall);
+		mWall->Play();
+	case tBad: return false; break;
+	default: return false; break;
 	}
-	mBadSounds.clear();
-	if (mXACore != NULL) {
-		delete mXACore;
-		mXACore = NULL;
-	}
-} // end CleanupGame function.
+}
 void SoundCues::Apply3D(){
-	//vector<AudioRenderable3D*>::const_iterator iter;
 	UpdateSettings(mPath);
 	UpdateSettings(mWall);
 	UpdateSettings(mGoodSounds.at(mGoodIter));
-	UpdateSettings(mBadSounds.at(mBadIter));/*
-	for(iter=mGoodSounds.begin(); iter!=mGoodSounds.end(); ++iter){
-		UpdateSettings((*iter));
-	}
-	for(iter=mBadSounds.begin(); iter!=mBadSounds.end(); ++iter){
-		UpdateSettings((*iter));
-	}*/
-}
-void SoundCues::StopAllSounds(){
-	vector<AudioRenderable3D*>::const_iterator iter;
-	mWall->Pause();
-	mPath->Pause();
-	for(iter=mGoodSounds.begin(); iter!=mGoodSounds.end(); ++iter){
-		(*iter)->Pause();
-	}
-	for(iter=mBadSounds.begin(); iter!=mBadSounds.end(); ++iter){
-		(*iter)->Pause();
-	}
+	UpdateSettings(mBadSounds.at(mBadIter));
 }
 void SoundCues::UpdateSettings(AudioRenderable3D* audio){
 	X3DAudioCalculate(mX3DInstance, &mPlayer->getListener(), &audio->getEmitter(), 
@@ -323,6 +269,41 @@ void SoundCues::UpdateSettings(AudioRenderable3D* audio){
 	XAUDIO2_FILTER_PARAMETERS FilterParams = {LowPassFilter, 2.0f*sinf(X3DAUDIO_PI/6.0f * audio->getDSPSettings()->LPFDirectCoefficient), 1.0f};
 	audio->getSourceVoice()->SetFilterParameters(&FilterParams);
 }
+int SoundCues::CheckIter(int check, int size){
+	int iter = rand()%size;
+	if(iter == check){
+		if(iter+1 < size){
+			iter++;
+		}else{
+			iter--;
+		}
+	}
+	return iter;
+}
+void SoundCues::StopAllSounds(){
+	mPlayPath = false;
+	mPlayGood = false;
+	mPlayBad = false;
+	vector<AudioRenderable3D*>::const_iterator iter;
+	mWall->Pause();
+	mPath->Pause();
+	for(iter=mGoodSounds.begin(); iter!=mGoodSounds.end(); ++iter){
+		(*iter)->Pause();
+	}
+	for(iter=mBadSounds.begin(); iter!=mBadSounds.end(); ++iter){
+		(*iter)->Pause();
+	}
+}
+bool SoundCues::FinishedGame(){
+	return mFinished;
+}
+void SoundCues::SetupMap(){
+	ClearArray();
+	SetUpOtherTiles();
+	SetUpGoodTiles();
+	SetUpBadTiles();
+	SetUpPathTiles();
+}
 void SoundCues::ClearArray(){
 	for(int i = 0; i < mapSize; i++){
 		for (int j = 0; j < mapSize; j++){
@@ -331,31 +312,14 @@ void SoundCues::ClearArray(){
 		}
 	}
 }
-void SoundCues::SetupMap(){
+void SoundCues::SetUpOtherTiles(){
 	locationX = 2;
 	locationZ = 15;
-	//initialise warning sounds
-	mMap[1][11].tile = tBad;
-	mMap[2][5].tile = tBad;
-	mMap[3][1].tile = tBad;
-	mMap[3][8].tile = tBad;
-	mMap[4][12].tile = tBad;
-	mMap[5][4].tile = tBad;
-	mMap[6][4].tile = tBad;
-	mMap[6][9].tile = tBad;
-	mMap[6][11].tile = tBad;
-	mMap[9][6].tile = tBad;
-	mMap[9][8].tile = tBad;
-	mMap[10][9].tile = tBad;
-	mMap[11][8].tile = tBad;
-	mMap[11][15].tile = tBad;
-	mMap[12][5].tile = tBad;
-	mMap[12][13].tile = tBad;
-	mMap[13][1].tile = tBad;
-	mMap[14][1].tile = tBad;
-	mMap[15][4].tile = tBad;
-	mMap[15][7].tile = tBad;
-	mMap[15][12].tile = tBad;
+	//init start and finish
+	mMap[locationZ][locationX].tile = tStart;
+	mMap[1][mapSize-2].tile = tFinish;
+}
+void SoundCues::SetUpGoodTiles(){
 	//initialise good sounds.
 	mMap[1][13].tile = tGood;
 	mMap[2][12].tile = tGood;
@@ -388,9 +352,32 @@ void SoundCues::SetupMap(){
 	mMap[14][10].tile = tGood;
 	mMap[14][11].tile = tGood;
 	mMap[15][9].tile = tGood;
-	//init start and finish
-	mMap[locationZ][locationX].tile = tStart;
-	mMap[1][mapSize-2].tile = tFinish;
+}
+void SoundCues::SetUpBadTiles(){
+	//initialise warning sounds
+	mMap[1][11].tile = tBad;
+	mMap[2][5].tile = tBad;
+	mMap[3][1].tile = tBad;
+	mMap[3][8].tile = tBad;
+	mMap[4][12].tile = tBad;
+	mMap[5][4].tile = tBad;
+	mMap[6][4].tile = tBad;
+	mMap[6][9].tile = tBad;
+	mMap[6][11].tile = tBad;
+	mMap[9][6].tile = tBad;
+	mMap[9][8].tile = tBad;
+	mMap[10][9].tile = tBad;
+	mMap[11][8].tile = tBad;
+	mMap[11][15].tile = tBad;
+	mMap[12][5].tile = tBad;
+	mMap[12][13].tile = tBad;
+	mMap[13][1].tile = tBad;
+	mMap[14][1].tile = tBad;
+	mMap[15][4].tile = tBad;
+	mMap[15][7].tile = tBad;
+	mMap[15][12].tile = tBad;
+}
+void SoundCues::SetUpPathTiles(){
 	//init path
 	mMap[1][12].tile = tPath;
 	mMap[1][14].tile = tPath;
@@ -442,20 +429,21 @@ void SoundCues::SetupMap(){
 	mMap[15][8].tile = tPath;
 	mMap[15][10].tile = tPath;
 }
-bool SoundCues::CheckForwardTile(int x, int y, X3DAUDIO_VECTOR pos){
-	X3DAUDIO_VECTOR velo = {0.0f,0.0f,0.0f};
-	switch(CheckMap(x,y)){
-	case tPath:
-	case tFinish:
-	case tStart:
-	case tGood: return true; break;
-	case tWall: 
-		mWall->UpdateEmitter(pos,velo);
-		UpdateSettings(mWall);
-		mWall->Play();
-	case tBad: return false; break;
-	default: return false; break;
+bool SoundCues::InitSounds(){
+	if(!InitRats()){
+		return false;
+	}else if(!InitBats()){
+		return false;
+	}else if(!InitBear()){
+		return false;
+	}else if(!InitOtherWarnings()){
+		return false;
+	}else if(!InitGood()){
+		return false;
+	}else if(!InitOther()){
+		return false;
 	}
+	return true;
 }
 bool SoundCues::InitBats(){
 	Bat *bat = new Bat(mXACore, 0);
@@ -644,4 +632,25 @@ bool SoundCues::InitGood(){
 	mGoodSounds.push_back((AudioRenderable3D*)good3);
 	return true;
 }
+//--- Release all XACore resources.
+//--- Note the order of destruction is important; XAudio2 destroys voices when the engine is destroyed, any calls to the voices AFTER this is an error, so any voice->DestroyVoice() should always be called before the engine is destroyed.
+void SoundCues::CleanupGame (){
+	vector<AudioRenderable3D*>::const_iterator iter;
+	for(iter = mGoodSounds.begin(); iter!=mGoodSounds.end(); ++iter){
+		delete *iter;
+	}
+	mGoodSounds.clear();
+	for(iter = mBadSounds.begin(); iter!=mBadSounds.end(); ++iter){
+		delete *iter;
+	}
+	mBadSounds.clear();
+	delete mFinish;
+	delete mPath;
+	delete mWall;
+	delete mStart;
+	if (mXACore != NULL) {
+		delete mXACore;
+		mXACore = NULL;
+	}
+} // end CleanupGame function.
 //=== end of code.

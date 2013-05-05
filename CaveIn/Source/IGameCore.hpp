@@ -47,6 +47,7 @@ public:
 	//--- Release all game-wide resources that have been allocated.
 	virtual void CleanupGame () = 0;
 
+	virtual bool FinishedGame() = 0;
 }; // end IGameCore interface.
 
 } // end AllanMilne namespace.

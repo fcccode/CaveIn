@@ -19,50 +19,36 @@ using AllanMilne::Audio::XASound;
 #include "Walking.hpp"
 
 Walking::Walking(XACore *aCore)
-	:mFinish(NULL), mElapsedTime(0.0f), mVolumeAdjustment(1.1f)
+	:mWalking(NULL), mFinished(false), mStarted(false)
 {
-	mFinish = aCore->CreateSound("Sounds/Walking.wav");
+	mWalking = aCore->CreateSound("Sounds/Walking.wav");
 }
-Walking::~Walking()
-{
-	if(mFinish!=NULL){
-		delete mFinish;
-		mFinish = NULL;
+Walking::~Walking(){
+	if(mWalking!=NULL){
+		delete mWalking;
+		mWalking = NULL;
 	}
 }
-void Walking::Play()
-{
-	mFinish->Play(0);
+void Walking::Play(){
+	if(mWalking->IsPlaying() == false && mStarted == false){
+		mWalking->Play(0);
+		mStarted = true;
+	}
+}
+bool Walking::getFinished(){
+	if(mWalking->IsPlaying()==false && mStarted == true){
+		mFinished = true;
+	}
+	return mFinished;
 }
 void Walking::Pause(){
-	mFinish->Pause();
+	mWalking->Pause();
 }
-inline bool Walking::IsOk() const {return (mFinish!=NULL);}
-void Walking::RenderAudio(const float deltaTime)
-{
-	static const float minVolume	= 0.1f;
-	static const float maxVolume	= 1.0f;
-	static const float volumeUp		= 1.25f;
-	static const float volumeDown	= 0.8f;
-	static const float pauseTime	= 1.0f;
-
+void Walking::RenderAudio(const float deltaTime){
 	if(!IsOk()){
 		return;
 	}
-	mElapsedTime+=deltaTime;
-	if(mElapsedTime>pauseTime){
-		mElapsedTime = 0.0f;
-		float volume = mFinish->GetVolume();
-		if(volume<minVolume){
-			mVolumeAdjustment = volumeUp;
-		}else if(volume > maxVolume){
-			mVolumeAdjustment = volumeDown;
-		}
-		mFinish->AdjustVolume(mVolumeAdjustment);
-	}
-
-	
 }
 IXAudio2SourceVoice* Walking::getSourceVoice(){
-	return mFinish->GetSourceVoice();
+	return mWalking->GetSourceVoice();
 }

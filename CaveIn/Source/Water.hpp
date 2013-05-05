@@ -26,19 +26,17 @@ public:
 	Water(XACore *aCore, int sound);
 	~Water();
 	void RenderAudio(const float deltaTime);
-	bool IsOk() const;
 	void Play();
 	void Pause();
 	XASound* getXASound() {return mWater;}
 	void InitializeEmitter(XACore *xacore);
 	inline X3DAUDIO_EMITTER getEmitter(){ return mEmitter;}
 	inline X3DAUDIO_DSP_SETTINGS* getDSPSettings(){return &mDSPSettings;}
+	inline bool IsOk() const {return (mWater!=NULL);}
 	IXAudio2SourceVoice* getSourceVoice();
 	void UpdateEmitter(X3DAUDIO_VECTOR pos, X3DAUDIO_VECTOR velo);
 private:
 	XASound *mWater;
-	float mElapsedTime;
-	float mVolumeAdjustment;
 };
 
 #endif 
