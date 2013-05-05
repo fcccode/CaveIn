@@ -25,17 +25,17 @@
     <Filter Include="Source Files\Sound Cues">
       <UniqueIdentifier>{779343c7-abcb-4320-87e4-f45058c7cc7c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Sound Cues\Praise">
-      <UniqueIdentifier>{d889145c-0005-490b-b19f-9340c4c4ab32}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\Sound Cues\Warnings">
       <UniqueIdentifier>{bbd6ca7a-8d9e-4ae9-83ca-5ee01289aa95}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Sound Cues\Praise">
-      <UniqueIdentifier>{400b9ee0-291c-4b2d-ab9d-c05821672072}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\Sound Cues\Warnings">
       <UniqueIdentifier>{75a18eec-e6a0-4259-a7d5-d54bef6b61b6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Sound Cues\Other Tiles">
+      <UniqueIdentifier>{400b9ee0-291c-4b2d-ab9d-c05821672072}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Sound Cues\Other Tiles">
+      <UniqueIdentifier>{d889145c-0005-490b-b19f-9340c4c4ab32}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -103,13 +103,25 @@
       <Filter>Header Files\Sound Cues\Warnings</Filter>
     </ClInclude>
     <ClInclude Include="Source\Directions.hpp">
-      <Filter>Header Files\Sound Cues\Praise</Filter>
+      <Filter>Header Files\Sound Cues\Other Tiles</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Path.hpp">
-      <Filter>Header Files\Sound Cues</Filter>
+    <ClInclude Include="Source\Finish.hpp">
+      <Filter>Header Files\Sound Cues\Other Tiles</Filter>
     </ClInclude>
     <ClInclude Include="Source\Wall.hpp">
-      <Filter>Header Files\Sound Cues</Filter>
+      <Filter>Header Files\Sound Cues\Warnings</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Start.hpp">
+      <Filter>Header Files\Sound Cues\Other Tiles</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Walking.hpp">
+      <Filter>Header Files\Sound Cues\Other Tiles</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Shuffle.hpp">
+      <Filter>Header Files\Sound Cues\Other Tiles</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Path.hpp">
+      <Filter>Header Files\Sound Cues\Other Tiles</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -140,9 +152,6 @@
     <ClCompile Include="Source\Main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Player.cpp">
-      <Filter>Source Files\Sound Cues</Filter>
-    </ClCompile>
     <ClCompile Include="Source\SoundCues.cpp">
       <Filter>Source Files\Sound Cues</Filter>
     </ClCompile>
@@ -159,13 +168,28 @@
       <Filter>Source Files\Sound Cues\Warnings</Filter>
     </ClCompile>
     <ClCompile Include="Source\Directions.cpp">
-      <Filter>Source Files\Sound Cues\Praise</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Path.cpp">
-      <Filter>Source Files\Sound Cues</Filter>
+      <Filter>Source Files\Sound Cues\Other Tiles</Filter>
     </ClCompile>
     <ClCompile Include="Source\Wall.cpp">
       <Filter>Source Files\Sound Cues</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Finish.cpp">
+      <Filter>Source Files\Sound Cues\Other Tiles</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Path.cpp">
+      <Filter>Source Files\Sound Cues\Warnings</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Shuffle.cpp">
+      <Filter>Source Files\Sound Cues\Other Tiles</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Walking.cpp">
+      <Filter>Source Files\Sound Cues\Other Tiles</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Player.cpp">
+      <Filter>Source Files\Sound Cues\Other Tiles</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Start.cpp">
+      <Filter>Source Files\Sound Cues\Other Tiles</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

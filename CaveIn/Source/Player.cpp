@@ -38,29 +38,34 @@ namespace {
 
 
 Player::Player(){
-	scale = 3.0f;
+	scale = 10.0f;
+	mElapsedTime = 0.0f;
+	transition = false;
 	memset((void*)&mListener,0,sizeof(X3DAUDIO_LISTENER));
 }
 bool Player::InitializeListener(){
-	X3DAUDIO_VECTOR front = {0.0f, 0.0f, 1.0f};
 	X3DAUDIO_VECTOR top = {0.0f, 1.0f, 0.0f};
 	X3DAUDIO_VECTOR position = {0.0f, 0.0f, 0.0f};
-	mListener.OrientFront = front;
+	mListener.OrientFront = compassVectors[int(currentDir)];
 	mListener.OrientTop = top;
 	mListener.Position = position;
 	return true;
 }
-void Player::Move(){
+void Player::Move(const float deltaTime){
 	if(transition == true){
-		RotateRound();
+		RotateRound(deltaTime);
 	}else if(nextDir == currentDir){
 		moving = false;
 	}
 }
-void Player::RotateRound(){
+void Player::RotateRound(const float deltaTime){
+	static const float pauseTime	= 1.0f;
+
+	mElapsedTime+=deltaTime;
 	if(nextDir == currentDir){
 		transition = false;
-	}else{
+	}else if(mElapsedTime>pauseTime){
+		mElapsedTime = 0.0f;
 		int endPoint = int(nextDir);
 		int currentPoint = int(currentDir);
 		if(endPoint==12 && currentPoint == 0){
@@ -97,18 +102,22 @@ bool Player::ShuffleLeft(){
 	case N: 
 		nextDir = W;
 		transition = true;
+		moving = true;
 		return true;
 	case E:
 		nextDir = N;
 		transition = true;
+		moving = true;
 		return true;
 	case S:
 		nextDir = E;
 		transition = true;
+		moving = true;
 		return true;
 	case W:
 		nextDir = S;
 		transition = true;
+		moving = true;
 		return true;
 	default: return false;
 	}
@@ -118,18 +127,22 @@ bool Player::ShuffleRight(){
 	case N:
 		nextDir = E;
 		transition = true;
+		moving = true;
 		return true;
 	case E:
 		nextDir = S;
 		transition = true;
+		moving = true;
 		return true;
 	case S:
 		nextDir = W;
 		transition = true;
+		moving = true;
 		return true;
 	case W:
 		nextDir = N;
 		transition = true;
+		moving = true;
 		return true;
 	default: return false;
 	}
@@ -139,18 +152,22 @@ bool Player::ShuffleBack(){
 	case N: 
 		nextDir = S;
 		transition = true;
+		moving = true;
 		return true;
 	case E:
 		nextDir = W;
 		transition = true;
+		moving = true;
 		return true;
 	case S:
 		nextDir = N;
 		transition = true;
+		moving = true;
 		return true;
 	case W:
 		nextDir = E;
 		transition = true;
+		moving = true;
 		return true;
 	default: return false;
 	}

@@ -41,10 +41,6 @@ void Directions::Pause(){
 	mGood->Pause();
 }
 void Directions::RenderAudio(const float deltaTime){
-	static const float minVolume	= 0.1f;
-	static const float maxVolume	= 1.0f;
-	static const float volumeUp		= 1.25f;
-	static const float volumeDown	= 0.8f;
 	static const float pauseTime	= 1.0f;
 
 	if(!IsOk()){
@@ -63,7 +59,7 @@ void Directions::InitializeEmitter(XACore *xacore){
 	mGood->GetSourceVoice()->GetVoiceDetails(&details);
 	mEmitter.ChannelCount = details.InputChannels;
 	mEmitter.CurveDistanceScaler = 1.0f;
-	X3DAUDIO_VECTOR tempVector = { 0.0f, 0.0f, 1.0f};
+	X3DAUDIO_VECTOR tempVector = { 0.0f, 0.0f, 0.0f};
 	mEmitter.Position = tempVector;
 	mEmitter.Velocity = tempVector;
 

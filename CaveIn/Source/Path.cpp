@@ -58,7 +58,7 @@ void Path::InitializeEmitter(XACore *xacore){
 	mPath->GetSourceVoice()->GetVoiceDetails(&details);
 	mEmitter.ChannelCount = details.InputChannels;
 	mEmitter.CurveDistanceScaler = 1.0f;
-	X3DAUDIO_VECTOR tempVector = { 0.0f, 0.0f, 1.0f};
+	X3DAUDIO_VECTOR tempVector = { 0.0f, 0.0f, 0.0f};
 	mEmitter.Position = tempVector;
 	mEmitter.Velocity = tempVector;
 

@@ -28,7 +28,9 @@ using AllanMilne::IGameCore;
 #include "AudioRenderable3D.hpp"
 #include "Player.hpp"
 #include "Path.hpp"
+#include "Finish.hpp"
 #include "Wall.hpp"
+#include "Start.hpp"
 #include <vector>
 using std::vector;
 
@@ -58,7 +60,7 @@ public:
 	//=== Game specific behaviour.
 	//--- Default constructor.
 	SoundCues () 
-	: mXACore (NULL), locationX(0), locationZ(0), mapSize(11), movementEnabled(true)
+	: mXACore (NULL), locationX(0), locationZ(0), mapSize(17), movementEnabled(true)
 	{} // end constructor.
 
 private:
@@ -80,6 +82,9 @@ private:
 	bool InitOtherWarnings();
 	bool InitGood();
 	bool InitOther();
+	void Move();
+	int CheckIter(int iter, int check);
+	bool CheckStart();
 	//--- the XAudio2 engine encapsulation.
 	XACore *mXACore;
 	XAUDIO2_FILTER_PARAMETERS mFParams;
@@ -90,12 +95,15 @@ private:
 	int mGoodIter, mBadIter;
 	int locationX, locationZ, mapSize;
 	bool movementEnabled;
-	Tiles mMap[11][11]; 
+	Tiles mMap[17][17]; 
 	Path *mPath;
 	Wall *mWall; 
+	Finish *mFinish; 
+	Start *mStart;
 	bool mPlayPath;
 	bool mPlayGood;
 	bool mPlayBad;
+
 }; // end Soundscape1 class.
 
 #endif

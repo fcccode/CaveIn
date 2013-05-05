@@ -33,6 +33,8 @@ using AllanMilne::Audio::Player;
 #include "Wall.hpp"
 #include "Directions.hpp"
 #include "Soundcues.hpp"
+#include "Finish.hpp"
+#include "Start.hpp"
 //=== Implementation of the IGameCore interface.
 namespace{
 	enum Orientation{North, East, South, West};
@@ -73,72 +75,91 @@ bool SoundCues::SetupGame (HWND aWindow)
 
 	ClearArray();
 	SetupMap();
-	mBadIter = rand()%mBadSounds.size();
-	mGoodIter = rand()%mGoodSounds.size();
-	UpdateSoundTile();
 	return true;		// All has been setup without error.
 } // end SetupGame function.
+bool SoundCues::CheckStart(){
+	if(mMap[locationZ][locationX].tile == tStart && mMap[locationZ][locationX].played == false){
+		if(mStart->getFinished()){
+			mMap[locationZ][locationX].played = true;
+			mBadIter = rand()%mBadSounds.size();
+			mGoodIter = rand()%mGoodSounds.size();
+			UpdateSoundTile();
+		}
+		mStart->Play();
+		return true;
+	}
+	return false;
+}
 //--- process a single game frame.
 void SoundCues::ProcessGameFrame (const float deltaTime)
 {
-	bool positionChanged = false;
-	bool changeSound = false;
-	mPlayer->Move();
-	if(mPlayer->getTransition()){
-		Apply3D();
-	}
-	if(mPlayer->getMoving() == false){
-		movementEnabled = true;
-	}else{
-		positionChanged = true;
-	}
-	if(movementEnabled){
-		if( (GetAsyncKeyState(VK_UP) & 0x0001) || (GetAsyncKeyState('W') & 0x0001) ){
-			if(CheckMoveForward()){
-				mPlayer->MoveForward();
-				movementEnabled = false;
-				positionChanged = true;
-				changeSound = true;
-				mMap[locationZ][locationX].played = true;
-				StopAllSounds();
+	if(CheckStart() == false){
+		if(mMap[locationZ][locationX].tile == tFinish){
+			mFinish->Play();
+			if(mFinish->getFinished()){
+
 			}
 		}
-		if( (GetAsyncKeyState(VK_LEFT) & 0x0001) || (GetAsyncKeyState('A') & 0x0001) ){
-			ChangeOrientation(1);
-			mPlayer->ShuffleLeft();
-			positionChanged = true;
-			movementEnabled = false;
+		mPlayer->Move(deltaTime);
+		if(mPlayer->getTransition()){
+			Apply3D();
 		}
-		if((GetAsyncKeyState(VK_RIGHT) & 0x0001) || (GetAsyncKeyState('D') & 0x0001) ){
-			ChangeOrientation(-1);
-			mPlayer->ShuffleRight();
-			positionChanged = true;
-			movementEnabled = false;
+		if(mPlayer->getMoving() == false){
+			movementEnabled = true;
 		}
-		if((GetAsyncKeyState(VK_DOWN) & 0x0001) || (GetAsyncKeyState('S') & 0x0001) ){
-			ChangeOrientation(2);
-			mPlayer->ShuffleBack();
-			positionChanged = true;
-			movementEnabled = false;
+		if(movementEnabled){
+			Move();
 		}
-	}
-	if(changeSound){
-		mBadIter = rand()%mBadSounds.size();
-		mGoodIter = rand()%mGoodSounds.size();
-	}
-	if(positionChanged){
-		UpdateSoundTile();
-	}
-	if(mPlayPath){
-		mPath->RenderAudio(deltaTime);
-	}
-	if(mPlayGood){
-		mGoodSounds.at(mGoodIter)->RenderAudio(deltaTime);
-	}
-	if(mPlayBad){
-		mBadSounds.at(mBadIter)->RenderAudio(deltaTime);
+		if(mPlayPath){
+			mPath->RenderAudio(deltaTime);
+		}
+		if(mPlayGood){
+			mGoodSounds.at(mGoodIter)->RenderAudio(deltaTime);
+		}
+		if(mPlayBad){
+			mBadSounds.at(mBadIter)->RenderAudio(deltaTime);
+		}
 	}
 } // end ProcessGameFrame function.
+void SoundCues::Move(){
+	if( (GetAsyncKeyState(VK_UP) & 0x0001) || (GetAsyncKeyState('W') & 0x0001) ){
+		if(CheckMoveForward()){
+			mPlayer->MoveForward();
+			movementEnabled = false;
+			mMap[locationZ][locationX].played = true;
+			mBadIter=CheckIter(mBadIter, mBadSounds.size());
+			mGoodIter=CheckIter(mGoodIter, mGoodSounds.size());
+			StopAllSounds();
+			UpdateSoundTile();
+		}
+	}else if( (GetAsyncKeyState(VK_LEFT) & 0x0001) || (GetAsyncKeyState('A') & 0x0001) ){
+		ChangeOrientation(1);
+		mPlayer->ShuffleLeft();
+		Apply3D();
+		movementEnabled = false;
+	}else if((GetAsyncKeyState(VK_RIGHT) & 0x0001) || (GetAsyncKeyState('D') & 0x0001) ){
+		ChangeOrientation(-1);
+		mPlayer->ShuffleRight();
+		Apply3D();
+		movementEnabled = false;
+	}else if((GetAsyncKeyState(VK_DOWN) & 0x0001) || (GetAsyncKeyState('S') & 0x0001) ){
+		ChangeOrientation(2);
+		mPlayer->ShuffleBack();
+		Apply3D();
+		movementEnabled = false;
+	}
+}
+int SoundCues::CheckIter(int check, int size){
+	int iter = rand()%size;
+	if(iter == check){
+		if(iter+1 < size){
+			iter++;
+		}else{
+			iter--;
+		}
+	}
+	return iter;
+}
 void SoundCues::UpdateSoundTile(){
 	mPlayPath = false;
 	mPlayGood = false;
@@ -217,15 +238,11 @@ bool SoundCues::CheckMoveForward(){
 	X3DAUDIO_VECTOR velo = {0.0f,0.0f,0.0f};
 	switch(PlayerOrientation){
 	case North:
-		if((locationZ-1)>0){
+		if((locationZ-1)>=0){
 			if(CheckForwardTile(locationZ-1,locationX, mPlayer->getPlayerNorth())){
 				locationZ-=1;
 				return true;
 			}
-		}else if((locationZ-1)==0){
-			mWall->UpdateEmitter(mPlayer->getPlayerNorth(),velo);
-			UpdateSettings((AudioRenderable3D*)mWall);
-			mWall->Play();
 		}
 		break;
 	case East:
@@ -234,10 +251,6 @@ bool SoundCues::CheckMoveForward(){
 				locationX+=1;
 				return true;
 			}
-		}else if((locationX+1)==mapSize){
-			mWall->UpdateEmitter(mPlayer->getPlayerEast(),velo);
-			UpdateSettings((AudioRenderable3D*)mWall);
-			mWall->Play();
 		}
 		break;
 	case South:
@@ -246,22 +259,14 @@ bool SoundCues::CheckMoveForward(){
 				locationZ+=1;
 				return true;
 			}
-		}else if((locationZ+1)==mapSize){
-			mWall->UpdateEmitter(mPlayer->getPlayerSouth(),velo);
-			UpdateSettings((AudioRenderable3D*)mWall);
-			mWall->Play();
 		}
 		break;
 	case West:
-		if((locationX-1)>0){
+		if((locationX-1)>=0){
 			if(CheckForwardTile(locationZ,locationX-1, mPlayer->getPlayerWest())){
 				locationX-=1;
 				return true;
 			}
-		}else if((locationX-1)==0){
-			mWall->UpdateEmitter(mPlayer->getPlayerWest(),velo);
-			UpdateSettings((AudioRenderable3D*)mWall);
-			mWall->Play();
 		}
 		break;
 	}
@@ -285,11 +290,10 @@ void SoundCues::CleanupGame ()
 		mXACore = NULL;
 	}
 } // end CleanupGame function.
-
 void SoundCues::Apply3D(){
 	//vector<AudioRenderable3D*>::const_iterator iter;
-	UpdateSettings((AudioRenderable3D*)mPath);
-	UpdateSettings((AudioRenderable3D*)mWall);
+	UpdateSettings(mPath);
+	UpdateSettings(mWall);
 	UpdateSettings(mGoodSounds.at(mGoodIter));
 	UpdateSettings(mBadSounds.at(mBadIter));/*
 	for(iter=mGoodSounds.begin(); iter!=mGoodSounds.end(); ++iter){
@@ -311,79 +315,132 @@ void SoundCues::StopAllSounds(){
 	}
 }
 void SoundCues::UpdateSettings(AudioRenderable3D* audio){
-	//deep copy vs shallow copy
-	X3DAUDIO_DSP_SETTINGS* settings = audio->getDSPSettings();
 	X3DAudioCalculate(mX3DInstance, &mPlayer->getListener(), &audio->getEmitter(), 
 		X3DAUDIO_CALCULATE_MATRIX | X3DAUDIO_CALCULATE_DOPPLER | X3DAUDIO_CALCULATE_LPF_DIRECT ,
-		settings);
-	audio->getSourceVoice()->SetOutputMatrix(NULL, settings->SrcChannelCount, settings->DstChannelCount, settings->pMatrixCoefficients);
-	audio->getSourceVoice()->SetFrequencyRatio(settings->DopplerFactor);
-	XAUDIO2_FILTER_PARAMETERS FilterParams = {LowPassFilter, 2.0f*sinf(X3DAUDIO_PI/6.0f * settings->LPFDirectCoefficient), 1.0f};
+		audio->getDSPSettings());
+	audio->getSourceVoice()->SetOutputMatrix(NULL, audio->getDSPSettings()->SrcChannelCount, audio->getDSPSettings()->DstChannelCount, audio->getDSPSettings()->pMatrixCoefficients);
+	audio->getSourceVoice()->SetFrequencyRatio(audio->getDSPSettings()->DopplerFactor);
+	XAUDIO2_FILTER_PARAMETERS FilterParams = {LowPassFilter, 2.0f*sinf(X3DAUDIO_PI/6.0f * audio->getDSPSettings()->LPFDirectCoefficient), 1.0f};
 	audio->getSourceVoice()->SetFilterParameters(&FilterParams);
 }
 void SoundCues::ClearArray(){
-	for(int i = 0; i < 10; i++){
-		for (int j = 0; j < 10; j++){
+	for(int i = 0; i < mapSize; i++){
+		for (int j = 0; j < mapSize; j++){
 			mMap[i][j].tile = tWall;
 			mMap[i][j].played = false;
 		}
 	}
 }
 void SoundCues::SetupMap(){
-	locationX = 5;
-	locationZ = 9;
+	locationX = 2;
+	locationZ = 15;
 	//initialise warning sounds
-	mMap[1][2].tile = tBad;
-	mMap[1][6].tile = tBad;
-	mMap[2][1].tile = tBad;
-	mMap[2][7].tile = tBad;
-	mMap[4][3].tile = tBad;
-	mMap[4][5].tile = tBad;
-	mMap[4][9].tile = tBad;
-	mMap[4][9].tile = tBad;
-	mMap[5][2].tile = tBad;
-	mMap[5][3].tile = tBad;
-	mMap[5][6].tile = tBad;
-	mMap[5][7].tile = tBad;
-	mMap[8][4].tile = tBad;
-	mMap[9][2].tile = tBad;
-	mMap[9][7].tile = tBad;
+	mMap[1][11].tile = tBad;
+	mMap[2][5].tile = tBad;
+	mMap[3][1].tile = tBad;
+	mMap[3][8].tile = tBad;
+	mMap[4][12].tile = tBad;
+	mMap[5][4].tile = tBad;
+	mMap[6][4].tile = tBad;
+	mMap[6][9].tile = tBad;
+	mMap[6][11].tile = tBad;
+	mMap[9][6].tile = tBad;
+	mMap[9][8].tile = tBad;
+	mMap[10][9].tile = tBad;
+	mMap[11][8].tile = tBad;
+	mMap[11][15].tile = tBad;
+	mMap[12][5].tile = tBad;
+	mMap[12][13].tile = tBad;
+	mMap[13][1].tile = tBad;
+	mMap[14][1].tile = tBad;
+	mMap[15][4].tile = tBad;
+	mMap[15][7].tile = tBad;
+	mMap[15][12].tile = tBad;
 	//initialise good sounds.
-	mMap[1][4].tile = tGood;
-	mMap[2][3].tile = tGood;
-	mMap[2][5].tile = tGood;
-	mMap[2][9].tile = tGood;
-	mMap[3][2].tile = tGood;
-	mMap[3][6].tile = tGood;
-	mMap[3][8].tile = tGood;
-	mMap[4][1].tile = tGood;
-	mMap[6][4].tile = tGood;
-	mMap[6][6].tile = tGood;
-	mMap[7][1].tile = tGood;
-	mMap[7][3].tile = tGood;
+	mMap[1][13].tile = tGood;
+	mMap[2][12].tile = tGood;
+	mMap[3][3].tile = tGood;
+	mMap[3][10].tile = tGood;
+	mMap[4][5].tile = tGood;
+	mMap[4][9].tile = tGood;
+	mMap[5][6].tile = tGood;
+	mMap[7][2].tile = tGood;
 	mMap[7][7].tile = tGood;
-	mMap[8][2].tile = tGood;
-	mMap[8][6].tile = tGood;
+	mMap[7][8].tile = tGood;
+	mMap[7][14].tile = tGood;
+	mMap[8][3].tile = tGood;
+	mMap[8][4].tile = tGood;
+	mMap[8][10].tile = tGood;
+	mMap[8][11].tile = tGood;
+	mMap[9][15].tile = tGood;
+	mMap[10][2].tile = tGood;
+	mMap[10][11].tile = tGood;
+	mMap[11][1].tile = tGood;
+	mMap[11][6].tile = tGood;
+	mMap[11][10].tile = tGood;
+	mMap[12][3].tile = tGood;
+	mMap[12][7].tile = tGood;
+	mMap[12][11].tile = tGood;
+	mMap[13][4].tile = tGood;
+	mMap[13][8].tile = tGood;
+	mMap[13][12].tile = tGood;
+	mMap[14][3].tile = tGood;
+	mMap[14][10].tile = tGood;
+	mMap[14][11].tile = tGood;
+	mMap[15][9].tile = tGood;
 	//init start and finish
-	mMap[9][5].tile = tStart;
-	mMap[1][9].tile = tFinish;
+	mMap[locationZ][locationX].tile = tStart;
+	mMap[1][mapSize-2].tile = tFinish;
 	//init path
-	mMap[1][3].tile = tPath;
-	mMap[1][5].tile = tPath;
-	mMap[3][1].tile = tPath;
-	mMap[3][3].tile = tPath;
+	mMap[1][12].tile = tPath;
+	mMap[1][14].tile = tPath;
+	mMap[3][2].tile = tPath;
+	mMap[3][4].tile = tPath;
 	mMap[3][5].tile = tPath;
-	mMap[3][7].tile = tPath;
 	mMap[3][9].tile = tPath;
-	mMap[5][1].tile = tPath;
-	mMap[6][1].tile = tPath;
-	mMap[6][3].tile = tPath;
-	mMap[6][5].tile = tPath;
-	mMap[6][7].tile = tPath;
-	mMap[8][1].tile = tPath;
-	mMap[8][3].tile = tPath;
-	mMap[8][5].tile = tPath;
-	mMap[8][7].tile = tPath;
+	mMap[3][11].tile = tPath;
+	mMap[3][12].tile = tPath;
+	mMap[4][2].tile = tPath;
+	mMap[5][2].tile = tPath;
+	mMap[5][5].tile = tPath;
+	mMap[5][7].tile = tPath;
+	mMap[5][8].tile = tPath;
+	mMap[5][9].tile = tPath;
+	mMap[6][2].tile = tPath;
+	mMap[7][4].tile = tPath;
+	mMap[7][5].tile = tPath;
+	mMap[7][6].tile = tPath;
+	mMap[7][11].tile = tPath;
+	mMap[7][12].tile = tPath;
+	mMap[7][13].tile = tPath;
+	mMap[7][15].tile = tPath;
+	mMap[8][2].tile = tPath;
+	mMap[8][8].tile = tPath;
+	mMap[8][9].tile = tPath;
+	mMap[8][15].tile = tPath;
+	mMap[10][1].tile = tPath;
+	mMap[10][3].tile = tPath;
+	mMap[10][4].tile = tPath;
+	mMap[10][5].tile = tPath;
+	mMap[10][6].tile = tPath;
+	mMap[10][10].tile = tPath;
+	mMap[10][12].tile = tPath;
+	mMap[10][13].tile = tPath;
+	mMap[10][14].tile = tPath;
+	mMap[10][15].tile = tPath;
+	mMap[12][1].tile = tPath;
+	mMap[12][2].tile = tPath;
+	mMap[12][4].tile = tPath;
+	mMap[12][6].tile = tPath;
+	mMap[12][8].tile = tPath;
+	mMap[12][10].tile = tPath;
+	mMap[12][12].tile = tPath;
+	mMap[14][2].tile = tPath;
+	mMap[14][4].tile = tPath;
+	mMap[14][8].tile = tPath;
+	mMap[14][12].tile = tPath;
+	mMap[15][8].tile = tPath;
+	mMap[15][10].tile = tPath;
 }
 bool SoundCues::CheckForwardTile(int x, int y, X3DAUDIO_VECTOR pos){
 	X3DAUDIO_VECTOR velo = {0.0f,0.0f,0.0f};
@@ -527,6 +584,23 @@ bool SoundCues::InitOther(){
 		return false;
 	}
 	mWall->InitializeEmitter(mXACore);
+	mFinish = new Finish(mXACore);
+	if(!mFinish->IsOk()){
+		MessageBox(NULL,"Error loading bat1.wav",TEXT("SetupGame()-FAILED"),MB_OK|MB_ICONERROR);
+		delete mPath;
+		delete mWall;
+		delete mFinish;
+		return false;
+	}
+	mStart = new Start(mXACore);
+	if(!mStart->IsOk()){
+		MessageBox(NULL,"Error loading bat1.wav",TEXT("SetupGame()-FAILED"),MB_OK|MB_ICONERROR);
+		delete mPath;
+		delete mWall;
+		delete mFinish;
+		delete mStart;
+		return false;
+	}
 	return true;
 }
 bool SoundCues::InitGood(){
