@@ -62,6 +62,12 @@ void Bear::UpdateEmitter(X3DAUDIO_VECTOR pos, X3DAUDIO_VECTOR velo){
 	mEmitter.Position = pos;
 	mEmitter.Velocity = velo;
 }
+void Bear::UpdateEmitterPos(X3DAUDIO_VECTOR pos){
+	mEmitter.Position = pos;
+}
+void Bear::UpdateEmitterVelo(X3DAUDIO_VECTOR velo){
+	mEmitter.Velocity = velo;
+}
 IXAudio2SourceVoice* Bear::getSourceVoice(){
 	return mBear->GetSourceVoice();
 }

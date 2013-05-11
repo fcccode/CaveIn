@@ -1,15 +1,14 @@
 /*
-	File:	Soundscape1.cpp
-	Version:	1.0
-	Date:	11th January 2013.
-	Author:	Allan C. Milne.
+	File:	Soundscape.cpp
+	Date:	8th May 2013.
+	Author:	Jake Morey based upon Allan C. Milne SoundScape1.cpp.
 
-	Exposes:	Soundscape1 implementation.
-	Requires:	Sounds\rain.wav, XACore, XASound, AudioRenderable, Bird, Frogs.
-	
+	Exposes:	Soundscape implementation.
+	Requires:	Sounds\Atmosphere\Wind.wav, XACore, XASound, AudioRenderable, Drip, Horror.
 	Description:
-	This is the implementation of the Soundscape1 class members;
-	*	see Soundscape1.hpp for the class definition and further information on the application functionality.
+	This is the implementation of the Soundscape class members inspired by the IGameCore interface;
+	*	this class is used to play the background sounds for the application
+	*	see Soundscape.hpp for the class definition and further information on the application functionality.
 
 */
 
@@ -28,11 +27,11 @@ using AllanMilne::Audio::XASound;
 #include "Drip.hpp"
 #include "Horror.hpp"
 
-//=== Implementation of the IGameCore interface.
-
-//--- create and initialize XACore and the sounds to be played.
-//--- Since this game has no graphics the HWND argument is not used.
-//--- this will create all the sound elements and play the rain & bird sounds.
+/*
+* Similar to IGameCore Interface but takes a XACore
+* as a parameter so it can initialize sounds using 
+* the SoundCues class.
+*/
 bool Soundscape::SetupGame (XACore *aCore){
 	// Create the rain sound object; check if ok.
 	mWind = aCore->CreateSound ("Sounds/Atmosphere/Wind.wav");
@@ -43,22 +42,22 @@ bool Soundscape::SetupGame (XACore *aCore){
 	mWind->SetLooped(true);
 
 	// Create the renderable objects and add to the renderable component list.
-	Drip *bats = new Drip(aCore);
-	if (!bats->IsOk()){
+	Drip *drips = new Drip(aCore);
+	if (!drips->IsOk()){
 		MessageBox (NULL, "Error loading bird.wav", TEXT ("SetupGame() - FAILED"), MB_OK | MB_ICONERROR );
 		delete mWind;
-		delete bats;
+		delete drips;
 		return false;
 	}
 	Horror *horror= new Horror(aCore);
 	if (!horror->IsOk()){
 		MessageBox (NULL, "Error loading frogs.wav", TEXT ("SetupGame() - FAILED"), MB_OK | MB_ICONERROR );
 		delete mWind;
-		delete bats;
+		delete drips;
 		delete horror;
 		return false;
 	}
-	mRenderedSounds.push_back((AudioRenderable*)bats);
+	mRenderedSounds.push_back((AudioRenderable*)drips);
 	mRenderedSounds.push_back((AudioRenderable*)horror);
 	
 	// Play the rain and bird sounds; frogs will be played through the game loop.
@@ -75,9 +74,7 @@ void Soundscape::ProcessGameFrame (const float deltaTime){
 		(*iter)->RenderAudio(deltaTime);
 	}
 } // end ProcessGameFrame function.
-
-//--- Release all XACore and XASound resources.
-//--- Note the order of destruction is important; XAudio2 destroys voices when the engine is destroyed, any calls to the voices AFTER this is an error, so any voice->DestroyVoice() should always be called before the engine is destroyed.
+//Clean up the game by removing all sounds.
 void Soundscape::CleanupGame (){
 	if (mWind != NULL) {
 		delete mWind;

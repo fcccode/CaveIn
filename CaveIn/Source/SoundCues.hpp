@@ -75,7 +75,9 @@ private:
 	void Apply3D();
 	bool CheckForwardTile(int x, int y, X3DAUDIO_VECTOR pos);
 	bool CheckMoveForward();
-	void ChangeOrientation(int dir);
+	void ChangeOrientationLeft();
+	void ChangeOrientationBack();
+	void ChangeOrientationRight();
 	void UpdateSoundTile();
 	void PlaySoundTiles(int z, int x, X3DAUDIO_VECTOR pos);
 	void StopAllSounds();
@@ -85,11 +87,11 @@ private:
 	bool CheckFinish();
 	
 	void SetupMap();
-	void ClearArray();
 	void SetUpGoodTiles();
 	void SetUpBadTiles();
 	void SetUpPathTiles();
 	void SetUpOtherTiles();
+	void ClearArray();
 
 	bool InitSounds();
 	bool InitRats();
@@ -100,22 +102,24 @@ private:
 	bool InitOther();
 	bool InitWalk();
 
-	//--- the XAudio2 engine encapsulation.
+	X3DAUDIO_HANDLE mX3DInstance;
 	XACore *mXACore;
 	Soundscape *mAmbient;
 	Player *mPlayer;
-	X3DAUDIO_HANDLE mX3DInstance;
+
+	Tiles mMap[17][17];
+	int locationX, locationZ, mapSize;
+
 	vector<AudioRenderable3D*> mGoodSounds;
 	vector<AudioRenderable3D*> mBadSounds;
 	int mGoodIter, mBadIter;
-	int locationX, locationZ, mapSize;
-	Tiles mMap[17][17]; 
 	Path *mPath;
 	Wall *mWall; 
 	Finish *mFinish; 
 	Start *mStart;
 	Walking *mWalking;
-	Shuffle *mShuffle; 
+	Shuffle *mShuffle;
+
 	bool mPlayPath;
 	bool mPlayGood;
 	bool mPlayBad;

@@ -59,6 +59,12 @@ void Rocks::UpdateEmitter(X3DAUDIO_VECTOR pos, X3DAUDIO_VECTOR velo){
 	mEmitter.Position = pos;
 	mEmitter.Velocity = velo;
 }
+void Rocks::UpdateEmitterPos(X3DAUDIO_VECTOR pos){
+	mEmitter.Position = pos;
+}
+void Rocks::UpdateEmitterVelo(X3DAUDIO_VECTOR velo){
+	mEmitter.Velocity = velo;
+}
 IXAudio2SourceVoice* Rocks::getSourceVoice(){
 	return mRocks->GetSourceVoice();
 }

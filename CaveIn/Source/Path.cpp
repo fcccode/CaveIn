@@ -66,6 +66,12 @@ void Path::UpdateEmitter(X3DAUDIO_VECTOR pos, X3DAUDIO_VECTOR velo){
 	mEmitter.Position = pos;
 	mEmitter.Velocity = velo;
 }
+void Path::UpdateEmitterPos(X3DAUDIO_VECTOR pos){
+	mEmitter.Position = pos;
+}
+void Path::UpdateEmitterVelo(X3DAUDIO_VECTOR velo){
+	mEmitter.Velocity = velo;
+}
 IXAudio2SourceVoice* Path::getSourceVoice(){
 	return mPath->GetSourceVoice();
 }

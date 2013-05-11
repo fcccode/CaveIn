@@ -35,6 +35,8 @@ public:
 	inline bool IsOk() const {return (mWall!=NULL);}
 	IXAudio2SourceVoice* getSourceVoice();
 	void UpdateEmitter(X3DAUDIO_VECTOR pos, X3DAUDIO_VECTOR velo);
+	void UpdateEmitterPos(X3DAUDIO_VECTOR pos);
+	void UpdateEmitterVelo(X3DAUDIO_VECTOR velo);
 private:
 	XASound *mWall;
 };

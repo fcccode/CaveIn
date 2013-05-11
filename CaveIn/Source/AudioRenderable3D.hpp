@@ -33,6 +33,8 @@ public:
 	virtual X3DAUDIO_DSP_SETTINGS* getDSPSettings()=0;
 	virtual IXAudio2SourceVoice* getSourceVoice() = 0;
 	virtual void UpdateEmitter(X3DAUDIO_VECTOR pos, X3DAUDIO_VECTOR velo) = 0;
+	virtual void UpdateEmitterPos(X3DAUDIO_VECTOR pos) = 0;
+	virtual void UpdateEmitterVelo(X3DAUDIO_VECTOR velo) = 0;
 	AudioRenderable3D(){
 		memset((void*)&mDSPSettings,0,sizeof(X3DAUDIO_DSP_SETTINGS));
 		memset((void*)&mEmitter,0,sizeof(X3DAUDIO_EMITTER));

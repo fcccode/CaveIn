@@ -61,6 +61,12 @@ void Water::UpdateEmitter(X3DAUDIO_VECTOR pos, X3DAUDIO_VECTOR velo){
 	mEmitter.Position = pos;
 	mEmitter.Velocity = velo;
 }
+void Water::UpdateEmitterPos(X3DAUDIO_VECTOR pos){
+	mEmitter.Position = pos;
+}
+void Water::UpdateEmitterVelo(X3DAUDIO_VECTOR velo){
+	mEmitter.Velocity = velo;
+}
 IXAudio2SourceVoice* Water::getSourceVoice(){
 	return mWater->GetSourceVoice();
 }

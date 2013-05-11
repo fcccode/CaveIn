@@ -135,7 +135,6 @@ void WinCore::Start (){
 			//--- call the game frame processing function. ---
 			mGame->ProcessGameFrame (mTimer->GetDeltaTime());
 			if(mGame->FinishedGame()==true){
-				MessageBox (NULL, TEXT ("Congratulations you've completed the game"), TEXT ("Game Over"), MB_OK | MB_ICONQUESTION );
 				DestroyWindow(mHwnd);
 			}
 		}

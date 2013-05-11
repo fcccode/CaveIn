@@ -108,20 +108,11 @@ void SoundCues::Move(){
 			mWalking->Play();
 		}
 	}else if( (GetAsyncKeyState(VK_LEFT) & 0x0001) || (GetAsyncKeyState('A') & 0x0001) ){
-		ChangeOrientation(1);
-		mPlayer->ShuffleLeft();
-		Apply3D();
-		mShuffle->Play();
+		ChangeOrientationLeft();
 	}else if((GetAsyncKeyState(VK_RIGHT) & 0x0001) || (GetAsyncKeyState('D') & 0x0001) ){
-		ChangeOrientation(-1);
-		mPlayer->ShuffleRight();
-		Apply3D();
-		mShuffle->Play();
+		ChangeOrientationRight();
 	}else if((GetAsyncKeyState(VK_DOWN) & 0x0001) || (GetAsyncKeyState('S') & 0x0001) ){
-		ChangeOrientation(2);
-		mPlayer->ShuffleBack();
-		Apply3D();
-		mShuffle->Play();
+		ChangeOrientationBack();
 	}
 }
 bool SoundCues::CheckStart(){
@@ -131,7 +122,9 @@ bool SoundCues::CheckStart(){
 			mBadIter = rand()%mBadSounds.size();
 			mGoodIter = rand()%mGoodSounds.size();
 			UpdateSoundTile();
-			mAmbient->SetupGame(mXACore);
+			if(mAmbient->SetupGame(mXACore)==false){
+				mFinished = true;
+			}
 		}
 		mStart->Play();
 		return true;
@@ -165,39 +158,38 @@ void SoundCues::UpdateSoundTile(){
 	}
 }
 void SoundCues::PlaySoundTiles(int z, int x, X3DAUDIO_VECTOR pos){
-	X3DAUDIO_VECTOR velo = {0.0f,0.0f,0.0f};
 	switch (CheckMap(z,x)){
 	case tFinish:
 	case tGood:
-		mGoodSounds.at(mGoodIter)->UpdateEmitter(pos,velo);
+		mGoodSounds.at(mGoodIter)->UpdateEmitterPos(pos);
 		UpdateSettings(mGoodSounds.at(mGoodIter));
 		mGoodSounds.at(mGoodIter)->Play();
 		mPlayGood = true;
 		break;
 	case tPath:
-		mPath->UpdateEmitter(pos,velo);
+		mPath->UpdateEmitterPos(pos);
 		UpdateSettings(mPath);
 		mPath->Play();
 		mPlayPath = true;
 		break;
 	case tBad:
-		mBadSounds.at(mBadIter)->UpdateEmitter(pos,velo);
+		mBadSounds.at(mBadIter)->UpdateEmitterPos(pos);
 		UpdateSettings(mBadSounds.at(mBadIter));
 		mBadSounds.at(mBadIter)->Play();
 		mPlayBad = true;
 		break;
 	case tWall:
-		mWall->UpdateEmitter(pos,velo);
+		mWall->UpdateEmitterPos(pos);
 		UpdateSettings(mWall);
 		break;
 	}
 }
 bool SoundCues::CheckMoveForward(){
-	X3DAUDIO_VECTOR velo = {0.0f,0.0f,0.0f};
 	switch(PlayerOrientation){
 	case North:
 		if((locationZ-1)>=0){
 			if(CheckForwardTile(locationZ-1,locationX, mPlayer->getPlayerNorth())){
+				mMap[locationZ][locationX].tile=tWall;
 				locationZ-=1;
 				return true;
 			}
@@ -206,6 +198,7 @@ bool SoundCues::CheckMoveForward(){
 	case East:
 		if((locationX+1)<mapSize){
 			if(CheckForwardTile(locationZ,locationX+1, mPlayer->getPlayerEast())){
+				mMap[locationZ][locationX].tile=tWall;
 				locationX+=1;
 				return true;
 			}
@@ -214,6 +207,7 @@ bool SoundCues::CheckMoveForward(){
 	case South:
 		if((locationZ+1)<mapSize){
 			if(CheckForwardTile(locationZ+1,locationX, mPlayer->getPlayerSouth())){
+				mMap[locationZ][locationX].tile=tWall;
 				locationZ+=1;
 				return true;
 			}
@@ -222,6 +216,7 @@ bool SoundCues::CheckMoveForward(){
 	case West:
 		if((locationX-1)>=0){
 			if(CheckForwardTile(locationZ,locationX-1, mPlayer->getPlayerWest())){
+				mMap[locationZ][locationX].tile=tWall;
 				locationX-=1;
 				return true;
 			}
@@ -230,39 +225,47 @@ bool SoundCues::CheckMoveForward(){
 	}
 	return false;
 }
-void SoundCues::ChangeOrientation(int dir){
-	if(dir == 1){
-		switch(PlayerOrientation){
-		case North: PlayerOrientation = West; break;
-		case East: PlayerOrientation = North; break;
-		case South: PlayerOrientation = East; break;
-		case West: PlayerOrientation = South; break;
-		}
-	}else if(dir == -1){
-		switch(PlayerOrientation){
-		case North: PlayerOrientation = East; break;
-		case East: PlayerOrientation = South; break;
-		case South: PlayerOrientation = West; break;
-		case West: PlayerOrientation = North; break;
-		}
-	}else if(dir == 2){
-		switch(PlayerOrientation){
-		case North: PlayerOrientation = South; break;
-		case East: PlayerOrientation = West; break;
-		case South: PlayerOrientation = North; break;
-		case West: PlayerOrientation = East; break;
-		}
+void SoundCues::ChangeOrientationLeft(){
+	switch(PlayerOrientation){
+	case North: PlayerOrientation = West; break;
+	case East: PlayerOrientation = North; break;
+	case South: PlayerOrientation = East; break;
+	case West: PlayerOrientation = South; break;
 	}
+	mPlayer->ShuffleLeft();
+	Apply3D();
+	mShuffle->Play();
+}
+void SoundCues::ChangeOrientationRight(){
+	switch(PlayerOrientation){
+	case North: PlayerOrientation = East; break;
+	case East: PlayerOrientation = South; break;
+	case South: PlayerOrientation = West; break;
+	case West: PlayerOrientation = North; break;
+	}
+	mPlayer->ShuffleRight();
+	Apply3D();
+	mShuffle->Play();
+}
+void SoundCues::ChangeOrientationBack(){
+	switch(PlayerOrientation){
+	case North: PlayerOrientation = South; break;
+	case East: PlayerOrientation = West; break;
+	case South: PlayerOrientation = North; break;
+	case West: PlayerOrientation = East; break;
+	}
+	mPlayer->ShuffleBack();
+	Apply3D();
+	mShuffle->Play();
 }
 bool SoundCues::CheckForwardTile(int x, int y, X3DAUDIO_VECTOR pos){
-	X3DAUDIO_VECTOR velo = {0.0f,0.0f,0.0f};
 	switch(CheckMap(x,y)){
 	case tPath:
 	case tFinish:
 	case tStart:
 	case tGood: return true; break;
 	case tWall: 
-		mWall->UpdateEmitter(pos,velo);
+		mWall->UpdateEmitterPos(pos);
 		UpdateSettings(mWall);
 		mWall->Play();
 	case tBad: return false; break;
@@ -699,6 +702,8 @@ void SoundCues::CleanupGame (){
 	delete mPath;
 	delete mWall;
 	delete mStart;
+	delete mWalking;
+	delete mShuffle;
 	mAmbient->CleanupGame();
 	if (mXACore != NULL) {
 		delete mXACore;

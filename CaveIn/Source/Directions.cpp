@@ -71,6 +71,12 @@ void Directions::UpdateEmitter(X3DAUDIO_VECTOR pos, X3DAUDIO_VECTOR velo){
 	mEmitter.Position = pos;
 	mEmitter.Velocity = velo;
 }
+void Directions::UpdateEmitterPos(X3DAUDIO_VECTOR pos){
+	mEmitter.Position = pos;
+}
+void Directions::UpdateEmitterVelo(X3DAUDIO_VECTOR velo){
+	mEmitter.Velocity = velo;
+}
 IXAudio2SourceVoice* Directions::getSourceVoice(){
 	return mGood->GetSourceVoice();
 }
