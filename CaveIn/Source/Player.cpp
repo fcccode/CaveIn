@@ -38,7 +38,7 @@ namespace {
 
 
 Player::Player(){
-	scale = 5.0f;
+	scale = 10.0f;
 	mElapsedTime = 0.0f;
 	moving = false;
 	transition = false;

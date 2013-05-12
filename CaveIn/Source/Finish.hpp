@@ -28,7 +28,6 @@ public:
 	void RenderAudio(const float deltaTime);
 	void Play();
 	void Pause();
-	void InitializeEmitter(XACore *xacore);
 	inline XASound* getXASound() {return mFinish;}
 	inline bool IsOk() const {return (mFinish!=NULL);}
 	bool getFinished();

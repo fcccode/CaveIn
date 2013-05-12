@@ -38,11 +38,9 @@ public:
 	AudioRenderable3D(){
 		memset((void*)&mDSPSettings,0,sizeof(X3DAUDIO_DSP_SETTINGS));
 		memset((void*)&mEmitter,0,sizeof(X3DAUDIO_EMITTER));
-		memset((void*)&mCone,0,sizeof(X3DAUDIO_CONE));
 	}
 protected:
 	X3DAUDIO_EMITTER mEmitter;
 	X3DAUDIO_DSP_SETTINGS mDSPSettings;
-	X3DAUDIO_CONE mCone;
 };
 #endif

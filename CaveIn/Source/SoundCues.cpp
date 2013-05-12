@@ -124,6 +124,7 @@ bool SoundCues::CheckStart(){
 			UpdateSoundTile();
 			if(mAmbient->SetupGame(mXACore)==false){
 				mFinished = true;
+				PostQuitMessage(0);
 			}
 		}
 		mStart->Play();
@@ -135,6 +136,7 @@ bool SoundCues::CheckFinish(){
 	if(mMap[locationZ][locationX].tile == tFinish){
 		if(mFinish->getFinished()){
 			mFinished = true;
+			PostQuitMessage(0);
 		}
 		mFinish->Play();
 	}
@@ -196,7 +198,7 @@ bool SoundCues::CheckMoveForward(){
 		}
 		break;
 	case East:
-		if((locationX+1)<mapSize){
+		if((locationX+1)<MAP_SIZE){
 			if(CheckForwardTile(locationZ,locationX+1, mPlayer->getPlayerEast())){
 				mMap[locationZ][locationX].tile=tWall;
 				locationX+=1;
@@ -205,7 +207,7 @@ bool SoundCues::CheckMoveForward(){
 		}
 		break;
 	case South:
-		if((locationZ+1)<mapSize){
+		if((locationZ+1)<MAP_SIZE){
 			if(CheckForwardTile(locationZ+1,locationX, mPlayer->getPlayerSouth())){
 				mMap[locationZ][locationX].tile=tWall;
 				locationZ+=1;
@@ -309,9 +311,6 @@ void SoundCues::StopAllSounds(){
 		(*iter)->Pause();
 	}
 }
-bool SoundCues::FinishedGame(){
-	return mFinished;
-}
 void SoundCues::SetupMap(){
 	ClearArray();
 	SetUpOtherTiles();
@@ -320,8 +319,8 @@ void SoundCues::SetupMap(){
 	SetUpPathTiles();
 }
 void SoundCues::ClearArray(){
-	for(int i = 0; i < mapSize; i++){
-		for (int j = 0; j < mapSize; j++){
+	for(int i = 0; i < MAP_SIZE; i++){
+		for (int j = 0; j < MAP_SIZE; j++){
 			mMap[i][j].tile = tWall;
 			mMap[i][j].played = false;
 		}
@@ -332,7 +331,7 @@ void SoundCues::SetUpOtherTiles(){
 	locationZ = 15;
 	//init start and finish
 	mMap[locationZ][locationX].tile = tStart;
-	mMap[1][mapSize-2].tile = tFinish;
+	mMap[1][MAP_SIZE-2].tile = tFinish;
 }
 void SoundCues::SetUpGoodTiles(){
 	//initialise good sounds.

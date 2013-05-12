@@ -204,18 +204,4 @@
       <Filter>Source Files\Soundscape</Filter>
     </ClCompile>
   </ItemGroup>
-  <ItemGroup>
-    <None Include="Sounds\car.wav">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="Sounds\frogs.wav">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="Sounds\rain.wav">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="Sounds\bird.wav">
-      <Filter>Resource Files</Filter>
-    </None>
-  </ItemGroup>
 </Project>

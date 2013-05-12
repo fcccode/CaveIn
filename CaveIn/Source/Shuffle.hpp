@@ -36,8 +36,6 @@ public:
 	inline bool getStarted(){return mStarted;}
 private:
 	XASound *mShuffle;
-	float mElapsedTime;
-	float mVolumeAdjustment;
 	bool mFinished;
 	bool mStarted;
 };

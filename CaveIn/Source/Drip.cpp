@@ -50,7 +50,7 @@ void Drip::RenderAudio (const float deltaTime)
 	// do nothing if random pause time has not passed.
 	if (mElapsedTime < mPause) return;
 	// play the harmonised frog sounds.
-	for (int i=0; i<3; ++i) {
+	for (int i=0; i<mAmountDrips; ++i) {
 		mDripVoices[i]->SubmitSourceBuffer(&mDripData);
 	}
 	// Restart timing for the next play.

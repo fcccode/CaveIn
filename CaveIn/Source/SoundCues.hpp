@@ -41,6 +41,8 @@ class XACore;
 class XASound;
 class Player;
 
+#define MAP_SIZE 17
+
 class SoundCues : public IGameCore {
 public:
 	enum mTileTypes {tWall, tStart, tFinish, tGood, tBad, tPath};
@@ -61,10 +63,10 @@ public:
 	//--- Release all XACore, XASound and other audio resources.
 	void CleanupGame ();
 	//=== Game specific behaviour.
-	bool FinishedGame();
+	//bool FinishedGame();
 	//--- Default constructor.
 	SoundCues () 
-	: mXACore (NULL), locationX(0), locationZ(0), mapSize(17), mFinished(false), mAmbient(NULL)
+	: mXACore (NULL), locationX(0), locationZ(0), mFinished(false), mAmbient(NULL)
 	{} // end constructor.
 
 	inline XACore * getXACore(){return mXACore;}
@@ -107,16 +109,18 @@ private:
 	Soundscape *mAmbient;
 	Player *mPlayer;
 
-	Tiles mMap[17][17];
-	int locationX, locationZ, mapSize;
+	Tiles mMap[MAP_SIZE][MAP_SIZE];
+	int locationX, locationZ;
 
 	vector<AudioRenderable3D*> mGoodSounds;
 	vector<AudioRenderable3D*> mBadSounds;
 	int mGoodIter, mBadIter;
+
 	Path *mPath;
 	Wall *mWall; 
-	Finish *mFinish; 
+
 	Start *mStart;
+	Finish *mFinish; 
 	Walking *mWalking;
 	Shuffle *mShuffle;
 

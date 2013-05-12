@@ -68,12 +68,6 @@
     <ClCompile Include="Source\XACore.cpp" />
     <ClCompile Include="Source\XASound.cpp" />
   </ItemGroup>
-  <ItemGroup>
-    <None Include="Sounds\bird.wav" />
-    <None Include="Sounds\car.wav" />
-    <None Include="Sounds\frogs.wav" />
-    <None Include="Sounds\rain.wav" />
-  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{FBEAFB05-8793-46D2-8829-8B7A5B577D00}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>

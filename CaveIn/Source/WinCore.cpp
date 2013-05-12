@@ -134,9 +134,6 @@ void WinCore::Start (){
 			mTimer->Tick ();
 			//--- call the game frame processing function. ---
 			mGame->ProcessGameFrame (mTimer->GetDeltaTime());
-			if(mGame->FinishedGame()==true){
-				DestroyWindow(mHwnd);
-			}
 		}
 	} // end while loop.
 	//--- clean up game-wide resources we have allocated.
