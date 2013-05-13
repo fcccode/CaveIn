@@ -1,20 +1,20 @@
-﻿Build started 5/13/2013 1:24:08 AM.
+﻿Build started 5/13/2013 1:48:41 AM.
      1>Project "C:\Users\Jake\Documents\Visual Studio 2010\Projects\CaveIn\CaveIn\CaveIn.vcxproj" on node 2 (build target(s)).
      1>InitializeBuildStatus:
          Creating "Debug\CaveIn.unsuccessfulbuild" because "AlwaysCreate" was specified.
        ClCompile:
-         c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _WINDOWS /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt Source\Bats.cpp Source\Bear.cpp Source\Directions.cpp Source\Finish.cpp Source\Main.cpp Source\Path.cpp Source\Rats.cpp Source\Rocks.cpp Source\Shuffle.cpp Source\SoundCues.cpp Source\Wall.cpp Source\Water.cpp
+         c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _WINDOWS /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt Source\Drip.cpp Source\Horror.cpp Source\Main.cpp Source\Rocks.cpp Source\Shuffle.cpp Source\SoundCues.cpp Source\Soundscape.cpp Source\Start.cpp Source\Walking.cpp Source\Wall.cpp Source\Water.cpp
          Water.cpp
          Wall.cpp
+         Walking.cpp
+         Start.cpp
+         Soundscape.cpp
          SoundCues.cpp
          Shuffle.cpp
          Rocks.cpp
-         Rats.cpp
-         Path.cpp
-         Finish.cpp
-         Directions.cpp
-         Bear.cpp
-         Bats.cpp
+         Horror.cpp
+         Drip.cpp
+     1>c:\users\jake\documents\visual studio 2010\projects\cavein\cavein\source\drip.cpp(96): warning C4244: 'argument' : conversion from 'time_t' to 'unsigned int', possible loss of data
          Generating Code...
          Compiling...
          Main.cpp
@@ -61,4 +61,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:21.68
+Time Elapsed 00:00:19.18
