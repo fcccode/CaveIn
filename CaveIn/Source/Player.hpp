@@ -6,7 +6,8 @@
 	Author:		Jake Morey
 	
 	Description:
-	
+	this class describes the movement of the player in 3D space. 
+	it stores the X3DAudio Listener and updates this when moving.
 *********************************************************************/
 #ifndef _Player_h_
 #define _Player_h_
@@ -21,19 +22,22 @@ namespace Audio {
 
 class Player{
 public:
+	Player();
+	~Player();
+	//initialize listener
 	bool InitializeListener();
+	//functions for moving around 3D space
+	void Move(const float deltaTime);
 	bool MoveForward();
 	bool ShuffleLeft();
 	bool ShuffleRight();
 	bool ShuffleBack();
-	void Move(const float deltaTime);
+	void RotateRound(const float deltaTime);
+	//inline functions that return variables
 	inline bool getMoving() {return mMoving;}
 	inline bool getTransition() {return mTransition;}
 	inline X3DAUDIO_LISTENER getListener() {return mListener;}
-	bool UpdateSettings(X3DAUDIO_HANDLE instance, X3DAUDIO_EMITTER& emitter, X3DAUDIO_DSP_SETTINGS& settings);
-	Player();
-	~Player();
-	void RotateRound(const float deltaTime);
+	//functions that return vectors for positions in 3D space
 	X3DAUDIO_VECTOR getPlayerNorth();
 	X3DAUDIO_VECTOR getPlayerEast();
 	X3DAUDIO_VECTOR getPlayerSouth();
@@ -48,4 +52,4 @@ private:
 
 }
 }
-#endif // _X3DSound_h_
+#endif

@@ -6,7 +6,9 @@
 	Author:		Jake Morey
 	
 	Description:
-	
+	Used to play the start sound.
+	Also checks to see if the audio has finished playing.
+	Inherits from AudioRenderable class.
 *********************************************************************/
 #ifndef _START_HPP_
 #define _START_HPP_
@@ -25,11 +27,14 @@ class Start: public AudioRenderable
 public:
 	Start(XACore *aCore);
 	~Start();
+	//functions from parent class
 	void RenderAudio(const float deltaTime);
+	inline bool IsOk() const {return (mStart!=NULL);}
+	//play and pause functions
 	void Play();
 	void Pause();
+	//if the sound has finished being played then return true.
 	bool getFinished();
-	inline bool IsOk() const {return (mStart!=NULL);}
 private:
 	XASound *mStart;
 	bool mFinished;
