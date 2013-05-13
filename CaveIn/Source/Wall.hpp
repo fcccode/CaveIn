@@ -28,7 +28,6 @@ public:
 	void RenderAudio(const float deltaTime);
 	void Play();
 	void Pause();
-	XASound* getXASound() {return mWall;}
 	void InitializeEmitter(XACore *xacore);
 	inline X3DAUDIO_EMITTER getEmitter(){ return mEmitter;}
 	inline X3DAUDIO_DSP_SETTINGS* getDSPSettings(){return &mDSPSettings;}

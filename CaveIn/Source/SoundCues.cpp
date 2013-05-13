@@ -1,17 +1,14 @@
-/*
-	File:	Soundscape1.cpp
-	Version:	0.1
-	Date:	9th January 2013.
-	Author:	Allan C. Milne.
-
-	Requires:	XACore.
+/********************************************************************
+	Filename:	SoundCues.cpp
+	Version: 	1.0
+	Updated:	12/05/2013
+	Author:		Jake  Morey implements Allan C. Milne IGameCore interface.
 
 	Description:
-	This is the implementation of the Soundscape1 class members;
-	this is the base version with no sounds yet added.
-
-*/
-
+	This is the implementation of the SoundsCues class members;
+	*	See SoundCues.hpp for details of this interface.
+	this application plays a soundscape made up of a variety of sound elements.
+	*********************************************************************/
 #include <windows.h>
 #include <stdio.h>
 #include <xaudio2.h>
@@ -37,7 +34,9 @@ using AllanMilne::Audio::Player;
 #include "Start.hpp"
 #include "Walking.hpp"
 #include "Shuffle.hpp"
-//=== Implementation of the IGameCore interface.
+/*
+* Namespace for local enumerated type orientation
+*/
 namespace{
 	enum Orientation{North, East, South, West};
 	Orientation PlayerOrientation = North;
@@ -51,30 +50,44 @@ bool SoundCues::SetupGame (HWND aWindow){
 	if (mXACore->GetEngine() == NULL || mXACore->GetMasterVoice() == NULL) {
 		return false;
 	}
-
+	//create the X3DInstance
 	memset((void*)&mX3DInstance,0,sizeof(X3DAUDIO_HANDLE));
 	DWORD channelMask = mXACore->GetDeviceDetails().OutputFormat.dwChannelMask;
 	mXACore->GetChannelCount();
 	X3DAudioInitialize(channelMask,X3DAUDIO_SPEED_OF_SOUND, mX3DInstance);
-
+	//initialize the player and X3DAudio Listener
 	mPlayer = new Player();
 	mPlayer->InitializeListener();
+	//create the soundscape class
 	mAmbient = new Soundscape();
+	//initialize all sounds
 	InitSounds();
+	//initialize the tile map array
 	SetupMap();
 	return true;		// All has been setup without error.
 } // end SetupGame function.
 //--- process a single game frame.
 void SoundCues::ProcessGameFrame (const float deltaTime){
+	//checks if start and finish sounds are playing
+	//if not do other functions
 	if(CheckStart() == false && CheckFinish() == false){
+		//process ambient sounds
 		mAmbient->ProcessGameFrame(deltaTime);
+		//move player
 		mPlayer->Move(deltaTime);
+		//if the player is rotating update the emitters
+		//if it has stopped and the shuffle sound is still play stop playing
 		if(mPlayer->getTransition()){
 			Apply3D();
 		}else if(mShuffle->getStarted() == true){
 			mShuffle->Reset();
 		}
+		//if the player is not moving
+		//check to see if it was recently walking or shuffling
 		if(mPlayer->getMoving() == false){
+			//if neither walking or turning recently then just move
+			//if just finished playing the walking sounds then update the sounds that need to be played and reset the walking sound
+			//if just finished shuffling the reset shuffling sound and move
 			if(mWalking->getStarted()== false && mShuffle->getStarted() == false){
 				Move();
 			}else if(mWalking->getStarted() == true && mWalking->getFinished() == true){
@@ -90,18 +103,27 @@ void SoundCues::ProcessGameFrame (const float deltaTime){
 				Move();
 			}
 		}
+		//if true then play path sound
 		if(mPlayPath){
 			mPath->RenderAudio(deltaTime);
 		}
+		//if true then play a sound from the good list
 		if(mPlayGood){
 			mGoodSounds.at(mGoodIter)->RenderAudio(deltaTime);
 		}
+		//if true then play a sound from the bas list
 		if(mPlayBad){
 			mBadSounds.at(mBadIter)->RenderAudio(deltaTime);
 		}
 	}
 } // end ProcessGameFrame function.
+/*
+* Depending on the keypress do a different task.
+*/
 void SoundCues::Move(){
+	//if keypress was UP or W then try to move forward
+	//if LEFT or A then rotate left, if Right or D then rotate right
+	//if BACK or S then rotate 180 degrees
 	if( (GetAsyncKeyState(VK_UP) & 0x0001) || (GetAsyncKeyState('W') & 0x0001) ){
 		if(CheckMoveForward()){
 			mPlayer->MoveForward();
@@ -115,13 +137,20 @@ void SoundCues::Move(){
 		ChangeOrientationBack();
 	}
 }
+/*
+* Checks to see the start sound has finished being played.
+*/
 bool SoundCues::CheckStart(){
+	//if the current element in the array is start and it hasn't been played 
+	//check that the start sound hasn't finished playing, if it hasn't do nothing
+	//if it has then update the tiles around the player and init the ambient sounds.
 	if(mMap[locationZ][locationX].tile == tStart && mMap[locationZ][locationX].played == false){
 		if(mStart->getFinished()){
 			mMap[locationZ][locationX].played = true;
 			mBadIter = rand()%mBadSounds.size();
 			mGoodIter = rand()%mGoodSounds.size();
 			UpdateSoundTile();
+			//try init ambient sounds if can't quit
 			if(mAmbient->SetupGame(mXACore)==false){
 				mFinished = true;
 				PostQuitMessage(0);
@@ -132,7 +161,13 @@ bool SoundCues::CheckStart(){
 	}
 	return false;
 }
+/*
+* Checks to see the finish sound has finished being played.
+*/
 bool SoundCues::CheckFinish(){
+	//checks if the current position is the finished tile
+	//if so then check the sounf has finished play
+	//if this is also true the post a quit message
 	if(mMap[locationZ][locationX].tile == tFinish){
 		if(mFinish->getFinished()){
 			mFinished = true;
@@ -142,54 +177,73 @@ bool SoundCues::CheckFinish(){
 	}
 	return mFinished;
 }
+/*
+* Checks the tiles around the player for tiles that have not been played before.
+*/
 void SoundCues::UpdateSoundTile(){
+	//set the play variables to false
 	mPlayPath = false;
 	mPlayGood = false;
 	mPlayBad = false;
+	//check all four elements around the player to see what tiles havnt been played
 	if(mMap[locationZ-1][locationX].played == false){
-		PlaySoundTiles(locationZ-1,locationX,mPlayer->getPlayerNorth());
+		SoundTiles(locationZ-1,locationX,mPlayer->getPlayerNorth());
 	}
 	if(mMap[locationZ+1][locationX].played == false){
-		PlaySoundTiles(locationZ+1,locationX,mPlayer->getPlayerSouth());
+		SoundTiles(locationZ+1,locationX,mPlayer->getPlayerSouth());
 	}
 	if(mMap[locationZ][locationX-1].played == false){
-		PlaySoundTiles(locationZ,locationX-1,mPlayer->getPlayerWest());
+		SoundTiles(locationZ,locationX-1,mPlayer->getPlayerWest());
 	}
 	if(mMap[locationZ][locationX+1].played == false){
-		PlaySoundTiles(locationZ,locationX+1,mPlayer->getPlayerEast());
+		SoundTiles(locationZ,locationX+1,mPlayer->getPlayerEast());
 	}
 }
-void SoundCues::PlaySoundTiles(int z, int x, X3DAUDIO_VECTOR pos){
+/*
+* Update the emitter positions of the correct sound in relation to the player.
+*/
+void SoundCues::SoundTiles(int z, int x, X3DAUDIO_VECTOR pos){
 	switch (CheckMap(z,x)){
 	case tFinish:
 	case tGood:
+		//update the position of the good sound and play for the first time
 		mGoodSounds.at(mGoodIter)->UpdateEmitterPos(pos);
 		UpdateSettings(mGoodSounds.at(mGoodIter));
 		mGoodSounds.at(mGoodIter)->Play();
 		mPlayGood = true;
 		break;
 	case tPath:
+		//update the position of the path sound and play for the first time
 		mPath->UpdateEmitterPos(pos);
 		UpdateSettings(mPath);
 		mPath->Play();
 		mPlayPath = true;
 		break;
 	case tBad:
+		//update the position of the bas sound and play for the first time
 		mBadSounds.at(mBadIter)->UpdateEmitterPos(pos);
 		UpdateSettings(mBadSounds.at(mBadIter));
 		mBadSounds.at(mBadIter)->Play();
 		mPlayBad = true;
 		break;
 	case tWall:
+		//update the position of the wall
 		mWall->UpdateEmitterPos(pos);
 		UpdateSettings(mWall);
 		break;
 	}
 }
+/*
+* Checks to make sure the player won't leave the array when moving forward.
+* This is based upon the orientation of the player.
+* Returns true if the player can move forward.
+*/
 bool SoundCues::CheckMoveForward(){
 	switch(PlayerOrientation){
 	case North:
 		if((locationZ-1)>=0){
+			//if inside the array check if the user can move forward
+			//if they can set the current tile to be a wall and move forward
 			if(CheckForwardTile(locationZ-1,locationX, mPlayer->getPlayerNorth())){
 				mMap[locationZ][locationX].tile=tWall;
 				locationZ-=1;
@@ -199,6 +253,8 @@ bool SoundCues::CheckMoveForward(){
 		break;
 	case East:
 		if((locationX+1)<MAP_SIZE){
+			//if inside the array check if the user can move forward
+			//if they can set the current tile to be a wall and move forward
 			if(CheckForwardTile(locationZ,locationX+1, mPlayer->getPlayerEast())){
 				mMap[locationZ][locationX].tile=tWall;
 				locationX+=1;
@@ -208,6 +264,8 @@ bool SoundCues::CheckMoveForward(){
 		break;
 	case South:
 		if((locationZ+1)<MAP_SIZE){
+			//if inside the array check if the user can move forward
+			//if they can set the current tile to be a wall and move forward
 			if(CheckForwardTile(locationZ+1,locationX, mPlayer->getPlayerSouth())){
 				mMap[locationZ][locationX].tile=tWall;
 				locationZ+=1;
@@ -217,6 +275,8 @@ bool SoundCues::CheckMoveForward(){
 		break;
 	case West:
 		if((locationX-1)>=0){
+			//if inside the array check if the user can move forward
+			//if they can set the current tile to be a wall and move forward
 			if(CheckForwardTile(locationZ,locationX-1, mPlayer->getPlayerWest())){
 				mMap[locationZ][locationX].tile=tWall;
 				locationX-=1;
@@ -227,6 +287,9 @@ bool SoundCues::CheckMoveForward(){
 	}
 	return false;
 }
+/*
+* Change the orientation variable anti-clockwise degrees
+*/
 void SoundCues::ChangeOrientationLeft(){
 	switch(PlayerOrientation){
 	case North: PlayerOrientation = West; break;
@@ -234,10 +297,14 @@ void SoundCues::ChangeOrientationLeft(){
 	case South: PlayerOrientation = East; break;
 	case West: PlayerOrientation = South; break;
 	}
+	//move the player and update the sounds
 	mPlayer->ShuffleLeft();
 	Apply3D();
 	mShuffle->Play();
 }
+/*
+* Change the orientation variable clockwise 90 degrees
+*/
 void SoundCues::ChangeOrientationRight(){
 	switch(PlayerOrientation){
 	case North: PlayerOrientation = East; break;
@@ -245,10 +312,14 @@ void SoundCues::ChangeOrientationRight(){
 	case South: PlayerOrientation = West; break;
 	case West: PlayerOrientation = North; break;
 	}
+	//move the player and update the sounds
 	mPlayer->ShuffleRight();
 	Apply3D();
 	mShuffle->Play();
 }
+/*
+* Change the orientation variable 180 degreed
+*/
 void SoundCues::ChangeOrientationBack(){
 	switch(PlayerOrientation){
 	case North: PlayerOrientation = South; break;
@@ -256,10 +327,16 @@ void SoundCues::ChangeOrientationBack(){
 	case South: PlayerOrientation = North; break;
 	case West: PlayerOrientation = East; break;
 	}
+	//move the player and update the sounds
 	mPlayer->ShuffleBack();
 	Apply3D();
 	mShuffle->Play();
 }
+/*
+* Check the type of the tile in front of the player.
+* If it is not a wall or a bad sound the return true.
+* else return false. if a wall also play the wall sound.
+*/
 bool SoundCues::CheckForwardTile(int x, int y, X3DAUDIO_VECTOR pos){
 	switch(CheckMap(x,y)){
 	case tPath:
@@ -274,12 +351,19 @@ bool SoundCues::CheckForwardTile(int x, int y, X3DAUDIO_VECTOR pos){
 	default: return false; break;
 	}
 }
+/*
+* Apply 3D to the Path and Wall objects. 
+* As well as the currently playing good and bad sounds
+*/
 void SoundCues::Apply3D(){
 	UpdateSettings(mPath);
 	UpdateSettings(mWall);
 	UpdateSettings(mGoodSounds.at(mGoodIter));
 	UpdateSettings(mBadSounds.at(mBadIter));
 }
+/*
+* Update the emitter & dsp settings of a chosen AudioRenderable3D object via the use of X3DAudio Calculate
+*/
 void SoundCues::UpdateSettings(AudioRenderable3D* audio){
 	X3DAudioCalculate(mX3DInstance, &mPlayer->getListener(), &audio->getEmitter(), 
 		X3DAUDIO_CALCULATE_MATRIX | X3DAUDIO_CALCULATE_DOPPLER | X3DAUDIO_CALCULATE_LPF_DIRECT ,
@@ -289,6 +373,11 @@ void SoundCues::UpdateSettings(AudioRenderable3D* audio){
 	XAUDIO2_FILTER_PARAMETERS FilterParams = {LowPassFilter, 2.0f*sinf(X3DAUDIO_PI/6.0f * audio->getDSPSettings()->LPFDirectCoefficient), 1.0f};
 	audio->getSourceVoice()->SetFilterParameters(&FilterParams);
 }
+/*
+* Randomize a value between 0 and size.
+* Then check this is not the same as the previous value.
+* If it is increment if smaller than size else decrement. 
+*/
 int SoundCues::CheckIter(int check, int size){
 	int iter = rand()%size;
 	if(iter == check){
@@ -300,6 +389,9 @@ int SoundCues::CheckIter(int check, int size){
 	}
 	return iter;
 }
+/*
+* Stop all 3D sounds from playing.
+*/
 void SoundCues::StopAllSounds(){
 	vector<AudioRenderable3D*>::const_iterator iter;
 	mWall->Pause();
@@ -311,6 +403,10 @@ void SoundCues::StopAllSounds(){
 		(*iter)->Pause();
 	}
 }
+/*
+* Sets up the tile map array.
+* Class all individual functions.
+*/
 void SoundCues::SetupMap(){
 	ClearArray();
 	SetUpOtherTiles();
@@ -318,6 +414,10 @@ void SoundCues::SetupMap(){
 	SetUpBadTiles();
 	SetUpPathTiles();
 }
+/*
+* Set all elements in the array to be Wall tiles.
+* Set played to be false.
+*/
 void SoundCues::ClearArray(){
 	for(int i = 0; i < MAP_SIZE; i++){
 		for (int j = 0; j < MAP_SIZE; j++){
@@ -326,123 +426,94 @@ void SoundCues::ClearArray(){
 		}
 	}
 }
+/*
+* Initializes the locations of the start and finish tiles.
+*/
 void SoundCues::SetUpOtherTiles(){
 	locationX = 2;
-	locationZ = 15;
-	//init start and finish
+	locationZ = 9;
 	mMap[locationZ][locationX].tile = tStart;
-	mMap[1][MAP_SIZE-2].tile = tFinish;
+	mMap[1][9].tile = tFinish;
 }
+/*
+* Initializes the locations of the good tiles.
+*/
 void SoundCues::SetUpGoodTiles(){
-	//initialise good sounds.
-	mMap[1][13].tile = tGood;
-	mMap[2][12].tile = tGood;
-	mMap[3][3].tile = tGood;
-	mMap[3][10].tile = tGood;
-	mMap[4][5].tile = tGood;
-	mMap[4][9].tile = tGood;
-	mMap[5][6].tile = tGood;
-	mMap[7][2].tile = tGood;
-	mMap[7][7].tile = tGood;
-	mMap[7][8].tile = tGood;
-	mMap[7][14].tile = tGood;
+	mMap[3][2].tile = tGood;
+	mMap[3][8].tile = tGood;
+
+	mMap[4][6].tile = tGood;
+	mMap[4][8].tile = tGood;
+	
+	mMap[5][1].tile = tGood;
+	mMap[5][7].tile = tGood;
+	
+	mMap[6][3].tile = tGood;
+	mMap[6][7].tile = tGood;
+	
+	mMap[7][4].tile = tGood;
+	mMap[7][9].tile = tGood;
+	
 	mMap[8][3].tile = tGood;
-	mMap[8][4].tile = tGood;
-	mMap[8][10].tile = tGood;
-	mMap[8][11].tile = tGood;
-	mMap[9][15].tile = tGood;
-	mMap[10][2].tile = tGood;
-	mMap[10][11].tile = tGood;
-	mMap[11][1].tile = tGood;
-	mMap[11][6].tile = tGood;
-	mMap[11][10].tile = tGood;
-	mMap[12][3].tile = tGood;
-	mMap[12][7].tile = tGood;
-	mMap[12][11].tile = tGood;
-	mMap[13][4].tile = tGood;
-	mMap[13][8].tile = tGood;
-	mMap[13][12].tile = tGood;
-	mMap[14][3].tile = tGood;
-	mMap[14][10].tile = tGood;
-	mMap[14][11].tile = tGood;
-	mMap[15][9].tile = tGood;
+	mMap[8][8].tile = tGood;
 }
+/*
+* Initializes the locations of the bad tiles.
+*/
 void SoundCues::SetUpBadTiles(){
-	//initialise warning sounds
-	mMap[1][11].tile = tBad;
-	mMap[2][5].tile = tBad;
-	mMap[3][1].tile = tBad;
-	mMap[3][8].tile = tBad;
-	mMap[4][12].tile = tBad;
-	mMap[5][4].tile = tBad;
-	mMap[6][4].tile = tBad;
-	mMap[6][9].tile = tBad;
-	mMap[6][11].tile = tBad;
-	mMap[9][6].tile = tBad;
-	mMap[9][8].tile = tBad;
-	mMap[10][9].tile = tBad;
-	mMap[11][8].tile = tBad;
-	mMap[11][15].tile = tBad;
-	mMap[12][5].tile = tBad;
-	mMap[12][13].tile = tBad;
-	mMap[13][1].tile = tBad;
-	mMap[14][1].tile = tBad;
-	mMap[15][4].tile = tBad;
-	mMap[15][7].tile = tBad;
-	mMap[15][12].tile = tBad;
+	mMap[1][7].tile = tBad;
+
+	mMap[2][6].tile = tBad;
+
+	mMap[5][5].tile = tBad;
+
+	mMap[6][5].tile = tBad;
+
+	mMap[7][1].tile = tBad;
+
+	mMap[8][1].tile = tBad;
+	mMap[8][6].tile = tBad;
+
+	mMap[9][4].tile = tBad;
+	mMap[9][9].tile = tBad;
 }
+/*
+* Initializes the locations of the path tiles.
+*/
 void SoundCues::SetUpPathTiles(){
-	//init path
-	mMap[1][12].tile = tPath;
-	mMap[1][14].tile = tPath;
-	mMap[3][2].tile = tPath;
+	mMap[1][8].tile = tPath;
+
+	mMap[2][8].tile = tPath;
+
+	mMap[3][1].tile = tPath;
+	mMap[3][3].tile = tPath;
 	mMap[3][4].tile = tPath;
 	mMap[3][5].tile = tPath;
-	mMap[3][9].tile = tPath;
-	mMap[3][11].tile = tPath;
-	mMap[3][12].tile = tPath;
-	mMap[4][2].tile = tPath;
-	mMap[5][2].tile = tPath;
-	mMap[5][5].tile = tPath;
-	mMap[5][7].tile = tPath;
-	mMap[5][8].tile = tPath;
+	mMap[3][6].tile = tPath;
+
+	mMap[4][1].tile = tPath;
+	mMap[4][9].tile = tPath;
+
+	mMap[5][6].tile = tPath;
 	mMap[5][9].tile = tPath;
+
+	mMap[6][1].tile = tPath;
 	mMap[6][2].tile = tPath;
-	mMap[7][4].tile = tPath;
-	mMap[7][5].tile = tPath;
-	mMap[7][6].tile = tPath;
-	mMap[7][11].tile = tPath;
-	mMap[7][12].tile = tPath;
-	mMap[7][13].tile = tPath;
-	mMap[7][15].tile = tPath;
+	mMap[6][4].tile = tPath;
+	mMap[6][9].tile = tPath;
+
+	mMap[7][7].tile = tPath;
+
 	mMap[8][2].tile = tPath;
-	mMap[8][8].tile = tPath;
+	mMap[8][4].tile = tPath;
+	mMap[8][7].tile = tPath;
 	mMap[8][9].tile = tPath;
-	mMap[8][15].tile = tPath;
-	mMap[10][1].tile = tPath;
-	mMap[10][3].tile = tPath;
-	mMap[10][4].tile = tPath;
-	mMap[10][5].tile = tPath;
-	mMap[10][6].tile = tPath;
-	mMap[10][10].tile = tPath;
-	mMap[10][12].tile = tPath;
-	mMap[10][13].tile = tPath;
-	mMap[10][14].tile = tPath;
-	mMap[10][15].tile = tPath;
-	mMap[12][1].tile = tPath;
-	mMap[12][2].tile = tPath;
-	mMap[12][4].tile = tPath;
-	mMap[12][6].tile = tPath;
-	mMap[12][8].tile = tPath;
-	mMap[12][10].tile = tPath;
-	mMap[12][12].tile = tPath;
-	mMap[14][2].tile = tPath;
-	mMap[14][4].tile = tPath;
-	mMap[14][8].tile = tPath;
-	mMap[14][12].tile = tPath;
-	mMap[15][8].tile = tPath;
-	mMap[15][10].tile = tPath;
+
 }
+/*
+* Initializes all sounds.
+* Returns false if there is an error.
+*/
 bool SoundCues::InitSounds(){
 	if(!InitRats()){
 		return false;
@@ -461,6 +532,10 @@ bool SoundCues::InitSounds(){
 	}
 	return true;
 }
+/*
+* Initializes all bat sounds.
+* Returns false if there is an error.
+*/
 bool SoundCues::InitBats(){
 	Bat *bat = new Bat(mXACore, 0);
 	if(!bat->IsOk()){
@@ -514,6 +589,10 @@ bool SoundCues::InitBats(){
 	mBadSounds.push_back((AudioRenderable3D*)bat4);
 	return true;
 }
+/*
+* Initializes all rat sounds.
+* Returns false if there is an error.
+*/
 bool SoundCues::InitRats(){
 	Rat *rat = new Rat(mXACore, 0);
 	if(!rat->IsOk()){
@@ -543,6 +622,10 @@ bool SoundCues::InitRats(){
 	mBadSounds.push_back((AudioRenderable3D*)rat1);
 	return true;
 }
+/*
+* Initializes all bear sounds.
+* Returns false if there is an error.
+*/
 bool SoundCues::InitBear(){
 	Bear *bear = new Bear(mXACore, 0);
 	if(!bear->IsOk()){
@@ -563,6 +646,10 @@ bool SoundCues::InitBear(){
 	mBadSounds.push_back((AudioRenderable3D*)bear1);
 	return true;
 }
+/*
+* Initializes all rock and water sounds.
+* Returns false if there is an error.
+*/
 bool SoundCues::InitOtherWarnings(){
 	Rocks *rocks = new Rocks(mXACore);
 	if(!rocks->IsOk()){
@@ -593,6 +680,10 @@ bool SoundCues::InitOtherWarnings(){
 	mBadSounds.push_back((AudioRenderable3D*)rocks);
 	return true;
 }
+/*
+* Initializes path, walk, start, and finish sounds.
+* Returns false if there is an error.
+*/
 bool SoundCues::InitOther(){
 	mPath = new Path(mXACore);
 	if(!mPath->IsOk()){
@@ -628,6 +719,10 @@ bool SoundCues::InitOther(){
 	}
 	return true;
 }
+/*
+* Initializes all good sounds.
+* Returns false if there is an error.
+*/
 bool SoundCues::InitGood(){
 	Directions *good = new Directions(mXACore, 0);
 	if(!good->IsOk()){
@@ -669,6 +764,10 @@ bool SoundCues::InitGood(){
 	mGoodSounds.push_back((AudioRenderable3D*)good3);
 	return true;
 }
+/*
+* Initializes walking and shuffling sounds.
+* Returns false if there is an error.
+*/
 bool SoundCues::InitWalk(){
 	mWalking = new Walking(mXACore);
 	if(!mWalking->IsOk()){

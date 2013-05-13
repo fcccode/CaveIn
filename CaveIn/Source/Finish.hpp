@@ -1,12 +1,14 @@
 /********************************************************************
-	Filename:	Bear.hpp
-	Version: 	
-	Created:	02/04/2013
+	Filename:	Finish.hpp
+	Version: 	1.0
+	Updated:	13/05/2013
 	
 	Author:		Jake Morey
 	
 	Description:
-	
+	inherits from the AudioRendable class. 
+	this class is used to play the finished sound.
+	this class haves functionality to check to see if the audio is finished playing. 
 *********************************************************************/
 #ifndef _FINISH_HPP_
 #define _FINISH_HPP_
@@ -25,13 +27,14 @@ class Finish: public AudioRenderable
 public:
 	Finish(XACore *aCore);
 	~Finish();
+	//functions from the parent class
 	void RenderAudio(const float deltaTime);
+	inline bool IsOk() const {return (mFinish!=NULL);}
+	//functions for playing and pausing audio
 	void Play();
 	void Pause();
-	inline XASound* getXASound() {return mFinish;}
-	inline bool IsOk() const {return (mFinish!=NULL);}
+	//function checks to see if the audio is finished playing
 	bool getFinished();
-	IXAudio2SourceVoice* getSourceVoice();
 private:
 	XASound *mFinish;
 	bool mFinished;

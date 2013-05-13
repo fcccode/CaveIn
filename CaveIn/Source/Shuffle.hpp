@@ -29,7 +29,6 @@ public:
 	void Play();
 	void Pause();
 	void Reset();
-	XASound* getXASound() {return mShuffle;}
 	IXAudio2SourceVoice* getSourceVoice();
 	bool getFinished();
 	inline bool IsOk() const {return (mShuffle!=NULL);}

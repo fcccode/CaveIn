@@ -1,12 +1,14 @@
 /********************************************************************
-	Filename:	Rocks.cpp
-	Version: 	
-	Created:	02/04/2013
+	Filename:	Path.cpp
+	Version: 	1.0
+	Updated:	13/05/2013
 	
 	Author:		Jake Morey
 	
 	Description:
-	
+	Implementation of Path.hpp.
+	It plays the 'Hey.wav' to inform the user they have to go forward
+	as long as they haven't rotated.
 *********************************************************************/
 #include <windows.h>
 #include <stdio.h>
@@ -23,19 +25,30 @@ Path::Path(XACore *aCore)
 {
 	mPath = aCore->CreateSound("Sounds/Hey.wav");
 }
+/*
+* Clean Up the class.
+*/
 Path::~Path(){
 	if(mPath!=NULL){
 		delete mPath;
 		mPath = NULL;
 	}
 }
+/*
+* Play the Sound once.
+*/
 void Path::Play(){
 	mPath->Play(0);
 }
+/*
+* Pause the Sound
+*/
 void Path::Pause(){
 	mPath->Pause();
 }
-
+/*
+* Play the sound again once a set time has passed.
+*/
 void Path::RenderAudio(const float deltaTime){
 	static const float pauseTime	= 1.0f;
 	if(!IsOk()){
@@ -49,6 +62,9 @@ void Path::RenderAudio(const float deltaTime){
 		}
 	}
 }
+/*
+* Initialize the Emitter with zero vectors.
+*/
 void Path::InitializeEmitter(XACore *xacore){
 	XAUDIO2_VOICE_DETAILS details;
 	mPath->GetSourceVoice()->GetVoiceDetails(&details);
@@ -62,16 +78,28 @@ void Path::InitializeEmitter(XACore *xacore){
 	mDSPSettings.DstChannelCount = xacore->GetChannelCount();
 	mDSPSettings.pMatrixCoefficients = new FLOAT32[mDSPSettings.SrcChannelCount * mDSPSettings.DstChannelCount];
 }
+/*
+* Update the Emitters position and velocity vectors
+*/
 void Path::UpdateEmitter(X3DAUDIO_VECTOR pos, X3DAUDIO_VECTOR velo){
 	mEmitter.Position = pos;
 	mEmitter.Velocity = velo;
 }
+/*
+* Update the Emitters position vector
+*/
 void Path::UpdateEmitterPos(X3DAUDIO_VECTOR pos){
 	mEmitter.Position = pos;
 }
+/*
+* Update the Emitters velocity vector
+*/
 void Path::UpdateEmitterVelo(X3DAUDIO_VECTOR velo){
 	mEmitter.Velocity = velo;
 }
+/*
+* Return the XASound Source Voice
+*/
 IXAudio2SourceVoice* Path::getSourceVoice(){
 	return mPath->GetSourceVoice();
 }

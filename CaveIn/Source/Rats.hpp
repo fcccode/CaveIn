@@ -5,7 +5,8 @@
 	
 	Author:		Jake Morey
 	
-	Description:
+	Description: 
+	Describes Rat class which inherits from AudioRenderable3D.
 	
 *********************************************************************/
 #ifndef _RAT_HPP_
@@ -28,7 +29,6 @@ public:
 	void RenderAudio(const float deltaTime);
 	void Play();
 	void Pause();
-	XASound* getXASound() {return mRat;}
 	void InitializeEmitter(XACore *xacore);
 
 	inline X3DAUDIO_EMITTER getEmitter(){ return mEmitter;}

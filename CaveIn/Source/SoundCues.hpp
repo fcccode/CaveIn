@@ -1,28 +1,23 @@
-/***
-for stereo input need matrix 4*4 first two how much of the left channel going to left and right the second two for right channel
-****/
-/*
-	File:	Soundscape1.hpp
-	Version:	0.1
-	Date:	10th January 2013.
-	Author:	Allan C. Milne.
-
-	Requires:	IGameCore, XACore.
-
+/********************************************************************
+	Filename:	SoundCues.hpp
+	Version: 	1.0
+	Updated:	12/05/2013
+	Author:		Jake  Morey implements Allan C. Milne IGameCore interface.
+	
 	Description:
 	This is a concrete implementation of the IGameCore interface for the application logic.
 	This is the concrete strategy class called  from the context WinCore class as part of a strategy pattern.
 	*	See IGameCore.hpp for details of this interface.
 
-	this application will eventually play a soundscape made up of a variety of sound elements.
-	this version is the base definition of the class with no sound elements.
-*/
-
+	this application plays a soundscape made up of a variety of sound elements.
+*********************************************************************/
 #ifndef _SOUNDS_CUES_HPP_
 #define _SOUNDS_CUES_HPP_
 
 #include <xaudio2.h>
 #include <X3DAudio.h>
+#include <vector>
+using std::vector;
 #include "IGameCore.hpp"
 using AllanMilne::IGameCore;
 #include "AudioRenderable3D.hpp"
@@ -31,17 +26,15 @@ using AllanMilne::IGameCore;
 #include "Finish.hpp"
 #include "Wall.hpp"
 #include "Start.hpp"
-#include <vector>
 #include "Soundscape.hpp"
 #include "Walking.hpp"
 #include "Shuffle.hpp"
-using std::vector;
 
 class XACore;
 class XASound;
 class Player;
 
-#define MAP_SIZE 17
+#define MAP_SIZE 11
 
 class SoundCues : public IGameCore {
 public:
@@ -63,38 +56,46 @@ public:
 	//--- Release all XACore, XASound and other audio resources.
 	void CleanupGame ();
 	//=== Game specific behaviour.
-	//bool FinishedGame();
+
 	//--- Default constructor.
 	SoundCues () 
 	: mXACore (NULL), locationX(0), locationZ(0), mFinished(false), mAmbient(NULL)
 	{} // end constructor.
-
-	inline XACore * getXACore(){return mXACore;}
 private:
 	inline mTileTypes CheckMap(int x, int y) {return mMap[x][y].tile;}
-
+	//Functions for updating emitters from AudioRenderable3D classes.
 	void UpdateSettings(AudioRenderable3D* audio);
 	void Apply3D();
-	bool CheckForwardTile(int x, int y, X3DAUDIO_VECTOR pos);
+	//Checks the iterator isn't the same as last time.
+	int CheckIter(int iter, int check);
+	//Checks to see if the start sound has finished.
+	bool CheckStart();
+	//Checks to sett if the finished sound has finished.
+	bool CheckFinish();
+	//Holds key checks for movement.
+	void Move();
+	//Checks if the player is inside the array.
 	bool CheckMoveForward();
+	//checks the type of tile infront of the player.
+	bool CheckForwardTile(int x, int y, X3DAUDIO_VECTOR pos);
+	//change the orientation.
 	void ChangeOrientationLeft();
 	void ChangeOrientationBack();
 	void ChangeOrientationRight();
+	//update the sounds locations based upon the tiles
 	void UpdateSoundTile();
-	void PlaySoundTiles(int z, int x, X3DAUDIO_VECTOR pos);
+	//start playing the sounds based upon the tiles surronding the player
+	void SoundTiles(int z, int x, X3DAUDIO_VECTOR pos);
+	//stop all playing sounds
 	void StopAllSounds();
-	void Move();
-	int CheckIter(int iter, int check);
-	bool CheckStart();
-	bool CheckFinish();
-	
+	//set up the tile map
 	void SetupMap();
 	void SetUpGoodTiles();
 	void SetUpBadTiles();
 	void SetUpPathTiles();
 	void SetUpOtherTiles();
 	void ClearArray();
-
+	//initialise all sounds
 	bool InitSounds();
 	bool InitRats();
 	bool InitBats();
@@ -103,31 +104,32 @@ private:
 	bool InitGood();
 	bool InitOther();
 	bool InitWalk();
-
+	//local variables
 	X3DAUDIO_HANDLE mX3DInstance;
 	XACore *mXACore;
 	Soundscape *mAmbient;
 	Player *mPlayer;
-
+	//tile map array and indexs for the array
 	Tiles mMap[MAP_SIZE][MAP_SIZE];
 	int locationX, locationZ;
-
+	//lists for both good and bad sounds, as well as integers to store positions in the vectors.
 	vector<AudioRenderable3D*> mGoodSounds;
 	vector<AudioRenderable3D*> mBadSounds;
 	int mGoodIter, mBadIter;
-
+	//3D sounds
 	Path *mPath;
 	Wall *mWall; 
-
+	//AudioRenderable sounds
 	Start *mStart;
 	Finish *mFinish; 
 	Walking *mWalking;
 	Shuffle *mShuffle;
-
+	//booleans for if certain types of sounds need playing
 	bool mPlayPath;
 	bool mPlayGood;
 	bool mPlayBad;
+	//finished the game variable
 	bool mFinished; 
-}; // end Soundscape1 class.
+}; // end Soundcues class.
 
 #endif

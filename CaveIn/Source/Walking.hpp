@@ -32,7 +32,6 @@ public:
 	bool getFinished();
 	IXAudio2SourceVoice* getSourceVoice();
 	inline bool getStarted(){return mStarted;}
-	inline XASound* getXASound() {return mWalking;}
 	inline bool IsOk() const {return (mWalking!=NULL);}
 private:
 	XASound *mWalking;

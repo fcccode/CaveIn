@@ -28,7 +28,6 @@ public:
 	void RenderAudio(const float deltaTime);
 	void Play();
 	void Pause();
-	XASound* getXASound() {return mStart;}
 	bool getFinished();
 	IXAudio2SourceVoice* getSourceVoice();
 	inline bool IsOk() const {return (mStart!=NULL);}

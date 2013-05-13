@@ -27,8 +27,8 @@ public:
 	bool ShuffleRight();
 	bool ShuffleBack();
 	void Move(const float deltaTime);
-	inline bool getMoving() {return moving;}
-	inline bool getTransition() {return transition;}
+	inline bool getMoving() {return mMoving;}
+	inline bool getTransition() {return mTransition;}
 	inline X3DAUDIO_LISTENER getListener() {return mListener;}
 	bool UpdateSettings(X3DAUDIO_HANDLE instance, X3DAUDIO_EMITTER& emitter, X3DAUDIO_DSP_SETTINGS& settings);
 	Player();
@@ -40,10 +40,10 @@ public:
 	X3DAUDIO_VECTOR getPlayerWest();
 private:
 	X3DAUDIO_LISTENER mListener;
-	bool transition;
-	bool moving;
+	bool mTransition;
+	bool mMoving;
 	float mElapsedTime;
-	float scale;
+	float mScale;
 };
 
 }
