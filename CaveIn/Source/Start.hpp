@@ -1,7 +1,7 @@
 /********************************************************************
-	Filename:	Bear.hpp
-	Version: 	
-	Created:	02/04/2013
+	Filename:	Start.hpp
+	Version: 	1.0
+	Updated:	13/05/2013
 	
 	Author:		Jake Morey
 	
@@ -29,7 +29,6 @@ public:
 	void Play();
 	void Pause();
 	bool getFinished();
-	IXAudio2SourceVoice* getSourceVoice();
 	inline bool IsOk() const {return (mStart!=NULL);}
 private:
 	XASound *mStart;

@@ -1,20 +1,18 @@
-/*
-	file:	Frogs.hpp
-	Version:	1.1
-	Date:	6th 2013.
-	Author:	allan c. Milne.
-
-	Exposes:	Frogs.
-	Requires:	AudioRenderable, XACore.
-
+/********************************************************************
+	Filename:	Drip.hpp
+	Version: 	1.0
+	Updated:	13/05/2013
+	
+	Author:		Jake Morey
+	
 	Description:
-	Defines an AudioRenderable class that will play the sound of frogs croaking in harmony.
+	this class is heavily based upon the Frogs.cpp class.
+	Defines an AudioRenderable class that will play the sound of water drops multiple times.
 	this will be played at random time intervals.
-	Uses frequency adjustment to implement the croaking harmonies.
+	Uses frequency adjustment to implement the variations in audio.
 
 	The implementation uses XAudio2 buffer and source voices directly.
-*/
-
+*********************************************************************/
 #ifndef __DRIP_HPP_1_1__
 #define __DRIP_HPP_1_1__
 
@@ -32,7 +30,7 @@ public:
 	void RenderAudio (const float deltaTime);
 
 	//--- Indicate if object has been created correctly.
-	bool IsOk() const;
+	inline bool IsOk() const { return mOk; }
 
 	//--- constructor loads and sets up the sound elements.
 	Drip(XACore *aCore);
@@ -40,11 +38,10 @@ public:
 
 private:
 	bool mOk;							// indicates if sound and voices have been set up correctly.
-	float mPause;							// number of seconds to pause between playing the frogs.
-	float mElapsedTime;					// Time since frogs last played.
-	XAUDIO2_BUFFER mDripData;			// the sound sample data for the base frogs croak.
-	IXAudio2SourceVoice **mDripVoices;	// array of pointer to source voices for different harmonies.
+	float mPause;							// number of seconds to pause between playing the drops.
+	float mElapsedTime;					// Time since drops last played.
+	XAUDIO2_BUFFER mDripData;			// the sound sample data for the base water drop.
+	IXAudio2SourceVoice **mDripVoices;	// array of pointer to source voices
 	int mAmountDrips;
-};	// end Frogs class.
-
+};
 #endif

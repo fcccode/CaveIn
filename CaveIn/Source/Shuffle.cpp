@@ -73,9 +73,3 @@ void Shuffle::RenderAudio(const float deltaTime){
 		return;
 	}
 }
-/*
-* Return the XASound Source Voice
-*/
-IXAudio2SourceVoice* Shuffle::getSourceVoice(){
-	return mShuffle->GetSourceVoice();
-}

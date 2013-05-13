@@ -7,7 +7,7 @@
 	
 	Description:
 	implements walking.hpp.
-	plays walking sound once, when finished return false, then reset all variables.
+	plays walking sound once, when finished return true, then reset all variables.
 *********************************************************************/
 #include <windows.h>
 #include <stdio.h>
@@ -73,10 +73,4 @@ void Walking::RenderAudio(const float deltaTime){
 void Walking::Reset(){
 	mStarted = false;
 	mFinished = false;
-}
-/*
-* Return the XASound Source Voice
-*/
-IXAudio2SourceVoice* Walking::getSourceVoice(){
-	return mWalking->GetSourceVoice();
 }

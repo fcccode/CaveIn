@@ -68,9 +68,3 @@ void Start::RenderAudio(const float deltaTime){
 		return;
 	}
 }
-/*
-* Return the XASound Source Voice
-*/
-IXAudio2SourceVoice* Start::getSourceVoice(){
-	return mStart->GetSourceVoice();
-}

@@ -1,7 +1,7 @@
 /********************************************************************
-	Filename:	Bear.hpp
-	Version: 	
-	Created:	02/04/2013
+	Filename:	Walking.hpp
+	Version: 	1.0
+	Updated:	13/05/2013
 	
 	Author:		Jake Morey
 	
@@ -30,7 +30,6 @@ public:
 	void Pause();
 	void Reset();
 	bool getFinished();
-	IXAudio2SourceVoice* getSourceVoice();
 	inline bool getStarted(){return mStarted;}
 	inline bool IsOk() const {return (mWalking!=NULL);}
 private:

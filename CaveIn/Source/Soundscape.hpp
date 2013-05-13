@@ -1,35 +1,20 @@
-/*
-	File:	Soundscape1.hpp
-	Version:	1.0
-	Date:	10th January 2013.
-	Author:	Allan C. Milne.
-
-	Requires:	IGameCore, XACore, XASound, AudioRenderable.
-
+/********************************************************************
+	Filename:	Soundscape.hpp
+	Version: 	1.0
+	Updated:	13/05/2013
+	
+	Author:		Jake Morey
+	
 	Description:
-	This is a concrete implementation of the IGameCore interface for the application logic.
-	This is the concrete strategy class called  from the context WinCore class as part of a strategy pattern.
-	*	See IGameCore.hpp for details of this interface.
+	similar to the IGameCore interface the change is that SetupGame()
+	now takes a XAcore variable. this is because an instance of this
+	class should be created inside SoundCues.cpp. in there the XACore
+	that object creates would be passed to this one which will then
+	initialize the ambient sounds.
+*********************************************************************/
 
-	this application plays a soundscape made up of a variety of sound elements.
-	It illustrates both the use of XAudio2 and relevant OO architecturing.
-	the sounds played are
-
-	*	a looped rain sound.
-		this uses the XASound framework class and illustrates a static background ambience.
-
-	*	a chirpingg bird moving towards and away from the listener.
-		This is encapsulated in the Bird class that implements the AudioRenderable interface.
-		Uses volume adjustment to provide the perception of movement.
-
-	*	frogs in harmony at random times.
-		this is encapsulated in the Frogs class implementing the AudioRenderable interface.
-		Uses frequency adjustment to provide the harmony.
-
-*/
-
-#ifndef __SOUNDSCAPE1_HPP_1_0__
-#define __SOUNDSCAPE1_HPP_1_0__
+#ifndef __SOUNDSCAPE_HPP_1_0__
+#define __SOUNDSCAPE_HPP_1_0__
 
 #include <xaudio2.h>
 #include <list>
@@ -44,12 +29,8 @@ class AudioRenderable;
 
 class Soundscape{
 public:
-
-	//=== Implementation of the IGameCore interface.
-
-	//--- create and initialize XACore and the sounds to be played.
-	//--- since this game has no graphics the argument is not used.
-	//--- this will create all the sound elements.
+	//--- gets passed a XACore so that the sounds can be created.
+	//--- this will create all the ambient sound elements.
 	bool SetupGame (XACore *aCore);
 
 	//--- process a single game frame.

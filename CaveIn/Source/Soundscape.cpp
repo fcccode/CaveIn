@@ -33,7 +33,7 @@ using AllanMilne::Audio::XASound;
 * the SoundCues class.
 */
 bool Soundscape::SetupGame (XACore *aCore){
-	// Create the rain sound object; check if ok.
+	// Create the wind sound object; check if ok.
 	mWind = aCore->CreateSound ("Sounds/Atmosphere/Wind.wav");
 	if (mWind == NULL){
 		MessageBox (NULL, "Error loading rain.wav", TEXT ("SetupGame() - FAILED"), MB_OK | MB_ICONERROR );
@@ -60,7 +60,7 @@ bool Soundscape::SetupGame (XACore *aCore){
 	mRenderedSounds.push_back((AudioRenderable*)drips);
 	mRenderedSounds.push_back((AudioRenderable*)horror);
 	
-	// Play the rain and bird sounds; frogs will be played through the game loop.
+	// Play the wind and horror sounds; drips will be played through the game loop.
 	mWind->Play(0);
 	horror->Play();
 	return true;		// All has been setup without error.

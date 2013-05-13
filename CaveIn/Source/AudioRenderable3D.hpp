@@ -1,5 +1,5 @@
 /********************************************************************
-	Filename:	AudioRenderable.hpp
+	Filename:	AudioRenderable3D.hpp
 	Version: 	
 	Created:	02/04/2013
 	
@@ -39,6 +39,7 @@ public:
 	virtual void Play() = 0;
 	virtual void Pause() = 0;
 	virtual ~AudioRenderable3D(){}
+	//constructor that sets a chunk of memeory for the emitter and dsp settings
 	AudioRenderable3D(){
 		memset((void*)&mDSPSettings,0,sizeof(X3DAUDIO_DSP_SETTINGS));
 		memset((void*)&mEmitter,0,sizeof(X3DAUDIO_EMITTER));
