@@ -611,7 +611,7 @@ bool SoundCues::InitRats(){
 	rat1->InitializeEmitter(mXACore);
 	Rat *rat2 = new Rat(mXACore, 2);
 	if(!rat2->IsOk()){
-		MessageBox(NULL,"Error loading rat1.wav",TEXT("SetupGame()-FAILED"),MB_OK|MB_ICONERROR);
+		MessageBox(NULL,"Error loading rat2.wav",TEXT("SetupGame()-FAILED"),MB_OK|MB_ICONERROR);
 		delete rat;
 		delete rat1;
 		delete rat2;
@@ -668,7 +668,7 @@ bool SoundCues::InitOtherWarnings(){
 	water->InitializeEmitter(mXACore);
 	Water *water1 = new Water(mXACore,0);
 	if(!water1->IsOk()){
-		MessageBox(NULL,"Error loading water.wav",TEXT("SetupGame()-FAILED"),MB_OK|MB_ICONERROR);
+		MessageBox(NULL,"Error loading water1.wav",TEXT("SetupGame()-FAILED"),MB_OK|MB_ICONERROR);
 		delete rocks;		
 		delete water;
 		delete water1;
@@ -687,14 +687,14 @@ bool SoundCues::InitOtherWarnings(){
 bool SoundCues::InitOther(){
 	mPath = new Path(mXACore);
 	if(!mPath->IsOk()){
-		MessageBox(NULL,"Error loading bat.wav",TEXT("SetupGame()-FAILED"),MB_OK|MB_ICONERROR);
+		MessageBox(NULL,"Error loading hey.wav",TEXT("SetupGame()-FAILED"),MB_OK|MB_ICONERROR);
 		delete mPath;
 		return false;
 	}
 	mPath->InitializeEmitter(mXACore);
 	mWall = new Wall(mXACore);
 	if(!mWall->IsOk()){
-		MessageBox(NULL,"Error loading bat1.wav",TEXT("SetupGame()-FAILED"),MB_OK|MB_ICONERROR);
+		MessageBox(NULL,"Error loading wall.wav",TEXT("SetupGame()-FAILED"),MB_OK|MB_ICONERROR);
 		delete mPath;
 		delete mWall;
 		return false;
@@ -702,7 +702,7 @@ bool SoundCues::InitOther(){
 	mWall->InitializeEmitter(mXACore);
 	mFinish = new Finish(mXACore);
 	if(!mFinish->IsOk()){
-		MessageBox(NULL,"Error loading bat1.wav",TEXT("SetupGame()-FAILED"),MB_OK|MB_ICONERROR);
+		MessageBox(NULL,"Error loading finish.wav",TEXT("SetupGame()-FAILED"),MB_OK|MB_ICONERROR);
 		delete mPath;
 		delete mWall;
 		delete mFinish;
@@ -710,7 +710,7 @@ bool SoundCues::InitOther(){
 	}
 	mStart = new Start(mXACore);
 	if(!mStart->IsOk()){
-		MessageBox(NULL,"Error loading bat1.wav",TEXT("SetupGame()-FAILED"),MB_OK|MB_ICONERROR);
+		MessageBox(NULL,"Error loading cavein.wav",TEXT("SetupGame()-FAILED"),MB_OK|MB_ICONERROR);
 		delete mPath;
 		delete mWall;
 		delete mFinish;
@@ -726,14 +726,14 @@ bool SoundCues::InitOther(){
 bool SoundCues::InitGood(){
 	Directions *good = new Directions(mXACore, 0);
 	if(!good->IsOk()){
-		MessageBox(NULL,"Error loading bat.wav",TEXT("SetupGame()-FAILED"),MB_OK|MB_ICONERROR);
+		MessageBox(NULL,"Error loading good",TEXT("SetupGame()-FAILED"),MB_OK|MB_ICONERROR);
 		delete good;
 		return false;
 	}
 	good->InitializeEmitter(mXACore);
 	Directions *good1 = new Directions(mXACore, 1);
 	if(!good1->IsOk()){
-		MessageBox(NULL,"Error loading bat1.wav",TEXT("SetupGame()-FAILED"),MB_OK|MB_ICONERROR);
+		MessageBox(NULL,"Error loading good1",TEXT("SetupGame()-FAILED"),MB_OK|MB_ICONERROR);
 		delete good;
 		delete good1;
 		return false;
@@ -741,7 +741,7 @@ bool SoundCues::InitGood(){
 	good1->InitializeEmitter(mXACore);
 	Directions *good2 = new Directions(mXACore, 2);
 	if(!good2->IsOk()){
-		MessageBox(NULL,"Error loading bat2.wav",TEXT("SetupGame()-FAILED"),MB_OK|MB_ICONERROR);
+		MessageBox(NULL,"Error loading good2.wav",TEXT("SetupGame()-FAILED"),MB_OK|MB_ICONERROR);
 		delete good;
 		delete good1;
 		delete good2;
@@ -750,7 +750,7 @@ bool SoundCues::InitGood(){
 	good2->InitializeEmitter(mXACore);
 	Directions *good3 = new Directions(mXACore, 3);
 	if(!good3->IsOk()){
-		MessageBox(NULL,"Error loading bat3.wav",TEXT("SetupGame()-FAILED"),MB_OK|MB_ICONERROR);
+		MessageBox(NULL,"Error loading good3.wav",TEXT("SetupGame()-FAILED"),MB_OK|MB_ICONERROR);
 		delete good;
 		delete good1;
 		delete good2;
@@ -771,13 +771,13 @@ bool SoundCues::InitGood(){
 bool SoundCues::InitWalk(){
 	mWalking = new Walking(mXACore);
 	if(!mWalking->IsOk()){
-		MessageBox(NULL,"Error loading bat.wav",TEXT("SetupGame()-FAILED"),MB_OK|MB_ICONERROR);
+		MessageBox(NULL,"Error loading footsteps.wav",TEXT("SetupGame()-FAILED"),MB_OK|MB_ICONERROR);
 		delete mWalking;
 		return false;
 	}
 	mShuffle = new Shuffle(mXACore);
 	if(!mShuffle->IsOk()){
-		MessageBox(NULL,"Error loading bat1.wav",TEXT("SetupGame()-FAILED"),MB_OK|MB_ICONERROR);
+		MessageBox(NULL,"Error loading shuffle.wav",TEXT("SetupGame()-FAILED"),MB_OK|MB_ICONERROR);
 		delete mWalking;
 		delete mShuffle;
 		return false;

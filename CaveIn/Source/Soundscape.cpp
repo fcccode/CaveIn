@@ -36,7 +36,7 @@ bool Soundscape::SetupGame (XACore *aCore){
 	// Create the wind sound object; check if ok.
 	mWind = aCore->CreateSound ("Sounds/Atmosphere/Wind.wav");
 	if (mWind == NULL){
-		MessageBox (NULL, "Error loading rain.wav", TEXT ("SetupGame() - FAILED"), MB_OK | MB_ICONERROR );
+		MessageBox (NULL, "Error loading wind.wav", TEXT ("SetupGame() - FAILED"), MB_OK | MB_ICONERROR );
 		return false;
 	}
 	mWind->SetLooped(true);
@@ -44,14 +44,14 @@ bool Soundscape::SetupGame (XACore *aCore){
 	// Create the renderable objects and add to the renderable component list.
 	Drip *drips = new Drip(aCore);
 	if (!drips->IsOk()){
-		MessageBox (NULL, "Error loading bird.wav", TEXT ("SetupGame() - FAILED"), MB_OK | MB_ICONERROR );
+		MessageBox (NULL, "Error loading drips.wav", TEXT ("SetupGame() - FAILED"), MB_OK | MB_ICONERROR );
 		delete mWind;
 		delete drips;
 		return false;
 	}
 	Horror *horror= new Horror(aCore);
 	if (!horror->IsOk()){
-		MessageBox (NULL, "Error loading frogs.wav", TEXT ("SetupGame() - FAILED"), MB_OK | MB_ICONERROR );
+		MessageBox (NULL, "Error loading horror.wav", TEXT ("SetupGame() - FAILED"), MB_OK | MB_ICONERROR );
 		delete mWind;
 		delete drips;
 		delete horror;

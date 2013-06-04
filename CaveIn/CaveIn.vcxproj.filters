@@ -179,16 +179,10 @@
     <ClCompile Include="Source\Finish.cpp">
       <Filter>Source Files\Sound Cues\Other Tiles</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Path.cpp">
-      <Filter>Source Files\Sound Cues\Warnings</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Shuffle.cpp">
       <Filter>Source Files\Sound Cues\Other Tiles</Filter>
     </ClCompile>
     <ClCompile Include="Source\Walking.cpp">
-      <Filter>Source Files\Sound Cues\Other Tiles</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Player.cpp">
       <Filter>Source Files\Sound Cues\Other Tiles</Filter>
     </ClCompile>
     <ClCompile Include="Source\Start.cpp">
@@ -202,6 +196,12 @@
     </ClCompile>
     <ClCompile Include="Source\Drip.cpp">
       <Filter>Source Files\Soundscape</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Path.cpp">
+      <Filter>Source Files\Sound Cues\Other Tiles</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Player.cpp">
+      <Filter>Source Files\Sound Cues</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

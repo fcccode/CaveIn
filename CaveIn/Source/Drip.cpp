@@ -34,8 +34,18 @@ using AllanMilne::Audio::WaveFmt;
 
 //--- internal helper function prototypes.
 bool LoadDropsFile (XAUDIO2_BUFFER *aBuffer, WAVEFORMATEX *aFormat);
-float GetRandomPause ();
 
+namespace{
+	//--- Get a random pause time between water drops playing; units are seconds.
+	float GetRandomPause ()
+	{
+		// Time range to use.
+		static const int minPause = 4;
+		static const int range = 10;
+
+		return float(rand() % range)/10 + minPause;
+	} // end GetRandomPause function.
+}
 
 //--- called every game frame to check if random time has passed and water drops should play.
 //--- Parameter is time in seconds since last call.
@@ -135,15 +145,4 @@ bool LoadDropsFile (XAUDIO2_BUFFER *aBuffer, WAVEFORMATEX *aFormat)
 	memcpy_s ((void*)aFormat, sizeof (WaveFmt), (void*)&(wave->GetWaveFormat()), sizeof (WaveFmt));
 	return true;
 	} // end LoadDropsFile function.
-
-//--- Get a random pause time between water drops playing; units are seconds.
-float GetRandomPause ()
-{
-	// Time range to use.
-	static const int minPause = 4;
-	static const int range = 10;
-
-	return float(rand() % range)/10 + minPause;
-} // end GetRandomPause function.
-
 //=== end of code.

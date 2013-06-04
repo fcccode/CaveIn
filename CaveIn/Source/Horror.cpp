@@ -14,8 +14,16 @@
 #include "XASound.hpp"
 using AllanMilne::Audio::XACore;
 using AllanMilne::Audio::XASound;
-
 #include "Horror.hpp"
+
+namespace{
+	//--- Get a random pause time between water drops playing; units are seconds.
+	float GetRandomPause(){
+		static const int range = 10;
+
+		return float(rand() % (5*range))/10;
+	} // end GetRandomPause function.
+}
 
 //--- Called every game frame to check if the audio can be played again.
 //--- Parameter is time in seconds since last call.
@@ -26,7 +34,7 @@ void Horror::RenderAudio (const float deltaTime)
 
 	mElapsedTime += deltaTime;
 	if(mElapsedTime > mPauseTime){
-		mPauseTime = float(rand()%100)/10;
+		mPauseTime = GetRandomPause();
 		mElapsedTime = 0.0f;
 		mHorror->Play(0);
 	}
@@ -52,5 +60,4 @@ Horror::~Horror()
 void Horror::Play (){
 	mHorror->Play(0);
 } // end Play method.
-
 //=== end of code.

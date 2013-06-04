@@ -33,7 +33,7 @@ namespace {
 		{0.0f, 0.0f, 1.0f}, {coordValue2, 0.0f, coordValue1}, {coordValue, 0.0f, coordValue}, {coordValue1, 0.0f, coordValue2},
 		{1.0f, 0.0f, 0.0f}, {coordValue1, 0.0f, -coordValue2}, {coordValue, 0.0f, -coordValue}, {coordValue2, 0.0f, -coordValue1},
 		{0.0f, 0.0f, -1.0f}, {-coordValue2, 0.0f, -coordValue1}, {-coordValue, 0.0f, -coordValue}, {-coordValue1, 0.0f, -coordValue2},
-		{-1.0f, 0.0f, 0.0f}, {-coordValue1, 0.0f, coordValue2}, {-coordValue, 0.0f, coordValue}, {-coordValue2, 0.0f, -coordValue1}
+		{-1.0f, 0.0f, 0.0f}, {-coordValue1, 0.0f, coordValue2}, {-coordValue, 0.0f, coordValue}, {-coordValue2, 0.0f, coordValue1}
 	};
 } // end anonymous namespace.
 

@@ -20,8 +20,18 @@ using AllanMilne::Audio::XACore;
 using AllanMilne::Audio::XASound;
 #include "Path.hpp"
 
+namespace{
+	//--- Get a random pause time between water drops playing; units are seconds.
+	float GetRandomPause(){
+		static const int range = 10;
+
+		return float(rand() % (3*range))/10;
+	} // end GetRandomPause function.
+	//=== end of code.
+}
+
 Path::Path(XACore *aCore)
-	:mPath(NULL), mElapsedTime(0.0f)
+	:mPath(NULL), mElapsedTime(0.0f), mPaused(0)
 {
 	mPath = aCore->CreateSound("Sounds/Hey.wav");
 }
@@ -50,13 +60,13 @@ void Path::Pause(){
 * Play the sound again once a set time has passed.
 */
 void Path::RenderAudio(const float deltaTime){
-	static const float pauseTime	= 1.0f;
 	if(!IsOk()){
 		return;
 	}
 	if(mPath->IsPlaying() == false){
 		mElapsedTime+=deltaTime;
-		if(mElapsedTime>pauseTime){
+		if(mElapsedTime>mPaused){
+			mPaused = GetRandomPause();
 			mElapsedTime = 0.0f;
 			mPath->Play(0);
 		}

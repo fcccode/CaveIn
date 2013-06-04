@@ -42,13 +42,11 @@ int WINAPI WinMain (HINSTANCE hinstance,
 	WinCore *windowApp;
 	IGameCore *game;
 	srand(time(NULL));
-	//xxx following line should be uncommented and XXX replaced with your game processing class (that implements IGameCore).
-	//game = new Soundscape();
+	//implements SoundCues class
 	game = new SoundCues();
 	windowApp = new WinCore (game);
 
 	//--- Create the application window and application-wide resources.
-	//xxx amend parameters to reflect your application.
 	bool ok = windowApp->Initialize (
 				"Cave In",		//xxx Windows title bar text.
 				800, 600,			//xxx width x height

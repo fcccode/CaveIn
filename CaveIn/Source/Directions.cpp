@@ -19,11 +19,21 @@
 using AllanMilne::Audio::XACore;
 using AllanMilne::Audio::XASound;
 #include "Directions.hpp"
+
+namespace{
+	//--- Get a random pause time between water drops playing; units are seconds.
+	float GetRandomPause(){
+		static const int range = 10;
+
+		return float(rand() % (3*range))/10;
+	} // end GetRandomPause function.
+	//=== end of code.
+}
 /*
 * Constructor that initializes different sounds based upon integer flag passed to it.
 */
 Directions::Directions(XACore *aCore, int sound)
-	:mGood(NULL), mElapsedTime(0.0f), mVolumeAdjustment(1.1f)
+	:mGood(NULL), mElapsedTime(0.0f), mVolumeAdjustment(1.1f), mPaused(0)
 {
 	switch(sound){
 	case 0: mGood = aCore->CreateSound("Sounds/Good/ComeOn.wav"); break;
@@ -57,14 +67,13 @@ void Directions::Pause(){
 * Play the sound again once a set time has passed.
 */
 void Directions::RenderAudio(const float deltaTime){
-	static const float pauseTime	= 1.0f;
-
 	if(!IsOk()){
 		return;
 	}
 	if(mGood->IsPlaying() == false){
 		mElapsedTime+=deltaTime;
-		if(mElapsedTime>pauseTime){
+		if(mElapsedTime>mPaused){
+			mPaused = GetRandomPause();
 			mElapsedTime = 0.0f;
 			mGood->Play(0);
 		}
@@ -111,3 +120,4 @@ void Directions::UpdateEmitterVelo(X3DAUDIO_VECTOR velo){
 IXAudio2SourceVoice* Directions::getSourceVoice(){
 	return mGood->GetSourceVoice();
 }
+

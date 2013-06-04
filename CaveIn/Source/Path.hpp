@@ -44,6 +44,7 @@ public:
 private:
 	XASound *mPath;
 	float mElapsedTime;
+	float mPaused;
 };
 
 #endif 

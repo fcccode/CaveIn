@@ -44,6 +44,7 @@ private:
 	XASound *mGood;
 	float mElapsedTime;
 	float mVolumeAdjustment;
+	float mPaused;
 };
 
 #endif 
